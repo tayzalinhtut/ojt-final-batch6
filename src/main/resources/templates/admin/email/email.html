@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragment/header :: header"></div>
+<body class="bg-light">
+<div class="d-flex">
+  <!-- Sidebar -->
+  <div th:replace="fragment/side-bar :: side-bar"></div>
+
+  <!-- Main Content -->
+  <div class="flex-grow-1" style="margin-left: 280px">
+    <!-- Top Navigation -->
+    <header class="bg-white shadow-sm border-bottom sticky-top">
+      <div class="d-flex align-items-center justify-content-between p-4">
+        <h3 class="mb-0 fw-bold text-dark">Email</h3>
+
+        <div class="d-flex align-items-center gap-3">
+          <div class="dropdown">
+            <button class="btn btn-link text-muted p-2 position-relative"
+                    data-bs-toggle="dropdown">
+              <i class="bi bi-bell fs-5"></i> <span
+                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                    style="font-size: 0.6rem">3</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="#">New evaluation
+                pending</a></li>
+              <li><a class="dropdown-item" href="#">Interview
+                scheduled</a></li>
+              <li><a class="dropdown-item" href="#">Offer response
+                due</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <div class="p-4">
+      <div class="row g-4">
+        <!-- Email Templates -->
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm mb-4">
+            <div
+                    class="card-header bg-success border-bottom py-3 d-flex justify-content-between align-items-center">
+              <h5 class="fw-bold mb-0 text-white">Email Templates (Success)</h5>
+            </div>
+            <div class="card-body p-0">
+              <div class="list-group list-group-flush">
+                <a href="#" data-status-type="Scan_Pass" id="codeTestTemplate"
+                   class="list-group-item list-group-item-action py-3 px-4 template-link">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1 fw-semibold">Code Test Invitation</h6>
+                  </div> <small>Notify candidate about code test</small>
+                </a> <a href="#" data-status-type="CodeTest_Pass"
+                        id="interviewInviteTemplate"
+                        class="list-group-item list-group-item-action py-3 px-4 template-link">
+                <div class="d-flex w-100 justify-content-between">
+                  <h6 class="mb-1 fw-semibold">Interview Invitation</h6>
+                </div> <small>Notify candidate about interview</small>
+              </a> <a href="#" data-status-type="Interview_Pass"
+                      id="interviewResultTemplate"
+                      class="list-group-item list-group-item-action py-3 px-4 template-link">
+                <div class="d-flex w-100 justify-content-between">
+                  <h6 class="mb-1 fw-semibold">Interview Result</h6>
+                </div> <small>Notify candidate about interview outcome</small>
+              </a>
+              </div>
+            </div>
+          </div>
+          <div class="card border-0 shadow-sm mb-4">
+            <div
+                    class="card-header bg-danger border-bottom py-3 d-flex justify-content-between align-items-center">
+              <h5 class="fw-bold mb-0 text-white">Email Templates (Fail)</h5>
+            </div>
+            <div class="card-body p-0">
+              <div class="list-group list-group-flush">
+                <a href="#" data-status-type="CodeTest_Fail"
+                   id="codeTestFailedTemplate"
+                   class="list-group-item list-group-item-action py-3 px-4 template-link">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1 fw-semibold">Code Test Failed</h6>
+                  </div> <small>Notify candidate of code test failure</small>
+                </a> <a href="#" data-status-type="Interview_Fail"
+                        id="interviewFailedTemplate"
+                        class="list-group-item list-group-item-action py-3 px-4 template-link">
+                <div class="d-flex w-100 justify-content-between">
+                  <h6 class="mb-1 fw-semibold">Interview Failed</h6>
+                </div> <small>Notify candidate of unsuccessful interview</small>
+              </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Compose Email -->
+        <div class="col-md-8">
+          <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white border-bottom py-3">
+              <h5 class="fw-bold mb-0">Compose Email</h5>
+            </div>
+            <div class="card-body p-4">
+              <form th:action="@{/admin/email/send}" method="post">
+                <!-- Recipients Section -->
+                <div class="mb-3">
+                  <div
+                          class="d-flex justify-content-between align-items-center mb-2">
+                    <label class="form-label fw-semibold mb-0">Recipients</label>
+                    <div>
+                      <button type="button" class="btn btn-sm btn-primary me-2"
+                              id="selectAllBtn">Select All</button>
+                      <button type="button" class="btn btn-sm btn-secondary"
+                              id="deselectAllBtn">Deselect All</button>
+                    </div>
+                  </div>
+
+                  <div id="recipientsContainer">
+                    <!-- recipient checkboxes will be injected by JS -->
+                  </div>
+
+                  <!-- ✅ Hidden email status type (updated via JS) -->
+                  <input type="hidden" name="emailStatusType" id="emailStatusType" />
+                  <input type="hidden" name="senderName" value="nik" />
+
+                </div>
+
+                <!-- Subject -->
+                <div class="mb-3">
+                  <label for="subject" class="form-label fw-semibold">Subject</label>
+                  <input type="text" class="form-control" id="subject"
+                         name="subject" readonly />
+                </div>
+
+                <!-- Email Body -->
+                <div class="mb-3">
+                  <label for="emailBody" class="form-label fw-semibold">Email
+                    Body</label>
+                  <textarea class="form-control" id="emailBody" name="emailBody"
+                            rows="12"></textarea>
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-flex justify-content-end gap-2">
+                  <button type="button" class="btn btn-secondary px-3 py-2"
+                          id="resetBtn">Clear</button>
+                  <button type="submit" class="btn btn-primary px-3 py-2">Send
+                    Email</button>
+                </div>
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    document.getElementById("subject").value = "";
+    document.getElementById("emailBody").value = "";
+    document.getElementById("recipientsContainer").innerHTML = "";
+    document
+            .querySelectorAll(".template-link")
+            .forEach((el) => el.classList.remove("bg-light"));
+  });
+</script>
+
+<script>
+  document.getElementById("selectAllBtn")
+          .addEventListener("click", function () {
+            document
+                    .querySelectorAll("input[name='recipients']")
+                    .forEach((checkbox) => {
+                      checkbox.checked = true;
+                    });
+          });
+
+  document.getElementById("deselectAllBtn")
+          .addEventListener("click", function () {
+            document
+                    .querySelectorAll("input[name='recipients']")
+                    .forEach((checkbox) => {
+                      checkbox.checked = false;
+                    });
+          });
+</script>
+
+<script>
+  document.querySelectorAll(".template-link").forEach((link) => {
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      document.querySelectorAll(".template-link")
+              .forEach((el) => el.classList.remove("bg-light"));
+      this.classList.add("bg-light");
+
+      const subjectInput = document.getElementById("subject");
+      const bodyInput = document.getElementById("emailBody");
+      const emailStatusInput = document.getElementById("emailStatusType");
+
+      let cvStatus = this.getAttribute("data-status-type");
+      let emailStatus = "";
+
+      switch (this.id) {
+        case "codeTestTemplate":
+          subjectInput.value = "Code Test Invitation";
+          bodyInput.value = `Dear [Candidate Name],\n\nYou are invited to take part in the coding test...`;
+          emailStatus = "Email_CodeTestInvite";
+          break;
+        case "interviewInviteTemplate":
+          subjectInput.value = "Interview Invitation";
+          bodyInput.value = `Dear [Candidate Name],\n\nWe are pleased to invite you for an interview...`;
+          emailStatus = "Email_InterviewInvite";
+          break;
+        case "interviewResultTemplate":
+          subjectInput.value = "Interview Result";
+          bodyInput.value = `Dear [Candidate Name],\n\nWe are pleased to share your interview result...`;
+          emailStatus = "Email_InterviewResult";
+          break;
+        case "codeTestFailedTemplate":
+          subjectInput.value = "Code Test Result - Unsuccessful";
+          bodyInput.value = `Dear [Candidate Name],\n\nUnfortunately, your score did not meet the threshold...`;
+          emailStatus = "Email_CodeTestFail";
+          break;
+        case "interviewFailedTemplate":
+          subjectInput.value = "Interview Result - Not Selected";
+          bodyInput.value = `Dear [Candidate Name],\n\nWe regret to inform you that you were not selected...`;
+          emailStatus = "Email_InterviewFail";
+          break;
+      }
+
+      emailStatusInput.value = emailStatus;
+
+      fetch(`/admin/email/recipients?cvStatus=${cvStatus}&emailStatus=${emailStatus}`)
+              .then((res) => res.json())
+              .then((data) => {
+                const container = document.getElementById("recipientsContainer");
+                container.innerHTML = "";
+
+                if (data.length === 0) {
+                  container.innerHTML = "<p class='text-muted'>No recipients found.</p>";
+                  return;
+                }
+
+                data.forEach((cv, index) => {
+                  console.log("CV" + cv.name);
+                  const checkbox = `
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="recipients"
+                     value="${cv.email}" id="recipient${index}">
+              <label class="form-check-label" for="recipient${index}">
+                ${cv.name} (${cv.email})
+              </label>
+            </div>`;
+                  container.innerHTML += checkbox;
+                });
+              });
+
+    });
+  });
+</script>
+
+</body>
+</html>

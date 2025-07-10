@@ -1,0 +1,169 @@
+<nav
+        class="bg-white shadow-sm position-fixed h-100 d-flex flex-column"
+        style="width: 280px; z-index: 1000"
+        th:fragment = "side-bar"
+>
+  <!-- Sidebar Header -->
+  <div class="p-4 border-bottom">
+    <div class="d-flex align-items-center">
+      <a href="/admin" class="nav-link d-flex">
+        <div
+                class="bg-primary text-white rounded-3 d-flex align-items-center justify-content-center me-3"
+                style="width: 45px; height: 45px"
+        >
+          <i class="bi bi-mortarboard-fill fs-5"></i>
+        </div>
+        <div>
+          <h5 class="mb-0 fw-bold text-dark">OJT Management</h5>
+          <small class="text-muted">System</small>
+        </div>
+      </a>
+    </div>
+  </div>
+  <!-- Sidebar Menu -->
+  <div class="sidebar-scroll flex-grow-1 p-3">
+    <ul class="nav flex-column gap-1">
+      <li class="nav-item">
+        <a
+                class="nav-link text-dark d-flex align-items-center py-3 px-3 rounded-3"
+                href="#"
+        >
+          <i class="bi bi-speedometer2 me-3 fs-5"></i>
+          <span class="fw-semibold">Dashboard</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+                class="nav-link text-dark d-flex align-items-center py-3 px-3 rounded-3"
+                href="#"
+        >
+          <i class="bi bi-people me-3 fs-5"></i>
+          <span class="fw-semibold">User Management</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+                class="nav-link text-dark d-flex align-items-center py-3 px-3 rounded-3"
+                href="/admin/batch"
+        >
+          <i class="bi bi-collection me-3 fs-5"></i>
+          <span class="fw-semibold">Batch Management</span>
+        </a>
+      </li>
+      </li>
+      <li class="nav-item">
+        <a
+                class="nav-link text-dark d-flex align-items-center py-3 px-3 rounded-3"
+                href="/admin/course"
+        >
+          <i class="bi bi-box me-3 fs-5"></i>
+          <span class="fw-semibold">Course Management</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+                class="nav-link text-dark d-flex align-items-center py-3 px-3 rounded-3"
+                href="#"
+        >
+          <i class="bi bi-file-earmark-person me-3 fs-5"></i>
+          <span class="fw-semibold">CV Management</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+                class="nav-link text-dark d-flex align-items-center py-3 px-3 rounded-3"
+                href="#"
+        >
+          <i class="bi bi-building me-3 fs-5"></i>
+          <span class="fw-semibold">Resources</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+                class="nav-link text-dark rounded-3 d-flex align-items-center py-3 px-3"
+                href="/Final OJT/admin/member-profiles.html"
+        >
+          <i class="bi bi-people me-3 fs-5"></i>
+          <span class="fw-semibold">OJT Management</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+                href="/admin/attendance"
+                class="nav-link text-dark d-flex align-items-center py-3 px-3 rounded-3"
+        >
+          <i class="bi bi-calendar-check me-3 fs-5"></i>
+          <span class="fw-semibold">Attendance</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+                class="nav-link text-dark d-flex align-items-center py-3 px-3 rounded-3"
+                href="#"
+        >
+          <i class="bi bi-clipboard-check me-3 fs-5"></i>
+          <span class="fw-semibold">Evaluations</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+                class="nav-link text-dark d-flex align-items-center py-3 px-3 rounded-3"
+                href="#"
+        >
+          <i class="bi bi-award me-3 fs-5"></i>
+          <span class="fw-semibold">Completion Report</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+                class="nav-link text-dark d-flex align-items-center py-3 px-3 rounded-3"
+                href="#"
+        >
+          <i class="bi bi-clipboard-data me-3 fs-5"></i>
+          <span class="fw-semibold">Reports & Analytics</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+                class="nav-link text-dark d-flex align-items-center py-3 px-3 rounded-3"
+                href="/admin/email"
+        >
+          <i class="bi bi-envelope me-3 fs-5"></i>
+          <span class="fw-semibold">Emails</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Sidebar Footer -->
+  <div class="p-4 border-top">
+    <div class="d-flex align-items-center">
+      <div
+              class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3"
+              style="width: 45px; height: 45px"
+      >
+        <i class="bi bi-person-circle fs-4 text-muted"></i>
+      </div>
+      <div class="flex-grow-1">
+        <div class="fw-semibold text-dark">Admin User</div>
+        <small class="text-muted">System Administrator</small>
+      </div>
+      <div class="dropdown">
+        <button
+                class="btn btn-link text-muted p-0"
+                data-bs-toggle="dropdown"
+        >
+          <i class="bi bi-three-dots-vertical"></i>
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <a class="dropdown-item" href="#">Profile</a>
+          </li>
+
+          <li><hr class="dropdown-divider" /></li>
+          <li><a class="dropdown-item" href="#">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Course Management</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<style>
+.list-item-hover:hover {
+	background-color: #f8f9fa;
+}
+
+.action-buttons {
+	min-width: 120px; /* Adjusted slightly to accommodate the new button */
+}
+</style>
+</head>
+<body class="bg-light">
+	<div th:replace="~{fragment/header :: header}"></div>
+
+	<div class="d-flex">
+		<div th:replace="~{fragment/side-bar :: side-bar}"></div>
+
+		<div class="flex-grow-1" style="margin-left: 280px">
+			<header class="bg-white shadow-sm border-bottom sticky-top">
+				<div class="d-flex align-items-center justify-content-between p-4">
+					<div class="d-flex align-items-center">
+						<h3 class="mb-0 fw-bold text-dark">Course List</h3>
+					</div>
+					<div class="d-flex align-items-center gap-3">
+						<div class="dropdown">
+							<button class="btn btn-link text-muted p-2 position-relative"
+								data-bs-toggle="dropdown">
+								<i class="bi bi-bell fs-5"></i> <span
+									class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+									style="font-size: 0.6rem">3</span>
+							</button>
+							<ul class="dropdown-menu dropdown-menu-end">
+								<li><a class="dropdown-item" href="#">New evaluation
+										pending</a></li>
+								<li><a class="dropdown-item" href="#">Interview
+										scheduled</a></li>
+								<li><a class="dropdown-item" href="#">Offer response
+										due</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</header>
+
+			<div class="p-4">
+				<div th:if="${message}" class="alert alert-dismissible fade show"
+					th:classappend="${alertClass}" role="alert">
+					<span th:text="${message}"></span>
+					<button type="button" class="btn-close" data-bs-dismiss="alert"
+						aria-label="Close"></button>
+				</div>
+
+				<div class="card border-0 shadow-sm">
+					<div
+						class="card-header bg-white border-bottom d-flex flex-wrap align-items-center justify-content-between py-3">
+						<h5 class="fw-bold mb-2 mb-md-0">All Courses</h5>
+						<div class="d-flex flex-column flex-md-row gap-2 ms-auto">
+							<div class="input-group" style="min-width: 300px">
+								<span class="input-group-text bg-light"> <i
+									class="bi bi-search"></i>
+								</span> <input type="text" class="form-control"
+									placeholder="Search courses..." id="searchCourseInput">
+							</div>
+							<a th:href="@{/admin/course/create}"
+								class="btn btn-primary w-100 w-md-auto"> <i
+								class="bi bi-plus-circle me-2"></i>Create New
+							</a>
+						</div>
+					</div>
+
+					<div class="card-body p-0">
+						<div th:if="${courses.empty}" class="text-center py-5">
+							<i class="bi bi-book text-muted" style="font-size: 3rem"></i>
+							<h5 class="mt-3 text-muted">No courses found</h5>
+							<p class="text-muted">Click "Create New" to add your first
+								course</p>
+						</div>
+
+						<div th:unless="${courses.empty}">
+							<div class="table-responsive">
+								<table class="table table-hover align-middle mb-0">
+									<thead class="table-light">
+										<tr>
+											<th>Course Name</th>
+											<th class="text-center">Instructors</th>
+											<!-- Added text-center here -->
+											<th class="text-end">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="course : ${courses}" class="list-item-hover">
+											<td>
+												<div class="d-flex align-items-center">
+													<div
+														class="bg-primary bg-opacity-10 text-primary rounded-2 d-flex align-items-center justify-content-center me-3"
+														style="width: 36px; height: 36px">
+														<i class="bi"
+															th:classappend="${
+                                #strings.containsIgnoreCase(course.name, 'Java') or
+                                #strings.containsIgnoreCase(course.name, 'Python') or
+                                #strings.containsIgnoreCase(course.name, 'C#') or
+                                #strings.containsIgnoreCase(course.name, 'C++') or
+                                #strings.containsIgnoreCase(course.name, 'JavaScript') or
+                                #strings.containsIgnoreCase(course.name, 'PHP') or
+                                #strings.containsIgnoreCase(course.name, 'Ruby') or
+                                #strings.containsIgnoreCase(course.name, 'Go') or
+                                #strings.containsIgnoreCase(course.name, 'Swift') or
+                                #strings.containsIgnoreCase(course.name, 'Kotlin') or
+                                #strings.containsIgnoreCase(course.name, 'SQL') or
+                                #strings.containsIgnoreCase(course.name, 'Rust') or
+                                #strings.containsIgnoreCase(course.name, 'TypeScript') or
+                                #strings.containsIgnoreCase(course.name, 'HTML') or
+                                #strings.containsIgnoreCase(course.name, 'CSS')
+                                ? 'bi-file-code' : 'bi-book'
+                            }"></i>
+													</div>
+													<span class="fw-semibold" th:text="${course.name}"></span>
+												</div>
+											</td>
+											<td class="text-center">
+												<!-- Moved to middle column -->
+												<div class="d-flex justify-content-center">
+													<span class="badge bg-info bg-opacity-10 text-info">
+														<a
+														th:href="@{'/admin/course/' + ${course.id} + '/instructors'}"
+														class="text-decoration-none d-flex align-items-center"
+														title="View Instructors"> <i class="bi bi-people me-1"></i>
+															<span th:text="${course.instructors.size()}"></span>
+													</a>
+													</span>
+												</div>
+											</td>
+											<td class="text-end">
+												<div class="d-flex justify-content-end gap-2">
+													<a th:href="@{/admin/course/edit(id=${course.id})}"
+														class="btn btn-sm btn-outline-primary"> <i
+														class="bi bi-pencil"></i> Edit
+													</a> <a
+														th:href="@{/admin/course/assignInstructors(courseId=${course.id})}"
+														class="btn btn-sm btn-outline-info"> <i
+														class="bi bi-people"></i> Assign
+													</a>
+													<form th:action="@{/admin/course/delete}" method="post"
+														onsubmit="return confirm('Are you sure you want to delete this course?')"
+														class="d-inline">
+														<input type="hidden" name="id" th:value="${course.id}">
+														<button type="submit"
+															class="btn btn-sm btn-outline-danger">
+															<i class="bi bi-trash"></i> Delete
+														</button>
+													</form>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+	<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-dismiss alerts - This is general UI behavior, so it's fine to keep.
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    new bootstrap.Alert(alert).close();
+                }, 2000);
+            });
+
+            // Search functionality - This is general UI behavior, so it's fine to keep.
+            const searchInput = document.getElementById('searchCourseInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    const searchTerm = e.target.value.toLowerCase();
+                    const rows = document.querySelectorAll('tbody tr');
+                    
+                    rows.forEach(row => {
+                        // Adjust the index if other columns are also removed or reordered
+                        const courseName = row.querySelector('td:nth-child(1)').textContent.toLowerCase(); 
+                        if (courseName.includes(searchTerm)) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

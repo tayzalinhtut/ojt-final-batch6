@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Assign Instructors to ' + ${course.name}">Assign Instructors</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        .list-item-hover:hover {
+            background-color: #f8f9fa;
+        }
+        /* Make the whole card clickable for the checkbox */
+        .form-check-label {
+            cursor: pointer;
+        }
+        .form-check-input {
+            cursor: pointer;
+            margin-right: 1rem; /* Adjust spacing */
+        }
+        .instructor-card {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        .instructor-details {
+            flex-grow: 1;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div th:replace="~{fragment/header :: header}"></div>
+    
+    <div class="d-flex">
+        <div th:replace="~{fragment/side-bar :: side-bar}"></div>
+
+        <div class="flex-grow-1" style="margin-left: 280px">
+            <header class="bg-white shadow-sm border-bottom sticky-top">
+                <div class="d-flex align-items-center justify-content-between p-4">
+                    <div class="d-flex align-items-center">
+                        <h3 class="mb-0 fw-bold text-dark">
+                            Assign Instructors to <span th:text="${course.name}">Course Name</span>
+                        </h3>
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="dropdown">
+                            <button class="btn btn-link text-muted p-2 position-relative" 
+                                    data-bs-toggle="dropdown">
+                                <i class="bi bi-bell fs-5"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" 
+                                      style="font-size: 0.6rem">3</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#">New evaluation pending</a></li>
+                                <li><a class="dropdown-item" href="#">Interview scheduled</a></li>
+                                <li><a class="dropdown-item" href="#">Offer response due</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="p-4">
+                <div th:if="${message}" class="alert alert-dismissible fade show" 
+                     th:classappend="${alertClass}" role="alert">
+                    <span th:text="${message}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white border-bottom d-flex align-items-center py-3">
+                        <h5 class="fw-bold mb-0">Select Instructors</h5>
+                    </div>
+
+                    <div class="card-body">
+                        <form th:action="@{/admin/course/assignInstructors}" method="post">
+                            <input type="hidden" name="courseId" th:value="${course.id}">
+                            
+                            <div th:if="${allInstructors.empty}" class="text-center py-5">
+                                <i class="bi bi-person-x text-muted" style="font-size: 3rem;"></i>
+                                <h5 class="mt-3 text-muted">No instructors available</h5>
+                                <p class="text-muted">Please add instructors first.</p>
+                                <a th:href="@{/admin/instructor/create}" class="btn btn-sm btn-outline-secondary">Add New Instructor</a>
+                            </div>
+
+                            <div th:unless="${allInstructors.empty}" class="row row-cols-1 row-cols-md-2 g-3">
+                                <div th:each="instructor : ${allInstructors}" class="col">
+                                    <label th:for="${'instructorCheck' + instructor.id}" class="form-check border p-3 rounded list-item-hover h-100 d-flex align-items-center">
+                                        <input class="form-check-input mt-0" type="checkbox"
+                                               th:value="${instructor.id}"
+                                               th:id="${'instructorCheck' + instructor.id}"
+                                               name="instructorIds"
+                                               th:checked="${assignedInstructorIds.contains(instructor.id)}">
+                                        <div class="instructor-details">
+                                            <h6 class="mb-1" th:text="${instructor.name}">Instructor Name</h6>
+                                            <p class="text-muted mb-0" th:text="${instructor.email}">instructor@example.com</p>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 border-top pt-3">
+                                <a th:href="@{/admin/course}" class="btn btn-secondary me-2">Cancel</a>
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Auto-dismiss alerts - This is general UI behavior, so it's fine to keep.
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    new bootstrap.Alert(alert).close();
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>
