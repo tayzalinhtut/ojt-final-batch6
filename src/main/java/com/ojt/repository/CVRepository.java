@@ -15,13 +15,6 @@ public interface CVRepository extends JpaRepository<CV, Long> {
     List<CV> findByBatchIsNull();         // Available
     List<CV> findByBatchId(Long id);
     long countByBatchIdAndStatus_StatusType(Long batchId, StatusType statusType);
-//    long countByBatchIdAndStatus_StatusTypeAndStatus_StatusType(Long batchId, StatusType statusType, StatusType statusType1);
-//    Status Status(Status status);
-//    List<CV> findByBatchIdAndStatus_StatusTypeOrStatus_StatusTypeOrStatus_StatusTypeOrStatus_StatusType(Long batchId, StatusType statusType, StatusType statusType1,StatusType statusType2,StatusType statusType3);
-
-//    @Query("SELECT c FROM CV c WHERE c.batch.id = :batchId AND c.status.statusType IN :statusTypes")
-//    List<CV> findByBatchIdAndStatusIn(@Param("batchId") Long batchId,
-//                                      @Param("statusTypes") List<StatusType> statusTypes);
 
 
     //Htet Linn Aung

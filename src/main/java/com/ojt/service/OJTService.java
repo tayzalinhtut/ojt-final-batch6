@@ -13,8 +13,6 @@ public interface OJTService {
 
     long countWithDrawStudentCount(Long batchId);
 
-    long countOfferAcceptedStudent(Long batchId);
-
     long countOJTPassed(Long batchId);
 
     long countOJTFailed(Long batchId);

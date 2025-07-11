@@ -69,7 +69,7 @@ public String viewAll(@RequestParam(name = "batchId", required = false) Long bat
 
     Map<Long, Long> studentCounts = new HashMap<>();
     for (Batch batch : batches) {
-        studentCounts.put(batch.getId(), ojtService.countOfferAcceptedStudent(batch.getId()));
+        studentCounts.put(batch.getId(), ojtService.countOjtAllStudent(batch.getId()));
     }
     Map<Long, Long> courseCounts = new HashMap<>();
     for (Batch batch : batches) {

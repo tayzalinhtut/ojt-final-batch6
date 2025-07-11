@@ -43,10 +43,6 @@ public class OJTServiceImplementation implements OJTService {
         return ojtRepository.countByBatchIdAndStatusType(batchId, StatusType.OJT_Withdraw);
     }
 
-    @Override
-    public long countOfferAcceptedStudent(Long batchId) {
-        return ojtRepository.countByBatchIdAndStatusType(batchId, StatusType.Offer_Accept);
-    }
 
     @Override
     public long countOJTPassed(Long batchId) {
@@ -68,7 +64,7 @@ public class OJTServiceImplementation implements OJTService {
 
     @Override
     public long countOjtAllStudent(Long batchId) {
-        return ojtRepository.countByBatchIdAndStatusType(batchId, StatusType.Offer_Accept);
+        return cvRepository.countByBatchIdAndStatus_StatusType(batchId, StatusType.Offer_Accept);
     }
 
 //    @Override
