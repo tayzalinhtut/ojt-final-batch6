@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="fragment/header :: header"></head>
+
+<body class="bg-light">
+	<div class="d-flex">
+		<!-- Sidebar -->
+		<div th:replace="fragment/side-bar :: side-bar"></div>
+
+		<!-- Main Content -->
+		<div class="flex-grow-1" style="margin-left: 280px">
+			<!-- Top Navigation -->
+			<header class="bg-white shadow-sm border-bottom sticky-top">
+				<div class="d-flex align-items-center justify-content-between p-4">
+					<div class="d-flex align-items-center">
+						<h3 class="mb-0 fw-bold text-dark">Reports & Analytics</h3>
+					</div>
+					<div class="d-flex align-items-center gap-3">
+						<div class="dropdown">
+							<button class="btn btn-link text-muted p-2 position-relative" data-bs-toggle="dropdown">
+								<i class="bi bi-bell fs-5"></i>
+								<span
+									class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+									style="font-size: 0.6rem">3</span>
+							</button>
+							<ul class="dropdown-menu dropdown-menu-end">
+								<li>
+									<a class="dropdown-item" href="#">New evaluation pending</a>
+								</li>
+								<li>
+									<a class="dropdown-item" href="#">Interview scheduled</a>
+								</li>
+								<li>
+									<a class="dropdown-item" href="#">Offer response due</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</header>
+
+			<div class="p-4">
+				<!-- First Row - Candidate Funnel Report -->
+				<div class="row mb-4">
+					<div class="col-12">
+						<div class="card border-0 shadow-sm">
+							<div class="card-header bg-white">
+								<h5 class="card-title mb-0 fw-bold">Candidate Funnel Report</h5>
+							</div>
+							<div class="card-body">
+								<!-- Funnel Controls -->
+								<div class="row align-items-center mb-3">
+									<div class="col-12">
+										<div class="d-flex gap-3 justify-content-end align-items-center flex-wrap">
+											<div class="d-flex align-items-center">
+												<label for="funnelFilterType"
+													class="form-label mb-0 me-2 fw-bold text-nowrap">Filter by:</label>
+												<select id="funnelFilterType" class="form-select form-select-sm"
+													onchange="onFunnelFilterTypeChange()" style="min-width: 120px">
+													<option value="year">Year</option>
+													<option value="batch">Batch</option>
+												</select>
+											</div>
+											<div class="d-flex align-items-center">
+												<label for="funnelYearSelect"
+													class="form-label mb-0 me-2 fw-bold text-nowrap">Select
+													Year:</label>
+												<select id="funnelYearSelect" class="form-select form-select-sm"
+													onchange="onFunnelYearChange()" style="min-width: 120px">
+													<option disabled selected>Select Year</option>
+													<option th:each="year : ${cvYears}" th:value="${year}"
+														th:text="${year}"></option>
+												</select>
+											</div>
+											<div class="d-flex align-items-center">
+												<label for="funnelBatchSelect"
+													class="form-label mb-0 me-2 fw-bold text-nowrap">Select
+													Batch:</label>
+												<select id="funnelBatchSelect" class="form-select form-select-sm"
+													onchange="onFunnelBatchChange()" disabled style="min-width: 180px">
+													<option value="">Choose a Batch</option>
+													<option th:each="batchLabel : ${batchLabels}"
+														th:value="${batchLabel.key}" th:text="${batchLabel.value}">Batch
+														1</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Chart Container -->
+								<div class="card">
+									<div class="card-body" style="height: 400px">
+										<canvas id="funnelChart"></canvas>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Second Row - Candidate Drop-off Report -->
+				<div class="row mb-4">
+					<div class="col-12">
+						<div class="card border-0 shadow-sm">
+							<div class="card-header bg-white">
+								<h5 class="card-title mb-0 fw-bold">Candidate Drop-Off Report</h5>
+							</div>
+							<div class="card-body">
+								<!-- Drop-off Controls -->
+								<div class="row align-items-center mb-3">
+									<div class="col-12">
+										<div class="d-flex gap-3 justify-content-end align-items-center flex-wrap">
+											<div class="d-flex align-items-center">
+												<label for="dropoffFilterType"
+													class="form-label mb-0 me-2 fw-bold text-nowrap">Filter by:</label>
+												<select id="dropoffFilterType" class="form-select form-select-sm"
+													onchange="onDropoffFilterTypeChange()" style="min-width: 120px">
+													<option value="year">Year</option>
+													<option value="batch">Batch</option>
+												</select>
+											</div>
+											<div class="d-flex align-items-center">
+												<label for="dropoffYearSelect"
+													class="form-label mb-0 me-2 fw-bold text-nowrap">Select
+													Year:</label>
+												<select id="dropoffYearSelect" class="form-select form-select-sm"
+													onchange="onDropoffYearChange()" style="min-width: 120px">
+													<option disabled selected>Select Year</option>
+													<option th:each="year : ${cvYears}" th:value="${year}"
+														th:text="${year}"></option>
+												</select>
+											</div>
+											<div class="d-flex align-items-center">
+												<label for="dropoffBatchSelect"
+													class="form-label mb-0 me-2 fw-bold text-nowrap">Select
+													Batch:</label>
+												<select id="dropoffBatchSelect" class="form-select form-select-sm"
+													onchange="onDropoffBatchChange()" disabled style="min-width: 180px">
+													<option value="">Choose a Batch</option>
+													<option th:each="batchLabel : ${batchLabels}"
+														th:value="${batchLabel.key}" th:text="${batchLabel.value}">Batch
+														1</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Chart Container -->
+								<div class="card">
+									<div class="card-body" style="height: 400px">
+										<div class="row h-100">
+											<!-- Chart on the left -->
+											<div class="col-6 d-flex align-items-center justify-content-center">
+												<div style="width: 300px; height: 300px">
+													<canvas id="dropoffChart"></canvas>
+												</div>
+											</div>
+											<!-- Legend on the right -->
+											<div class="col-6 d-flex align-items-center">
+												<div id="dropoffLegend" class="w-100">
+													<!-- Legend items will be populated by JavaScript -->
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Third Row - Attendance Heatmap -->
+				<div class="row mb-4">
+					<div class="col-12">
+						<div class="card border-0 shadow-sm">
+							<div class="card-header bg-white">
+								<h5 class="card-title mb-0 fw-bold">Attendance Report</h5>
+							</div>
+							<div class="card-body">
+								<!-- Attendance Controls - Direct above chart -->
+								<div class="row align-items-center mb-3">
+									<!-- Legend Section - Left -->
+									<div class="col-md-6">
+										<div class="d-flex align-items-center flex-wrap">
+											<div class="d-flex gap-3 flex-wrap">
+												<div class="d-flex align-items-center">
+													<span class="badge attendance-present me-1"
+														style="width: 16px; height: 16px">&nbsp;</span>
+													<small class="text-muted">Present</small>
+												</div>
+												<div class="d-flex align-items-center">
+													<span class="badge attendance-half me-1"
+														style="width: 16px; height: 16px">&nbsp;</span>
+													<small class="text-muted">Half-Leave</small>
+												</div>
+												<div class="d-flex align-items-center">
+													<span class="badge attendance-absent me-1"
+														style="width: 16px; height: 16px">&nbsp;</span>
+													<small class="text-muted">Absent</small>
+												</div>
+												<div class="d-flex align-items-center">
+													<span class="badge attendance-off me-1"
+														style="width: 16px; height: 16px">&nbsp;</span>
+													<small class="text-muted">Off Day</small>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<!-- Attendance Filters - Right -->
+									<div class="col-md-6">
+										<div class="d-flex gap-3 justify-content-end align-items-center">
+											<div class="d-flex align-items-center">
+												<label for="attendanceBatchSelect"
+													class="form-label mb-0 me-2 fw-bold text-nowrap">Select
+													Batch:</label>
+												<select id="attendanceBatchSelect" class="form-select form-select-sm"
+													onchange="onAttendanceBatchChange()" style="min-width: 160px">
+													<option value="">Choose a Batch</option>
+													<option th:each="batchLabel : ${batchLabels}"
+														th:value="${batchLabel.key}" th:text="${batchLabel.value}">Batch
+														1</option>
+												</select>
+											</div>
+											<div class="d-flex align-items-center">
+												<label for="attendanceMonthSelect"
+													class="form-label mb-0 me-2 fw-bold text-nowrap">Select
+													Month:</label>
+												<select id="attendanceMonthSelect" class="form-select form-select-sm"
+													onchange="onAttendanceMonthChange()" disabled
+													style="min-width: 160px">
+													<option value="">Choose a Month</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Attendance Heatmap -->
+								<div class="card">
+									<div class="card-body p-2">
+										<!-- Loading State -->
+										<div id="attendanceLoading" class="text-center py-5">
+											<div class="text-muted">
+												<i class="bi bi-bar-chart fs-3 d-block mb-2"></i>
+												<h5>
+													Please select a batch and month to view attendance
+													data
+												</h5>
+											</div>
+										</div>
+
+										<!-- Heatmap -->
+										<div id="attendanceHeatmap" class="table-responsive" style="
+                          display: none;
+                          max-height: 500px;
+                          overflow-y: auto;
+                        ">
+											<table class="table table-bordered mb-0 table-sm"
+												id="attendanceHeatmapTable">
+												<!-- Heatmap will be generated here -->
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Fourth Row - OJT Report and Evaluation Charts -->
+				<div class="row">
+					<!-- Left - OJT Report -->
+					<div class="col-lg-6 mb-4 mb-lg-0">
+						<div class="card border-0 shadow-sm">
+							<div class="card-header bg-white">
+								<h5 class="card-title mb-0 fw-bold">OJT Report</h5>
+							</div>
+							<div class="card-body">
+								<!-- OJT Report Controls -->
+								<div class="row align-items-center mb-3">
+									<div class="col-12">
+										<div class="d-flex justify-content-end">
+											<div class="d-flex align-items-center flex-column">
+												<label for="ojtBatchSelect"
+													class="form-label mb-0 me-2 fw-bold text-nowrap">Select
+													Batch:</label>
+												<select id="ojtBatchSelect" class="form-select form-select-sm"
+													onchange="onOjtBatchChange()" style="min-width: 160px">
+													<option value="1">Batch 1</option>
+													<option value="2">Batch 2</option>
+													<option value="3">Batch 3</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Chart Container -->
+								<div class="card">
+									<div class="card-body" style="height: 400px">
+										<!-- Chart Container -->
+										<div id="ojtChartContainer" class="h-100">
+											<div class="row h-100">
+												<!-- Chart on the left -->
+												<div class="col-7 d-flex align-items-center justify-content-center">
+													<div style="width: 220px; height: 220px">
+														<canvas id="ojtChart"></canvas>
+													</div>
+												</div>
+												<!-- Legend on the right -->
+												<div class="col-5 d-flex align-items-center">
+													<div id="ojtLegend" class="w-100">
+														<!-- Legend items will be populated by JavaScript -->
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Right - Student Evaluation Chart -->
+					<div class="col-6">
+						<div class="card border-0 shadow-sm">
+							<div class="card-header bg-white">
+								<h5 class="card-title mb-0 fw-bold">
+									<span id="evaluationChartTitle">Student Evaluation Report</span>
+								</h5>
+							</div>
+							<div class="card-body">
+								<!-- Evaluation Controls -->
+								<div class="row align-items-center mb-3">
+									<div class="col-12">
+										<div class="d-flex gap-3 justify-content-end align-items-center">
+											<div class="d-flex align-items-center flex-column">
+												<label for="evaluationBatchSelect"
+													class="form-label mb-0 me-2 fw-bold text-nowrap">Select
+													Batch:</label>
+												<select id="evaluationBatchSelect" class="form-select form-select-sm"
+													onchange="onEvaluationBatchChange()" style="min-width: 160px">
+													<option value="">Choose a Batch</option>
+													<option th:each="batchLabel : ${batchLabels}"
+														th:value="${batchLabel.key}" th:text="${batchLabel.value}">Batch
+														1</option>
+												</select>
+											</div>
+											<div class="d-flex align-items-center flex-column">
+												<label for="evaluationStudentSelect"
+													class="form-label mb-0 me-2 fw-bold text-nowrap">Select
+													Student:</label>
+												<select id="evaluationStudentSelect" class="form-select form-select-sm"
+													onchange="onEvaluationStudentChange()" disabled
+													style="min-width: 160px">
+													<option value="">Choose a Student</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Chart Container -->
+								<div class="card">
+									<div class="card-body d-flex align-items-center justify-content-center"
+										style="height: 400px">
+										<!-- Loading State -->
+										<div id="evaluationLoading" class="text-center">
+											<div class="text-muted">
+												<i class="bi bi-graph-up fs-3 d-block mb-2"></i>
+												<h5>
+													Please select a batch and student to view evaluation
+													data
+												</h5>
+											</div>
+										</div>
+
+										<!-- Chart Canvas -->
+										<div id="evaluationChartContainer" style="
+                          display: none;
+                          width: 100%;
+                          height: 100%;
+                          max-width: 500px;
+                          max-height: 350px;
+                        ">
+											<canvas id="evaluationChart"></canvas>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Bootstrap Tooltip -->
+	<div id="tooltip" class="tooltip bs-tooltip-top" role="tooltip"
+		style="position: absolute; opacity: 0; pointer-events: none">
+		<div class="tooltip-arrow"></div>
+		<div class="tooltip-inner"></div>
+	</div>
+
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+	<script>
+
+		// Global variables
+		let currentAttendanceBatch = null;
+		let currentAttendanceMonth = null;
+		let currentAttendanceDates = [];
+		let currentHolidays = [];
+
+		let currentEvaluationBatch = null;
+		let currentEvaluationStudent = null;
+		let evaluationChart = null;
+
+		let funnelChart = null;
+		let dropoffChart = null;
+		let ojtChart = null;
+		let currentFunnelYear = "2024";
+		let currentDropoffYear = "2025";
+		let currentOjtBatch = null;
+		let year = 2025;
+		let reportData = {};
+		let batchData = {};
+		let holidayData = {};
+		let attendanceData = {};
+		// Evaluation criteria and data
+		const evaluationCriteria = [
+			"Teamwork",
+			"Leadership",
+			"RD/Assignment Understanding",
+			"Research & Technical Skill",
+			"Logical Thinking",
+			"Error Handling",
+			"Accuracy (Meet with RD)",
+			"Standard & Formatting",
+			"Assignment Competence",
+		];
+		let evaluationData = {};
+
+		const fetchData = async (year, batchId) => {
+			try {
+				let res;
+				if (year > 0) {
+					res = await fetch(`/admin/api/report/report-data?year=${year}`);
+				} else {
+					console.log("Fetching funnel batch data")
+					res = await fetch(`/admin/api/report/report-data?batchId=${batchId}`);
+				}
+				if (!res.ok) {
+					throw new Error("Failed to fetch");
+				}
+				reportData = await res.json();
+				batchData = reportData.batchData;
+				holidayData = reportData.holidays;
+				attendanceData = reportData.attendanceData;
+				evaluationData = reportData.evaluationData;
+				console.log(reportData.batchData);
+			} catch (error) {
+				console.error(error);
+				alert("Data fetch failed: " + error.message);
+			}
+		}
+
+		/*<![CDATA[*/
+
+		// OJT Report data
+		const ojtReportData = {
+			1: {
+				Pass: 45,
+				Fail: 12,
+				Withdrawal: 8,
+			},
+			2: {
+				Pass: 38,
+				Fail: 15,
+				Withdrawal: 7,
+			},
+			3: {
+				Pass: 42,
+				Fail: 10,
+				Withdrawal: 5,
+			},
+		};
+
+		// Add filter type variables
+		let currentFunnelFilterType = "year";
+		let currentDropoffFilterType = "year";
+		let currentFunnelBatch = null;
+		let currentDropoffBatch = null;
+
+		// CANDIDATE FUNNEL FUNCTIONS
+		function onFunnelFilterTypeChange() {
+			const filterType = document.getElementById("funnelFilterType").value;
+			const yearSelect = document.getElementById("funnelYearSelect");
+			const batchSelect = document.getElementById("funnelBatchSelect");
+
+			currentFunnelFilterType = filterType;
+
+			if (filterType === "year") {
+				yearSelect.disabled = false;
+				batchSelect.disabled = true;
+				batchSelect.value = "";
+				currentFunnelBatch = null;
+				generateFunnelChart();
+			} else {
+				yearSelect.disabled = true;
+				batchSelect.disabled = false;
+				currentFunnelYear = null;
+			}
+		}
+
+		function onFunnelYearChange() {
+			const yearSelect = document.getElementById("funnelYearSelect");
+			currentFunnelYear = yearSelect.value;
+			generateFunnelChart();
+		}
+
+		function onFunnelBatchChange() {
+			const batchSelect = document.getElementById("funnelBatchSelect");
+			currentFunnelBatch = batchSelect.value;
+			if (currentFunnelBatch) {
+				generateFunnelChart();
+			}
+		}
+
+		async function generateFunnelChart() {
+
+			const ctx = document.getElementById("funnelChart").getContext("2d");
+
+			if (funnelChart) {
+				funnelChart.destroy();
+			}
+
+			let data, labels, values;
+
+			if (currentFunnelFilterType === "year" && year) {
+				console.log("Fetching year in generate funnel batch")
+				await fetchData(year, 0);
+				data = reportData.funnelReportData[year];
+			} else if (currentFunnelFilterType === "batch" && currentFunnelBatch) {
+				console.log("Funnel Batch: " + currentFunnelBatch);
+				await fetchData(0, currentFunnelBatch);
+				data = reportData.funnelReportData[currentFunnelBatch];
+			} else {
+				// Default to current year data
+				await fetchData(2025, 0);
+				data = reportData.funnelReportData[currentFunnelYear || "2025"];
+			}
+
+			labels = Object.keys(data);
+			values = Object.values(data);
+
+			funnelChart = new Chart(ctx, {
+				type: "bar",
+				data: {
+					labels: labels,
+					datasets: [
+						{
+							label: "Candidates",
+							data: values,
+							backgroundColor: [
+								"rgba(54, 162, 235, 0.8)",
+								"rgba(75, 192, 192, 0.8)",
+								"rgba(255, 206, 86, 0.8)",
+								"rgba(153, 102, 255, 0.8)",
+								"rgba(255, 159, 64, 0.8)",
+								"rgba(199, 199, 199, 0.8)",
+							],
+							borderColor: [
+								"rgba(54, 162, 235, 1)",
+								"rgba(75, 192, 192, 1)",
+								"rgba(255, 206, 86, 1)",
+								"rgba(153, 102, 255, 1)",
+								"rgba(255, 159, 64, 1)",
+								"rgba(199, 199, 199, 1)",
+							],
+							borderWidth: 2,
+						},
+					],
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					plugins: {
+						legend: {
+							display: false,
+						},
+						tooltip: {
+							callbacks: {
+								label: function (context) {
+									return `${context.label}: ${context.parsed.y} candidates`;
+								},
+							},
+						},
+					},
+					scales: {
+						y: {
+							beginAtZero: true,
+							ticks: {
+								stepSize: 1,
+							},
+						},
+						x: {
+							ticks: {
+								maxRotation: 0,
+								minRotation: 0,
+							},
+						},
+					},
+				},
+			});
+		}
+
+		// CANDIDATE DROP-OFF FUNCTIONS
+		function onDropoffFilterTypeChange() {
+			const filterType = document.getElementById("dropoffFilterType").value;
+			const yearSelect = document.getElementById("dropoffYearSelect");
+			const batchSelect = document.getElementById("dropoffBatchSelect");
+
+			currentDropoffFilterType = filterType;
+
+			if (filterType === "year") {
+				yearSelect.disabled = false;
+				batchSelect.disabled = true;
+				batchSelect.value = "";
+				currentDropoffBatch = null;
+				generateDropoffChart();
+			} else {
+				yearSelect.disabled = true;
+				batchSelect.disabled = false;
+				currentDropoffYear = null;
+			}
+		}
+
+		function onDropoffYearChange() {
+			const yearSelect = document.getElementById("dropoffYearSelect");
+			currentDropoffYear = yearSelect.value;
+			generateDropoffChart();
+		}
+
+		function onDropoffBatchChange() {
+			const batchSelect = document.getElementById("dropoffBatchSelect");
+			currentDropoffBatch = batchSelect.value;
+			if (currentDropoffBatch) {
+				generateDropoffChart();
+			}
+		}
+
+		async function generateDropoffChart() {
+			const ctx = document.getElementById("dropoffChart").getContext("2d");
+
+			if (dropoffChart) {
+				dropoffChart.destroy();
+			}
+
+			let data, labels, values;
+
+			if (currentDropoffFilterType === "year" && currentDropoffYear) {
+				await fetchData(currentDropoffYear, 0);
+				console.log(reportData)
+				data = reportData.dropoffReportData[currentDropoffYear];
+			} else if (
+				currentDropoffFilterType === "batch" &&
+				currentDropoffBatch
+			) {
+				await fetchData(0, currentDropoffBatch);
+				data = reportData.dropoffReportData[currentDropoffBatch];
+			} else {
+				// Default to current year data
+				await fetchData(2025, 0);
+				data = reportData.dropoffReportData[currentDropoffYear || "2025"];
+			}
+
+			labels = Object.keys(data);
+			values = Object.values(data);
+
+			const colors = [
+				"rgba(255, 99, 132, 0.8)",
+				"rgba(255, 159, 64, 0.8)",
+				"rgba(255, 205, 86, 0.8)",
+				"rgba(201, 203, 207, 0.8)",
+			];
+
+			dropoffChart = new Chart(ctx, {
+				type: "doughnut",
+				data: {
+					labels: labels,
+					datasets: [
+						{
+							data: values,
+							backgroundColor: colors,
+							borderColor: [
+								"rgba(255, 99, 132, 1)",
+								"rgba(255, 159, 64, 1)",
+								"rgba(255, 205, 86, 1)",
+								"rgba(201, 203, 207, 1)",
+							],
+							borderWidth: 2,
+						},
+					],
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					plugins: {
+						legend: {
+							display: false,
+						},
+						tooltip: {
+							callbacks: {
+								label: function (context) {
+									const total = context.dataset.data.reduce(
+										(a, b) => a + b,
+										0
+									);
+									const percentage = ((context.parsed / total) * 100).toFixed(
+										1
+									);
+									return `${context.label}: ${context.parsed} (${percentage}%)`;
+								},
+							},
+						},
+					},
+				},
+			});
+
+			// Create custom legend
+			const legendContainer = document.getElementById("dropoffLegend");
+			legendContainer.innerHTML = "";
+
+			const total = values.reduce((a, b) => a + b, 0);
+
+			labels.forEach((label, index) => {
+				const percentage = ((values[index] / total) * 100).toFixed(1);
+				const legendItem = document.createElement("div");
+				legendItem.className = "d-flex align-items-center mb-3";
+				legendItem.innerHTML = `
+                    <div style="width: 20px; height: 20px; background-color: ${colors[index]}; margin-right: 12px; border-radius: 3px; flex-shrink: 0;"></div>
+                    <div style="font-size: 13px; line-height: 1.3;">
+                        <div style="font-weight: 600; color: #333;">${label}</div>
+                        <div style="color: #6c757d; font-size: 12px;">${values[index]} candidates (${percentage}%)</div>
+                    </div>
+                `;
+				legendContainer.appendChild(legendItem);
+			});
+		}
+
+		// OJT REPORT FUNCTIONS
+		function onOjtBatchChange() {
+			const batchSelect = document.getElementById("ojtBatchSelect");
+			const selectedBatchId = batchSelect.value;
+
+			if (selectedBatchId && ojtReportData[selectedBatchId]) {
+				currentOjtBatch = selectedBatchId;
+				generateOjtChart();
+			}
+		}
+
+		function generateOjtChart() {
+			const ctx = document.getElementById("ojtChart").getContext("2d");
+
+			if (ojtChart) {
+				ojtChart.destroy();
+			}
+
+			const data = ojtReportData[currentOjtBatch];
+			const labels = Object.keys(data);
+			const values = Object.values(data);
+			const colors = [
+				"rgba(40, 167, 69, 0.8)", // Green for Pass
+				"rgba(220, 53, 69, 0.8)", // Red for Fail
+				"rgba(108, 117, 125, 0.8)", // Gray for Withdrawal
+			];
+
+			ojtChart = new Chart(ctx, {
+				type: "pie",
+				data: {
+					labels: labels,
+					datasets: [
+						{
+							data: values,
+							backgroundColor: colors,
+							borderColor: [
+								"rgba(40, 167, 69, 1)",
+								"rgba(220, 53, 69, 1)",
+								"rgba(108, 117, 125, 1)",
+							],
+							borderWidth: 2,
+						},
+					],
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					plugins: {
+						legend: {
+							display: false,
+						},
+						tooltip: {
+							callbacks: {
+								label: function (context) {
+									const total = context.dataset.data.reduce(
+										(a, b) => a + b,
+										0
+									);
+									const percentage = ((context.parsed / total) * 100).toFixed(
+										1
+									);
+									return `${context.label}: ${context.parsed} (${percentage}%)`;
+								},
+							},
+						},
+					},
+				},
+			});
+
+			// Create custom legend
+			const legendContainer = document.getElementById("ojtLegend");
+			legendContainer.innerHTML = "";
+
+			const total = values.reduce((a, b) => a + b, 0);
+
+			labels.forEach((label, index) => {
+				const percentage = ((values[index] / total) * 100).toFixed(1);
+				const legendItem = document.createElement("div");
+				legendItem.className = "d-flex align-items-center mb-3";
+				legendItem.innerHTML = `
+                    <div style="width: 20px; height: 20px; background-color: ${colors[index]}; margin-right: 12px; border-radius: 3px; flex-shrink: 0;"></div>
+                    <div style="font-size: 13px; line-height: 1.3;">
+                        <div style="font-weight: 600; color: #333;">${label}</div>
+                        <div style="color: #6c757d; font-size: 12px;">${values[index]} students (${percentage}%)</div>
+                    </div>
+                `;
+				legendContainer.appendChild(legendItem);
+			});
+		}
+
+		// ATTENDANCE FUNCTIONS
+		function onAttendanceBatchChange() {
+			const batchSelect = document.getElementById("attendanceBatchSelect");
+			const monthSelect = document.getElementById("attendanceMonthSelect");
+			const selectedBatchId = batchSelect.value;
+
+			monthSelect.innerHTML = '<option value="">Choose a Month</option>';
+			monthSelect.disabled = true;
+
+			document.getElementById("attendanceHeatmap").style.display = "none";
+			document.getElementById("attendanceLoading").style.display = "block";
+
+			if (selectedBatchId && batchData[selectedBatchId]) {
+				currentAttendanceBatch = selectedBatchId.toString();
+				const batch = batchData[selectedBatchId];
+				console.log(batch)
+
+				batch.months.forEach((month) => {
+					const option = document.createElement("option");
+					option.value = month.value;
+					option.textContent = month.name;
+					monthSelect.appendChild(option);
+				});
+
+				monthSelect.disabled = false;
+			} else {
+				currentAttendanceBatch = null;
+			}
+		}
+
+		function onAttendanceMonthChange() {
+			const monthSelect = document.getElementById("attendanceMonthSelect");
+			const selectedMonth = monthSelect.value;
+			console.log(selectedMonth);
+
+			if (selectedMonth && currentAttendanceBatch) {
+				currentAttendanceMonth = selectedMonth;
+				loadAttendanceData();
+			} else {
+				document.getElementById("attendanceHeatmap").style.display = "none";
+				document.getElementById("attendanceLoading").style.display = "block";
+			}
+		}
+		const testId = 1;
+		function loadAttendanceData() {
+			if (
+				attendanceData[currentAttendanceBatch] &&
+				attendanceData[currentAttendanceBatch][currentAttendanceMonth]
+			) {
+				generateAttendanceDatesForMonth(currentAttendanceMonth, batchData[currentAttendanceBatch].startDate);
+				loadHolidays(currentAttendanceMonth);
+				generateAttendanceHeatmap(
+					attendanceData[currentAttendanceBatch][currentAttendanceMonth]
+				);
+				document.getElementById("attendanceLoading").style.display = "none";
+				document.getElementById("attendanceHeatmap").style.display = "block";
+			} else {
+				document.getElementById("attendanceLoading").innerHTML = `
+				                <div class="text-muted">
+				                    <i class="bi bi-exclamation-triangle fs-3 d-block mb-2"></i>
+				                    <h5>No attendance data available for selected month</h5>
+				                </div>
+				            `;
+			}
+		}
+
+		function generateAttendanceDatesForMonth(monthStr, date) {
+			const [year, month] = monthStr.split("-");
+			let [tmpYear, tmpMonth, startDate] = date.split("-");
+			console.log("Actual month: " + month);
+			console.log("Tmp month: " + tmpMonth);
+			if(month !== tmpMonth) {
+				startDate = 1;
+			}
+			const daysInMonth = new Date(year, month, 0).getDate();
+			console.log("Days in month: " + daysInMonth);
+			currentAttendanceDates = [];
+
+			for (let day = startDate; day <= daysInMonth; day++) {
+				currentAttendanceDates.push(new Date(year, month - 1, day));
+			}
+		}
+
+		function loadHolidays(monthStr) {
+			currentHolidays = holidayData[monthStr] || [];
+		}
+
+		function isSunday(date) {
+			return date.getDay() === 0;
+		}
+
+		function isHoliday(date) {
+			const dateStr = date.getFullYear() + '-' +
+				String(date.getMonth() + 1).padStart(2, '0') + '-' +
+				String(date.getDate()).padStart(2, '0');
+
+			return currentHolidays.some((holiday) => holiday.date === dateStr);
+		}
+
+		function isOffDay(date) {
+			return isSunday(date) || isHoliday(date);
+		}
+
+		function getAttendanceClass(status, date) {
+			if (isOffDay(date)) {
+				return "attendance-off attendance-cell";
+			}
+
+			switch (status) {
+				case "ABSENT":
+				case "Leave":
+					return "attendance-absent attendance-cell";
+				case "Attend":
+					return "attendance-present attendance-cell";
+				case "HalfLeave":
+					return "attendance-half attendance-cell";
+				default:
+					return "table-light attendance-cell";
+			}
+		}
+
+		function getAttendanceText(status, date) {
+			if (isSunday(date)) {
+				return "Sunday (Off Day)";
+			}
+
+			if (isHoliday(date)) {
+				return "Holiday";
+			}
+
+			switch (status) {
+				case "ABSENT":
+					return "Absent";
+				case "Attend":
+					return "Attend";
+				case "HalfLeave":
+					return "Half Day";
+				case "Leave":
+					return "Leave";
+				default:
+					return "No Data";
+			}
+		}
+
+		function generateAttendanceHeatmap(students) {
+		    const heatmapTable = document.getElementById("attendanceHeatmapTable");
+		    heatmapTable.innerHTML = "";
+
+		    // Create header row
+		    const thead = document.createElement("thead");
+		    const headerRow = document.createElement("tr");
+		    headerRow.className = "table-dark";
+
+		    const emptyHeader = document.createElement("th");
+		    emptyHeader.className = "text-end fw-bold bg-white text-black";
+		    emptyHeader.style.minWidth = "150px";
+		    emptyHeader.style.fontSize = "12px";
+		    emptyHeader.textContent = "Student Name";
+		    headerRow.appendChild(emptyHeader);
+
+		    currentAttendanceDates.forEach((date) => {
+		        const headerCell = document.createElement("th");
+		        headerCell.className = "text-center";
+		        headerCell.style.width = "30px";
+		        headerCell.style.fontSize = "10px";
+		        headerCell.style.padding = "4px";
+		        
+		        if (isSunday(date)) {
+		            headerCell.style.backgroundColor = "#6c757d";
+		            headerCell.style.color = "white";
+		        }
+		        if (isHoliday(date)) {
+		            headerCell.style.backgroundColor = "#dc3545";
+		            headerCell.style.color = "white";
+		        }
+
+		        headerCell.textContent = date.getDate();
+		        headerCell.title = formatDate(date) + (isOffDay(date) ? " (Off Day)" : "");
+		        headerRow.appendChild(headerCell);
+		    });
+
+		    thead.appendChild(headerRow);
+		    heatmapTable.appendChild(thead);
+
+		    // Create table body
+		    const tbody = document.createElement("tbody");
+
+		    students.forEach((student) => {
+		        const row = document.createElement("tr");
+
+		        const nameCell = document.createElement("td");
+		        nameCell.className = "table-light text-end fw-bold";
+		        nameCell.style.fontSize = "12px";
+		        nameCell.style.padding = "8px";
+		        nameCell.textContent = student.studentName;
+		        row.appendChild(nameCell);
+
+		        let attendanceIndex = 0; // Separate index for attendance array
+		        
+		        currentAttendanceDates.forEach((date) => {
+		            const cell = document.createElement("td");
+		            
+		            if (isOffDay(date)) {
+		                // For off days (Sundays/holidays), show gray color
+		                cell.className = "attendance-off attendance-cell";
+		                cell.innerHTML = "&nbsp;";
+		                cell.title = formatDate(date) + " (Off Day)";
+		            } else {
+		                // For working days, use the attendance data
+		                const status = student.attendance[attendanceIndex] || "No Data";
+		                cell.className = getAttendanceClass(status, date);
+		                cell.innerHTML = "&nbsp;";
+		                cell.title = formatDate(date) + ": " + getAttendanceText(status, date);
+		                attendanceIndex++; // Only increment for working days
+		            }
+
+		            cell.style.padding = "2px";
+		            cell.style.textAlign = "center";
+		            cell.style.verticalAlign = "middle";
+		            cell.style.cursor = "pointer";
+
+		            row.appendChild(cell);
+		        });
+
+		        tbody.appendChild(row);
+		    });
+
+		    heatmapTable.appendChild(tbody);
+		}
+
+		function showAttendanceTooltip(event, student, dayIndex, status, date) {
+			const tooltip = document.getElementById("tooltip");
+			const tooltipInner = tooltip.querySelector(".tooltip-inner");
+
+			tooltipInner.innerHTML = `
+                <strong>${student.studentName}</strong><br>
+                Date: ${formatDate(date)}<br>
+                Status: ${getAttendanceText(status, date)}
+            `;
+
+			tooltip.style.left = event.pageX + 10 + "px";
+			tooltip.style.top = event.pageY - 10 + "px";
+			tooltip.style.opacity = "1";
+		}
+
+		// EVALUATION FUNCTIONS
+		let selectedBatchId = 0;
+
+		function onEvaluationBatchChange() {
+			const batchSelect = document.getElementById("evaluationBatchSelect");
+			const studentSelect = document.getElementById(
+				"evaluationStudentSelect"
+			);
+			selectedBatchId = batchSelect.value;
+
+			studentSelect.innerHTML = '<option value="">Choose a Student</option>';
+			studentSelect.disabled = true;
+
+			document.getElementById("evaluationChartContainer").style.display =
+				"none";
+			document.getElementById("evaluationLoading").style.display = "block";
+
+			if (selectedBatchId && batchData[selectedBatchId]) {
+				currentEvaluationBatch = selectedBatchId;
+				const batch = batchData[selectedBatchId];
+
+				batch.students.forEach((student) => {
+					const option = document.createElement("option");
+					option.value = student.id;
+					option.textContent = student.name;
+					studentSelect.appendChild(option);
+				});
+
+				studentSelect.disabled = false;
+			} else {
+				currentEvaluationBatch = null;
+			}
+		}
+
+		function onEvaluationStudentChange() {
+			const studentSelect = document.getElementById(
+				"evaluationStudentSelect"
+			);
+			const selectedStudentId = studentSelect.value;
+
+			if (selectedStudentId && currentEvaluationBatch) {
+				currentEvaluationStudent = selectedStudentId;
+				loadEvaluationData();
+			} else {
+				document.getElementById("evaluationChartContainer").style.display =
+					"none";
+				document.getElementById("evaluationLoading").style.display = "block";
+			}
+		}
+
+		function loadEvaluationData() {
+			console.log("Student data: " + evaluationData[selectedBatchId][currentEvaluationStudent]);
+			if (evaluationData[selectedBatchId][currentEvaluationStudent]) {
+				const studentName = getStudentName(currentEvaluationStudent);
+				document.getElementById(
+					"evaluationChartTitle"
+				).textContent = `${studentName} - Evaluation Chart`;
+
+				generateEvaluationChart(evaluationData[selectedBatchId][currentEvaluationStudent]);
+
+				document.getElementById("evaluationLoading").style.display = "none";
+				document.getElementById("evaluationChartContainer").style.display =
+					"block";
+			}
+		}
+
+		function getStudentName(studentId) {
+			const batch = batchData[currentEvaluationBatch];
+			const student = batch.students.find((s) => s.id == studentId);
+			return student ? student.name : "Unknown Student";
+		}
+
+		function generateEvaluationChart(data) {
+			const ctx = document.getElementById("evaluationChart").getContext("2d");
+
+			if (evaluationChart) {
+				evaluationChart.destroy();
+			}
+
+			// Calculate dynamic max value and step size
+			const maxScore = Math.max(...data.scores);
+			const dynamicMax = Math.ceil(maxScore * 1.2); // Add 20% padding above highest score
+			const stepSize = Math.ceil(dynamicMax / 5); // Divide into 5 steps
+
+			evaluationChart = new Chart(ctx, {
+				type: "radar",
+				data: {
+					labels: evaluationCriteria,
+					datasets: [
+						{
+							label: "Evaluation Scores",
+							data: data.scores,
+							backgroundColor: "rgba(54, 162, 235, 0.2)",
+							borderColor: "rgba(54, 162, 235, 1)",
+							borderWidth: 3,
+							pointBackgroundColor: "rgba(54, 162, 235, 1)",
+							pointBorderColor: "#fff",
+							pointHoverBackgroundColor: "#fff",
+							pointHoverBorderColor: "rgba(54, 162, 235, 1)",
+							pointRadius: 6,
+							pointHoverRadius: 8,
+						},
+					],
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					aspectRatio: 1,
+					scales: {
+						r: {
+							beginAtZero: true,
+							max: dynamicMax, // Use dynamic max value
+							min: 0,
+							ticks: {
+								stepSize: stepSize, // Use dynamic step size
+								font: {
+									size: 12,
+								},
+							},
+							grid: {
+								color: "rgba(0, 0, 0, 0.1)",
+							},
+							angleLines: {
+								color: "rgba(0, 0, 0, 0.1)",
+							},
+							pointLabels: {
+								font: {
+									size: 11,
+								},
+								callback: function (label) {
+									if (label.length > 15) {
+										const words = label.split(" ");
+										const mid = Math.ceil(words.length / 2);
+										return [
+											words.slice(0, mid).join(" "),
+											words.slice(mid).join(" "),
+										];
+									}
+									return label;
+								},
+							},
+						},
+					},
+					plugins: {
+						legend: {
+							display: false,
+						},
+						tooltip: {
+							callbacks: {
+								label: function (context) {
+									return `${context.label}: ${context.parsed.r}`;
+								},
+							},
+						},
+					},
+				},
+			});
+		}
+
+		// SHARED FUNCTIONS
+		function hideTooltip() {
+			const tooltip = document.getElementById("tooltip");
+			tooltip.style.opacity = "0";
+		}
+
+		function formatDate(date) {
+			return date.toLocaleDateString("en-US", {
+				weekday: "short",
+				month: "short",
+				day: "numeric",
+				year: "numeric",
+			});
+		}
+
+		// Initialize charts on page load
+		document.addEventListener("DOMContentLoaded", function () {
+			generateFunnelChart();
+			generateDropoffChart();
+
+			// Initialize OJT chart with first batch
+			document.getElementById("ojtBatchSelect").value = "1";
+			currentOjtBatch = "1";
+			generateOjtChart();
+		});
+
+		/*]]>*/
+	</script>
+</body>
+
+</html>

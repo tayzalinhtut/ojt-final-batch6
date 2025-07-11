@@ -4,6 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ojt.entity.Evaluation;
 
-public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
+import java.util.List;
 
+public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
+    List<Evaluation> findByOjt_Id(Long ojtId);
 }

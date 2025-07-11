@@ -3,7 +3,9 @@ package com.ojt.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -24,13 +26,17 @@ public class CV {
     private int codeTestMark;
     private String file_path;
 
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
     @ManyToOne
     @JoinColumn(name = "batch_id")
     private Batch batch;
 
     @ManyToOne
     @JoinColumn(name = "resource_id")
-    private Resource resource;
+    private Resources resource;
 
     @ManyToOne
     @JoinColumn(name = "status_id")

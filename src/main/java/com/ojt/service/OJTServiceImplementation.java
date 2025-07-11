@@ -1,14 +1,23 @@
 package com.ojt.service;
 
+import com.ojt.dto.OJTDTO;
+import com.ojt.entity.Batch;
 import com.ojt.entity.CV;
 import com.ojt.entity.OJT;
+import com.ojt.entity.Status;
 import com.ojt.enumeration.StatusType;
+import com.ojt.repository.BatchRepository;
 import com.ojt.repository.CVRepository;
 import com.ojt.repository.OJTRepository;
+import com.ojt.repository.StatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OJTServiceImplementation implements OJTService {
@@ -54,21 +63,107 @@ public class OJTServiceImplementation implements OJTService {
         return ojtRepository.countByBatchIdAndStatusType(batchId, StatusType.OJT_Fail);
     }
 
-//    @Override
-//    public long getOjtStatusStudent(Long batchId) {
-//        // Optional: Combine OJT_Active + Withdraw, etc. Here is just one example:
-//        long active = ojtRepository.countByBatchIdAndStatusType(batchId, StatusType.OJT_Active);
-//        long withdraw = ojtRepository.countByBatchIdAndStatusType(batchId, StatusType.OJT_Withdraw);
-//        return active + withdraw;
-//    }
-
     @Override
     public long countOjtAllStudent(Long batchId) {
         return cvRepository.countByBatchIdAndStatus_StatusType(batchId, StatusType.Offer_Accept);
     }
 
-//    @Override
-//    public List<OJT> getOjtByBatchId(Long batchId) {
-//        return ojt.findByBatchId(batchId);
-//    }
+    //Mg Thant
+
+
+    @Autowired
+    private StatusRepository statusRepository;
+
+    @Autowired
+    private BatchRepository batchRepository;
+
+    @Override
+    public Page<OJT> getAllOJT(Pageable pageable) {
+        // TODO Auto-generated method stub
+        return ojtRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<OJT> getOJTByBatch(Long batchId) {
+        Optional<Batch> optional = batchRepository.findById(batchId);
+        Batch batch = null;
+
+        if(optional.isPresent()) {
+            batch = optional.get();
+        } else {
+            throw new RuntimeException("Batch id doesn't exist with this batch id");
+        }
+
+        List<OJT> ojts = ojtRepository.findAll();
+        List<OJT> ojtByBatch = new ArrayList<>();
+
+        for(OJT ojt : ojts) {
+            if(ojt.getCv().getBatch().getId() == batch.getId()) {
+                ojtByBatch.add(ojt);
+            }
+        }
+
+        return ojtByBatch;
+    }
+
+    @Override
+    public Page<OJT> getAllOJTWithoutAttendance(Pageable pageable) {
+        return ojtRepository.findAllWithoutAttendance(pageable);
+    }
+
+    @Override
+    public OJT getOJTById(Long id) {
+        // TODO Auto-generated method stub
+        return ojtRepository.findById(id).orElseThrow(() -> new RuntimeException("OJT not found"));
+    }
+
+    @Override
+    public OJT saveOJT(OJTDTO ojtDto) {
+        // TODO Auto-generated method stub
+
+        return null;
+    }
+
+    @Override
+    public OJT updateOJT(Long id, OJTDTO ojtDto) {
+        OJT ojt = getOJTById(id);
+
+        // Update bank account
+        ojt.setBankAccount(ojtDto.getBankAccount());
+
+        CV cv = ojt.getCv();
+        if (cv != null) {
+            cv.setName(ojtDto.getName());
+            cv.setPhone(ojtDto.getPhone());
+            cvRepository.save(cv);
+        } else {
+            throw new RuntimeException("CV not found for OJT ID: " + id);
+        }
+
+        StatusType status = ojtDto.getStatusName();
+        if (status != null) {
+            Status existStatus = statusRepository.findByStatusType(status);
+            ojt.setStatus(existStatus);
+        } else {
+            throw new RuntimeException("Status not found for OJT ID: " + id);
+        }
+
+        return ojtRepository.save(ojt);
+    }
+
+
+    @Override
+    public void deleteOJT(Long id) throws Exception {
+        // TODO Auto-generated method stub
+        OJT ojt = getOJTById(id);
+
+        ojtRepository.delete(ojt);
+    }
+
+    @Override
+    public List<OJT> getPassedOjtsByIds() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

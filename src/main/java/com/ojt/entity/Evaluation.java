@@ -16,7 +16,7 @@ public class Evaluation {
 	private int teamwork;
 	private int leadership;
 	private int assignmentUnderstanding;
-	private int techicalSkill;
+	private int technicalSkill;
 	private int logicalThinking;
 	private int errorHandling;
 	private int accuracy;
