@@ -2,6 +2,9 @@ package com.ojt.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -22,6 +25,9 @@ public class Evaluation {
 	private int accuracy;
 	private int standardOrFormatting;
 	private int assignmentCompetence;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate createdDate;
 
 	@ManyToOne
 	@JoinColumn(name = "instructor_id")

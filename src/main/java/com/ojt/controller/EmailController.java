@@ -40,6 +40,7 @@ public class EmailController {
         try {
             System.out.println("Sending email");
             System.out.println("Sender name: " + senderName);
+            System.out.println("Recipient emails: " + recipientEmails);
             emailService.sendEmailToSelectedRecipients(recipientEmails, subject, body, emailStatus, senderName);
             model.addAttribute("successMessage", "Emails sent successfully!");
         } catch (Exception e) {

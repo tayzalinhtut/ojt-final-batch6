@@ -27,7 +27,7 @@ public class Instructor {
     private List<Course> courses;
 
     @OneToMany(mappedBy = "instructor")
-    private Set<Evaluation> evaluations;
+    private List<Evaluation> evaluations;
 
     //Nyi Min Htet Lwin
     public void addCourse(Course course) {

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class EmailServiceImplementation implements EmailService {
+public class  EmailServiceImplementation implements EmailService {
 
     @Autowired
     private JavaMailSender mailSender;
@@ -64,13 +64,12 @@ public class EmailServiceImplementation implements EmailService {
     @Override
     public void sendEmailToSelectedRecipients(List<String> recipientEmails, String subject, String body,
                                               StatusType emailStatusType, String senderName) {
-        List<User> user = userRepository.findAll();
         User sender = userRepository.findByStaffName(senderName);
         System.out.println("Sender: " + sender.getStaffName());
         if (sender == null) {
             throw new RuntimeException("Sender not found");
         }
-
+        System.out.println("Test test test test");
         Status emailStatus = statusRepository.findByStatusType(emailStatusType);
         if (emailStatus == null) {
             throw new RuntimeException("Email status not found");

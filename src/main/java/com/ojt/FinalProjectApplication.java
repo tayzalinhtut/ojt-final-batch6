@@ -27,10 +27,11 @@ public class FinalProjectApplication {
 		return args -> {
 
 			Role role = new Role();
-			role.setName("ROLE_ADMIN");
+			role.setName("Admin");
 			roleRepository.save(role);
 
 			User user = new User();
+			user.setStaffName("nik");
 			user.setDepartment("Admin");
 			user.setDivision("Manager");
 			user.setEmail("admin@admin.com");
@@ -98,7 +99,7 @@ public class FinalProjectApplication {
 			CV cv8 = new CV(); cv8.setName("CV8"); cv8.setEmail("cv8@mail.com"); cv8.setPhone("118"); cv8.setStatus(offerAccepted);
 			CV cv9 = new CV(); cv9.setName("CV9"); cv9.setEmail("cv9@mail.com"); cv9.setPhone("119"); cv9.setStatus(offerAccepted);
 			CV cv10 = new CV(); cv10.setName("CV10"); cv10.setEmail("cv10@mail.com"); cv10.setPhone("120"); cv10.setStatus(offerAccepted);
-			CV cv11 = new CV(); cv11.setName("CV11"); cv11.setEmail("cv11@mail.com"); cv11.setPhone("121"); cv11.setStatus(interFail);
+			CV cv11 = new CV(); cv11.setName("CV11"); cv11.setEmail("tayzalinhtut@gmail.com"); cv11.setPhone("121"); cv11.setStatus(interPass);
 			CV cv12 = new CV(); cv12.setName("CV12"); cv12.setEmail("cv12@mail.com"); cv12.setPhone("122"); cv12.setStatus(interFail);
 			CV cv13 = new CV(); cv13.setName("CV13"); cv13.setEmail("cv13@mail.com"); cv13.setPhone("123"); cv13.setStatus(interFail);
 			CV cv14 = new CV(); cv14.setName("CV14"); cv14.setEmail("cv14@mail.com"); cv14.setPhone("124"); cv14.setStatus(interFail);

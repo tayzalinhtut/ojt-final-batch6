@@ -51,5 +51,4 @@ public class CV {
     @OneToOne(mappedBy = "cv")
     private OJT ojt;
 
-
 }
