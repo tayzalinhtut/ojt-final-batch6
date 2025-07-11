@@ -5,8 +5,8 @@ public enum StatusType {
     // For CV Status
     Scan_Pass,
     Scan_Fail,
-    CodeTest_Pass,
-    CodeTest_Fail,
+    CodeTest_Pass, //
+    CodeTest_Fail, //
     Interview_Pass,
     Interview_Fail,
     Offer_Accept,

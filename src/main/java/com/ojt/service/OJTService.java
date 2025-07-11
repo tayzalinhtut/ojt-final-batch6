@@ -12,6 +12,8 @@ public interface OJTService {
 
     List<OJT> getOjtByBatchIdAndStatusTypeAndStatus(Long batchId);
 
+    long getOjtStatusCount();
+
     long countOjtActiveStudent(Long batchId);
 
     long countWithDrawStudentCount(Long batchId);

@@ -6,4 +6,5 @@ import com.ojt.entity.Batch;
 import java.util.List;
 
 public interface BatchRepository extends JpaRepository<Batch, Long> {
+    long count();
 }

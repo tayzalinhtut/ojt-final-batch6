@@ -55,14 +55,6 @@
                             Here's what's happening with your OJT program today.
                         </p>
                     </div>
-                    <div class="col-md-4 text-md-end">
-                        <div
-                                class="d-flex align-items-center justify-content-md-end opacity-75"
-                        >
-                            <i class="bi bi-calendar3 me-2"></i>
-                            <span>June 5, 2025</span>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -79,7 +71,7 @@
                                     <i class="bi bi-people fs-3"></i>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <h3 class="fw-bold mb-1 text-dark">42</h3>
+                                    <h3 class="fw-bold mb-1 text-dark" th:text="${activeStudentCount}">42</h3>
                                     <p class="text-muted mb-1">Total OJT Members</p>
                                 </div>
                             </div>
@@ -94,11 +86,11 @@
                                         class="bg-success bg-opacity-10 text-success rounded-3 d-flex align-items-center justify-content-center me-3"
                                         style="width: 60px; height: 60px"
                                 >
-                                    <i class="bi bi-check-circle fs-3"></i>
+                                    <i class="bi bi-building fs-3"></i>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <h3 class="fw-bold mb-1 text-dark">78%</h3>
-                                    <p class="text-muted mb-1">Interview Pass Rate</p>
+                                    <h3 class="fw-bold mb-1 text-dark" th:text="${batchTotal}">78%</h3>
+                                    <p class="text-muted mb-1">Total Batches</p>
                                     <!-- <small class="text-success">
                                       <i class="bi bi-arrow-up me-1"></i>+5% from last month
                                     </small> -->
@@ -139,8 +131,8 @@
                                     <i class="bi bi-hourglass-split fs-3"></i>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <h3 class="fw-bold mb-1 text-dark">12</h3>
-                                    <p class="text-muted mb-1">Pending Evaluations</p>
+                                    <h3 class="fw-bold mb-1 text-dark" th:text="${attendancePending}">12</h3>
+                                    <p class="text-muted mb-1">Pending Attendance</p>
                                     <!-- <small class="text-warning">
                                       <i class="bi bi-arrow-up me-1"></i>+2 from yesterday
                                     </small> -->

@@ -61,4 +61,9 @@ public class BatchServiceImplementation implements BatchService {
         batchRepository.deleteById(id);
     }
 
+    @Override
+    public long countTotalBatches(){
+        return batchRepository.count();
+    }
+
 }

@@ -91,5 +91,14 @@ public class AttendanceServiceImplementation implements AttendanceService {
     public void rejectAttendance(Long id) {
         attendanceRepository.deleteById(id);
     }
+
+    @Override
+    public long countAttendancePending(){
+        long count = attendanceRepository.countByActionFalse();
+        if (count == 0) {
+            return 0;
+        }
+        return count;
+    }
 }
 
