@@ -132,9 +132,9 @@ public class FinalProjectApplication {
 			CV cv11 = new CV(); cv11.setName("CV11"); cv11.setEmail("tayzalinhtut@gmail.com"); cv11.setPhone("121"); cv11.setStatus(interPass);
 
 
-			CV cv12 = new CV(); cv12.setName("CV12"); cv12.setEmail("thanthtoo128@gmail.com"); cv12.setPhone("122"); cv12.setStatus(interFail);
-			CV cv13 = new CV(); cv13.setName("CV13"); cv13.setEmail("thanthtoo1285@gmail.com"); cv13.setPhone("123"); cv13.setStatus(interFail);
-			CV cv14 = new CV(); cv14.setName("CV14"); cv14.setEmail("angelaanime87@gmail.com"); cv14.setPhone("124"); cv14.setStatus(interFail);
+			CV cv12 = new CV(); cv12.setName("CV12"); cv12.setEmail("abv@gmail.com"); cv12.setPhone("122"); cv12.setStatus(interFail);
+			CV cv13 = new CV(); cv13.setName("CV13"); cv13.setEmail("v@gmail.com"); cv13.setPhone("123"); cv13.setStatus(interFail);
+			CV cv14 = new CV(); cv14.setName("CV14"); cv14.setEmail("x@gmail.com"); cv14.setPhone("124"); cv14.setStatus(interFail);
 			CV cv15 = new CV(); cv15.setName("CV15"); cv15.setEmail("tayzalinhtut@gmail.com"); cv15.setPhone("125"); cv15.setStatus(interFail);
 			CV cv16 = new CV(); cv16.setName("CV16"); cv16.setEmail("tayzalinhtut11@gmail.com"); cv16.setPhone("126"); cv16.setStatus(interFail);
 			CV cv17 = new CV(); cv17.setName("CV17"); cv17.setEmail("cv17@mail.com"); cv17.setPhone("127"); cv17.setStatus(interFail);
