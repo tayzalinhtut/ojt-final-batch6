@@ -13,4 +13,5 @@ public interface BatchService {
     void deleteBatch(Long id);
     Batch saveBatch(BatchDTO batchDto);
 
+    long countTotalBatches();
 }

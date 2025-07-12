@@ -11,10 +11,16 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface OJTRepository extends JpaRepository<OJT, Long> {
+    //Tay Za Lin Htut
 
     @Query("SELECT COUNT(o) FROM OJT o WHERE o.cv.batch.id = :batchId AND o.status.statusType = :statusType")
     long countByBatchIdAndStatusType(@Param("batchId") Long batchId,
                                      @Param("statusType") StatusType statusType);
+
+    @Query("SELECT COUNT(o) FROM OJT o WHERE o.status.statusType = :statusType1 OR o.status.statusType = :statusType2")
+    long countByStatusTypeOrStatusType(@Param("statusType1") StatusType statusType1,
+                                       @Param("statusType2") StatusType statusType2);
+
 
     @Query("SELECT o FROM OJT o JOIN FETCH o.cv WHERE o.cv.batch.id = :batchId AND o.status.statusType IN :statusTypes")
     List<OJT> findWithCvByBatchIdAndStatusTypeIn(@Param("batchId") Long batchId,

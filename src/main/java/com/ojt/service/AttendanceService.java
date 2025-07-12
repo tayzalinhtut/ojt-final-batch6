@@ -15,5 +15,7 @@ public interface AttendanceService {
     List<Attendance> getPendingAttendance();
     void approveAttendance(Long id);
     void rejectAttendance(Long id);
+
+    long countAttendancePending();
 }
 

@@ -21,7 +21,7 @@ import java.util.Optional;
 
 @Service
 public class OJTServiceImplementation implements OJTService {
-
+    //Tay Za Lin Htut
     @Autowired
     private OJTRepository ojtRepository;
 
@@ -38,6 +38,12 @@ public class OJTServiceImplementation implements OJTService {
         );
         return ojtRepository.findWithCvByBatchIdAndStatusTypeIn(batchId, types);
     }
+
+    @Override
+    public long getOjtStatusCount() {
+        return ojtRepository.countByStatusTypeOrStatusType(StatusType.OJT_Active, StatusType.OJT_Pass);
+    }
+
 
 
 
@@ -78,9 +84,9 @@ public class OJTServiceImplementation implements OJTService {
     private BatchRepository batchRepository;
 
     @Override
-    public Page<OJT> getAllOJT(Pageable pageable) {
+    public List<OJT> getAllOJT() {
         // TODO Auto-generated method stub
-        return ojtRepository.findAll(pageable);
+        return ojtRepository.findAll();
     }
 
     @Override

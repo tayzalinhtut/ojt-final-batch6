@@ -23,7 +23,7 @@ public class FinalProjectApplication {
 	}
 
 	@Bean
-	CommandLineRunner runner(RoleRepository roleRepository,UserRepository userRepository,CVRepository cvRepo, OJTRepository ojtRepo, CourseRepository courseRepo, StatusRepository statusRepo, BatchRepository batchRepo ,InstructorRepository instructorRepo,AttendanceRepository attendanceRepo) {
+	CommandLineRunner runner(RoleRepository roleRepository, UserRepository userRepository, CVRepository cvRepo, OJTRepository ojtRepo, CourseRepository courseRepo, StatusRepository statusRepo, BatchRepository batchRepo , InstructorRepository instructorRepo, AttendanceRepository attendanceRepo, EvaluationRepository evaluationRepository) {
 		return args -> {
 
 			Role role = new Role();
@@ -34,7 +34,7 @@ public class FinalProjectApplication {
 			user.setStaffName("nik");
 			user.setDepartment("Admin");
 			user.setDivision("Manager");
-			user.setEmail("admin@admin.com");
+			user.setEmail("admin@gmail.com");
 			user.setPassword("admin");
 			user.setPhone("09862372");
 			user.setPosition("Manager");
@@ -87,6 +87,34 @@ public class FinalProjectApplication {
 			offerAccepted.setStatusType(StatusType.Offer_Accept);
 			offerAccepted = statusRepo.save(offerAccepted);
 
+			Status scanPassed = new Status();
+			scanPassed.setStatusType(StatusType.Scan_Pass);
+			scanPassed = statusRepo.save(scanPassed);
+
+			Status scanFail = new Status();
+			scanFail.setStatusType(StatusType.Scan_Fail);
+			scanFail = statusRepo.save(scanFail);
+
+			Status emailInvited = new Status();
+			emailInvited.setStatusType(StatusType.Email_InterviewInvite);
+			emailInvited = statusRepo.save(emailInvited);
+
+			Status emailCodeInvite = new Status();
+			emailCodeInvite.setStatusType(StatusType.Email_CodeTestInvite);
+			emailCodeInvite = statusRepo.save(emailCodeInvite);
+
+			Status emailInterviewResult = new Status();
+			emailInterviewResult.setStatusType(StatusType.Email_InterviewResult);
+			emailInterviewResult = statusRepo.save(emailInterviewResult);
+
+			Status emailCodetestFail = new Status();
+			emailCodetestFail.setStatusType(StatusType.Email_CodeTestFail);
+			emailCodetestFail = statusRepo.save(emailCodetestFail);
+
+
+			Status emailInterFail = new Status();
+			emailInterFail.setStatusType(StatusType.Email_InterviewFail);
+			emailInterFail = statusRepo.save(emailInterFail);
 
 			// 20 CVs
 			CV cv1 = new CV(); cv1.setName("CV1"); cv1.setEmail("cv1@mail.com"); cv1.setPhone("111"); cv1.setStatus(offerAccepted);
@@ -200,6 +228,38 @@ public class FinalProjectApplication {
 			attendance3.setCreatedAt(currentTime);
 
 			attendanceRepo.saveAll(Arrays.asList(attendance1, attendance2, attendance3));
+
+			Evaluation evaluation1 = new Evaluation();
+			evaluation1.setTeamwork(4);
+			evaluation1.setOjt(ojt4);
+			evaluation1.setLeadership(3);
+			evaluation1.setAccuracy(4);
+			evaluation1.setAssignmentUnderstanding(5);
+			evaluation1.setAssignmentCompetence(4);
+			evaluation1.setLogicalThinking(3);
+			evaluation1.setTechnicalSkill(3);
+			evaluation1.setErrorHandling(4);
+			evaluation1.setStandardOrFormatting(4);
+			evaluation1.setNote("All Fine");
+			evaluation1.setInstructor(instructor1);
+			evaluation1.setCreatedDate(LocalDate.now());
+			evaluationRepository.save(evaluation1);
+
+			Evaluation evaluation2 = new Evaluation();
+			evaluation2.setTeamwork(5);
+			evaluation2.setOjt(ojt3);
+			evaluation2.setLeadership(5);
+			evaluation2.setAccuracy(5);
+			evaluation2.setAssignmentUnderstanding(5);
+			evaluation2.setAssignmentCompetence(5);
+			evaluation2.setLogicalThinking(5);
+			evaluation2.setTechnicalSkill(5);
+			evaluation2.setErrorHandling(5);
+			evaluation2.setStandardOrFormatting(4);
+			evaluation2.setNote("All Fine");
+			evaluation2.setInstructor(instructor1);
+			evaluation2.setCreatedDate(LocalDate.now());
+			evaluationRepository.save(evaluation2);
 
 		};
 	}

@@ -14,8 +14,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface CVRepository extends JpaRepository<CV, Long> {
-    List<CV> findByBatchIsNull();         // Available
-    List<CV> findByBatchId(Long id);
+    //Tay Za Lin Htut
     long countByBatchIdAndStatus_StatusType(Long batchId, StatusType statusType);
 
 

@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
     List<Attendance> findByActionFalse();
-
+    long countByActionFalse();
     // Find attendance for specific student on specific date
     Optional<Attendance> findByOjtIdAndDate(Long ojtId, LocalDate date);
 
