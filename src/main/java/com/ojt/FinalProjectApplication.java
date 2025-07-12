@@ -8,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -16,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @SpringBootApplication
+@EnableAsync
 public class FinalProjectApplication {
 
 	public static void main(String[] args) {
@@ -128,11 +130,13 @@ public class FinalProjectApplication {
 			CV cv9 = new CV(); cv9.setName("CV9"); cv9.setEmail("cv9@mail.com"); cv9.setPhone("119"); cv9.setStatus(offerAccepted);
 			CV cv10 = new CV(); cv10.setName("CV10"); cv10.setEmail("cv10@mail.com"); cv10.setPhone("120"); cv10.setStatus(offerAccepted);
 			CV cv11 = new CV(); cv11.setName("CV11"); cv11.setEmail("tayzalinhtut@gmail.com"); cv11.setPhone("121"); cv11.setStatus(interPass);
-			CV cv12 = new CV(); cv12.setName("CV12"); cv12.setEmail("cv12@mail.com"); cv12.setPhone("122"); cv12.setStatus(interFail);
-			CV cv13 = new CV(); cv13.setName("CV13"); cv13.setEmail("cv13@mail.com"); cv13.setPhone("123"); cv13.setStatus(interFail);
-			CV cv14 = new CV(); cv14.setName("CV14"); cv14.setEmail("cv14@mail.com"); cv14.setPhone("124"); cv14.setStatus(interFail);
-			CV cv15 = new CV(); cv15.setName("CV15"); cv15.setEmail("cv15@mail.com"); cv15.setPhone("125"); cv15.setStatus(interFail);
-			CV cv16 = new CV(); cv16.setName("CV16"); cv16.setEmail("cv16@mail.com"); cv16.setPhone("126"); cv16.setStatus(interFail);
+
+
+			CV cv12 = new CV(); cv12.setName("CV12"); cv12.setEmail("thanthtoo128@gmail.com"); cv12.setPhone("122"); cv12.setStatus(interFail);
+			CV cv13 = new CV(); cv13.setName("CV13"); cv13.setEmail("thanthtoo1285@gmail.com"); cv13.setPhone("123"); cv13.setStatus(interFail);
+			CV cv14 = new CV(); cv14.setName("CV14"); cv14.setEmail("angelaanime87@gmail.com"); cv14.setPhone("124"); cv14.setStatus(interFail);
+			CV cv15 = new CV(); cv15.setName("CV15"); cv15.setEmail("tayzalinhtut@gmail.com"); cv15.setPhone("125"); cv15.setStatus(interFail);
+			CV cv16 = new CV(); cv16.setName("CV16"); cv16.setEmail("tayzalinhtut11@gmail.com"); cv16.setPhone("126"); cv16.setStatus(interFail);
 			CV cv17 = new CV(); cv17.setName("CV17"); cv17.setEmail("cv17@mail.com"); cv17.setPhone("127"); cv17.setStatus(interFail);
 			CV cv18 = new CV(); cv18.setName("CV18"); cv18.setEmail("cv18@mail.com"); cv18.setPhone("128"); cv18.setStatus(interFail);
 			CV cv19 = new CV(); cv19.setName("CV19"); cv19.setEmail("cv19@mail.com"); cv19.setPhone("129"); cv19.setStatus(interFail);
