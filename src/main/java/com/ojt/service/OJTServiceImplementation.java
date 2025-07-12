@@ -84,9 +84,9 @@ public class OJTServiceImplementation implements OJTService {
     private BatchRepository batchRepository;
 
     @Override
-    public Page<OJT> getAllOJT(Pageable pageable) {
+    public List<OJT> getAllOJT() {
         // TODO Auto-generated method stub
-        return ojtRepository.findAll(pageable);
+        return ojtRepository.findAll();
     }
 
     @Override

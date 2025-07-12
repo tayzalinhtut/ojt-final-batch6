@@ -2,8 +2,11 @@ package com.ojt.controller;
 
 import java.security.Principal;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.ojt.dto.OJTCustomDTO;
+import com.ojt.service.AttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,17 +36,38 @@ public class OJTController {
     @Autowired
     private OJTService ojtService;
 
-    @GetMapping("/ojt-members")
-    public String showOjtMembers(@RequestParam(name = "page", defaultValue = "0") int page, Model model, @ModelAttribute("message") String message) {
-        Pageable pageable = PageRequest.of(page, 5);
-        Page<OJT> ojtPage = ojtService.getAllOJT(pageable);
+    @Autowired
+    private AttendanceService atattendanceService;
 
-        model.addAttribute("ojts", ojtPage.getContent());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", ojtPage.getTotalPages());
-        model.addAttribute("startEntry", page * 5 + 1);
-        model.addAttribute("endEntry", Math.min((page + 1) * 5, (int) ojtPage.getTotalElements()));
-        model.addAttribute("totalEntries", ojtPage.getTotalElements());
+    @GetMapping("/ojt-members")
+    public String showOjtMembers(Model model, @ModelAttribute("message") String message) {
+        List<OJT> allOjts = ojtService.getAllOJT();
+
+        List<OJTCustomDTO> data = new ArrayList<>();
+
+        for(OJT ojt : allOjts) {
+            Long ojtId = ojt.getId();
+            Long batchId = ojt.getCv().getBatch().getId();
+
+            OJTDTO ojtDto = new OJTDTO();
+
+            ojtDto.setName(ojt.getCv().getName());
+            ojtDto.setBatchName(ojt.getCv().getBatch().getName());
+            ojtDto.setStatusName(ojt.getStatus().getStatusType());
+            ojtDto.setId(ojt.getId());
+            ojtDto.setBankAccount(ojt.getBankAccount());
+            ojtDto.setCvId(ojt.getCv().getId());
+            ojtDto.setBatchId(ojt.getCv().getBatch().getId());
+            ojtDto.setStatusId(ojt.getStatus().getId());
+            ojtDto.setEmail(ojt.getCv().getEmail());
+
+            int attendance = (int) atattendanceService.calculatedAttendancePercentage(ojtId, batchId);
+            System.out.println("Attendance : " + attendance);
+
+            data.add(new OJTCustomDTO(ojtDto, attendance));
+        }
+
+        model.addAttribute("ojts", data);
         model.addAttribute("message", message);
 
         return "admin/ojt/ojt-member-management";
