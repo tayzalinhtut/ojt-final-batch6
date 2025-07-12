@@ -48,8 +48,6 @@
 					</a>
 				</div>
 
-				<p th:text="${message}">no message</p>
-
 				<!-- Resources Table Card -->
 				<div class="card border-0 shadow-sm">
 					<div class="card-header bg-white border-0">
@@ -116,7 +114,7 @@
 				}
 			})
 	    }
-		
+
 		let errorMessage = /*[[${errorMessage != null ? "" + errorMessage + "" : ""}]]*/ '';
 
 		if (errorMessage.trim().length > 0) {
