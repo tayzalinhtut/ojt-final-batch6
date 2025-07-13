@@ -48,31 +48,33 @@
             <div class="p-4">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <form th:action="@{/admin/timetable/list}" th:object="${timetableDTO}" method="post">
+                        <form th:action="@{/admin/timetable/new}" th:object="${timetableDTO}" method="post">
+
+                            <!-- Day of Week -->
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Day of Week</label>
-                                <select class="form-select" th:field="*{dayOfWeek}" id="daySelect" required>
-
-                                <option value="">Select Day</option>
+                                <select class="form-select" th:field="*{dayOfWeek}" id="daySelect">
+                                    <option value="">Select Day</option>
                                     <option th:each="day : ${T(com.ojt.enumeration.DayOfWeek).values()}"
                                             th:value="${day}" th:text="${day}"></option>
                                 </select>
+                                <div class="text-danger mt-1" th:if="${#fields.hasErrors('dayOfWeek')}" th:errors="*{dayOfWeek}"></div>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Course</label>
-                                <select class="form-select" th:field="*{courseId}" required>
+                                <select class="form-select" th:field="*{courseId}">
                                     <option value="">Select Course</option>
                                     <option th:each="course : ${courses}" th:value="${course.id}"
-                                        th:text="${course.name}"></option>
+                                            th:text="${course.name}"></option>
                                 </select>
+                                <div class="text-danger mt-1" th:if="${#fields.hasErrors('courseId')}" th:errors="*{courseId}"></div>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Time Slot</label>
-                                <select class="form-select" th:field="*{time}" id="timeSlotSelect" required>
-
-                                <option value="">Select Time</option>
+                                <select class="form-select" th:field="*{time}" id="timeSlotSelect">
+                                    <option value="">Select Time</option>
                                     <option value="8-9 AM">8-9 AM</option>
                                     <option value="9-10 AM">9-10 AM</option>
                                     <option value="10-11 AM">10-11 AM</option>
@@ -83,14 +85,14 @@
                                     <option value="3-4 PM">3-4 PM</option>
                                     <option value="4-5 PM">4-5 PM</option>
                                 </select>
+                                <div class="text-danger mt-1" th:if="${#fields.hasErrors('time')}" th:errors="*{time}"></div>
                             </div>
 
-                            <!-- Buttons -->
                             <div class="d-flex justify-content-end gap-2">
-                                <a th:href="@{/admin/timetable}" class="btn btn-secondary">
+                                <a th:href="@{/admin/timetable}" class="btn btn-outline-secondary btn-toggle">
                                     <i class="bi bi-x-circle"></i> Cancel
                                 </a>
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-outline-primary btn-toggle">
                                     <i class="bi bi-check-circle"></i> Create Timetable
                                 </button>
                             </div>
@@ -98,6 +100,7 @@
                     </div>
                 </div>
             </div>
+
 
         </div>
     </div>
@@ -110,7 +113,7 @@
 
             daySelect.addEventListener("change", function () {
                 const selectedDay = this.value;
-                console.log("Selected day:", selectedDay); // Debug
+                console.log("Selected day:", selectedDay);
 
                 if (!selectedDay) {
                     timeSelect.innerHTML = '<option value="">Select Time</option>';

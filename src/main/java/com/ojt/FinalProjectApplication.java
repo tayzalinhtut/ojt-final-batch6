@@ -173,22 +173,25 @@ public class FinalProjectApplication {
 
 			Course course1 = new Course();
 			course1.setName("Java");
-
+			courseRepo.save(course1);
 
 			Course course2 = new Course();
 			course2.setName("Spring Boot");
 
 			Course course3 = new Course();
-			course3.setName("ReactJS");
+			course3.setName("Excel");
 
 			Course course4 = new Course();
-			course4.setName("Python");
+			course4.setName("Linux");
 
 			Course course5 = new Course();
-			course5.setName("Docker");
-//
-//
-			courseRepo.saveAll(Arrays.asList(course1, course2, course3, course4, course5));
+			course5.setName("Knowledge Sharing");
+
+			Course course6 = new Course();
+			course6.setName("Self Study");
+			courseRepo.save(course6);
+
+			courseRepo.saveAll(Arrays.asList( course2, course3, course4, course5));
 
 
 			OJT ojt1 = new OJT(); ojt1.setBankAccount("Acc1"); ojt1.setStatus(ojtActive); ojt1.setCv(cv1);
@@ -205,7 +208,7 @@ public class FinalProjectApplication {
 			ojtRepo.saveAll(Arrays.asList(ojt1, ojt2, ojt3, ojt4, ojt5, ojt6, ojt7, ojt8, ojt9, ojt10));
 
 			Instructor instructor1 = new Instructor();
-			instructor1.setName("Tr.Nyo Mon Naing Win");
+			instructor1.setName("Tr.NyoMon NaingWin");
 			instructor1.setEmail("nyomonnaingwin@gmail.com");
 			instructorRepo.save(instructor1);
 
@@ -214,10 +217,16 @@ public class FinalProjectApplication {
 			instructor2.setEmail("sayarzayyar@gmail.com");
 			instructorRepo.save(instructor2);
 
-			Course course = new Course();
-			course.setName("Java");
-			course.setInstructors(Arrays.asList(instructor1, instructor2));
-			courseRepo.save(course);
+			Instructor instructor3 = new Instructor();
+			instructor3.setName("Sayar Thant");
+			instructor3.setEmail("sayarthant@gmail.com");
+			instructorRepo.save(instructor3);
+
+			Instructor instructor4 = new Instructor();
+			instructor4.setName("Tr. Zin Mar Oo");
+			instructor4.setEmail("zinmarooo@gmail.com");
+			instructorRepo.save(instructor4);
+
 
 			LocalTime currentTime = LocalTime.now();
 			Attendance attendance1 = new Attendance();
