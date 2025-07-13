@@ -112,6 +112,9 @@ public class  EmailServiceImplementation implements EmailService {
         emailReplyRepository.save(reply);
         cvRepository.saveAll(cvList);
     }
+    private void sendEmail(final String toEmail, final String subject, final String body) {
+        this.eventPublisher.publishEvent(new EmailEvent(this, toEmail, subject, body));
+    }
 
     /*
     private void sendEmail(String toEmail, String subject, String body) {
@@ -132,8 +135,6 @@ public class  EmailServiceImplementation implements EmailService {
     }
     */
 
-    private void sendEmail(final String toEmail, final String subject, final String body) {
-        this.eventPublisher.publishEvent(new EmailEvent(this, toEmail, subject, body));
-    }
+
 
 }

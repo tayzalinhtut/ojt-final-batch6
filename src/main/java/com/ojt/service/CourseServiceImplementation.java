@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class CourseServiceImplementation implements CourseService {
@@ -28,19 +27,17 @@ public class CourseServiceImplementation implements CourseService {
     @Autowired
     private InstructorRepository instructorRepository;
 
-    @Override //Tay Za Lin Htut
+    @Override
     public List<Course> getCoursesByBatchId(Long batchId) {
         return courseRepository.findByBatches_Id(batchId);
     }
 
-
-    @Override //Tay Za Lin Htut
+    @Override
     public List<Course> getCoursesWithoutBatch(Long batchId) {
         return courseRepository.findCoursesNotInBatchOrUnassigned(batchId);
     }
 
-
-    @Override //Tay Za Lin Htut
+    @Override
     public void assignCoursesToBatch(List<Long> courseIds, Long batchId) {
         Batch batch = batchRepository.findById(batchId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid batch ID"));
@@ -49,11 +46,13 @@ public class CourseServiceImplementation implements CourseService {
         for (Course course : courses) {
             if (!course.getBatches().contains(batch)) {
                 course.getBatches().add(batch);
+                batch.getCourses().add(course);
             }
         }
         courseRepository.saveAll(courses);
     }
-    @Override //Tay Za Lin Htut
+
+    @Override
     public void unassignCoursesFromBatch(List<Long> courseIds, Long batchId) {
         Batch batch = batchRepository.findById(batchId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid batch ID"));
@@ -61,10 +60,12 @@ public class CourseServiceImplementation implements CourseService {
         List<Course> courses = courseRepository.findAllById(courseIds);
         for (Course course : courses) {
             course.getBatches().remove(batch);
+            batch.getCourses().remove(course);
         }
         courseRepository.saveAll(courses);
     }
-    @Override //Tay Za Lin Htut
+
+    @Override
     public List<Course> findAll() {
         return courseRepository.findAll();
     }
@@ -72,19 +73,12 @@ public class CourseServiceImplementation implements CourseService {
     @Override
     @Transactional
     public List<Course> getAllCourses() {
-        // Ensure instructors are fetched if needed immediately on course list page
-        // If not using eager fetching or a custom query in repository, you might need a custom method.
-        // For simplicity, let's assume default fetching or that the Thymeleaf template will lazily load.
-        // If your CourseRepository.findAllWithInstructors() works, keep it.
-        return courseRepository.findAll(); // Assuming find all might fetch or lazy load
+        return courseRepository.findAll();
     }
 
     @Override
     @Transactional
     public Course getCourseById(Long id) {
-        // Use findById for simplicity; if you specifically need eager loading of instructors
-        // when fetching a single course, you might need a custom query in your repository.
-        // For assigning instructors, the default fetching should be fine as we modify the collection.
         return courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course not found with ID: " + id));
     }
@@ -100,19 +94,19 @@ public class CourseServiceImplementation implements CourseService {
         course.setName(courseDTO.getName());
 
         if (courseDTO.getInstructorIds() != null && !courseDTO.getInstructorIds().isEmpty()) {
-            Set<Instructor> instructors = new HashSet<>(
-                    instructorRepository.findAllById(courseDTO.getInstructorIds())
-            );
-            // Use helper method to maintain bidirectional relationship
-            instructors.forEach(course::addInstructor);
+            Set<Instructor> instructors = new HashSet<>(instructorRepository.findAllById(courseDTO.getInstructorIds()));
+            course.setInstructors(instructors.stream().toList());
+            for (Instructor instructor : instructors) {
+                instructor.getCourses().add(course);
+            }
         }
 
         if (courseDTO.getBatchIds() != null && !courseDTO.getBatchIds().isEmpty()) {
-            Set<Batch> batches = new HashSet<>(
-                    batchRepository.findAllById(courseDTO.getBatchIds())
-            );
-            // Use helper method to maintain bidirectional relationship
-            batches.forEach(course::addBatch);
+            Set<Batch> batches = new HashSet<>(batchRepository.findAllById(courseDTO.getBatchIds()));
+            course.setBatches(batches);
+            for (Batch batch : batches) {
+                batch.getCourses().add(course);
+            }
         }
 
         return courseRepository.save(course);
@@ -123,32 +117,39 @@ public class CourseServiceImplementation implements CourseService {
     public Course updateCourse(Long id, CourseDTO courseDTO) {
         Course course = getCourseById(id);
 
-        if (!course.getName().equalsIgnoreCase(courseDTO.getName()) && courseRepository.existsByName(courseDTO.getName())) {
+        if (!course.getName().equalsIgnoreCase(courseDTO.getName()) &&
+                courseRepository.existsByName(courseDTO.getName())) {
             throw new RuntimeException("Course name '" + courseDTO.getName() + "' already exists for another course.");
         }
 
         course.setName(courseDTO.getName());
 
-        // Update instructors: Clear existing and re-add
-        // Need to iterate and call removeInstructor to maintain bidirectional link
-        new HashSet<>(course.getInstructors()).forEach(instructor -> instructor.removeCourse(course)); // Remove from inverse side
-        course.getInstructors().clear(); // Clear the owning side's collection
+        // Update instructors
+        for (Instructor instructor : new HashSet<>(course.getInstructors())) {
+            instructor.getCourses().remove(course);
+        }
+        course.getInstructors().clear();
 
         if (courseDTO.getInstructorIds() != null && !courseDTO.getInstructorIds().isEmpty()) {
-            Set<Instructor> newInstructors = new HashSet<>(
-                    instructorRepository.findAllById(courseDTO.getInstructorIds())
-            );
-            newInstructors.forEach(course::addInstructor); // Add new, maintains bidirectional link
+            Set<Instructor> newInstructors = new HashSet<>(instructorRepository.findAllById(courseDTO.getInstructorIds()));
+            course.setInstructors(newInstructors.stream().toList());
+            for (Instructor instructor : newInstructors) {
+                instructor.getCourses().add(course);
+            }
         }
 
-        // Update batches: Clear existing and re-add
-        new HashSet<>(course.getBatches()).forEach(batch -> batch.removeCourse(course));
+        // Update batches
+        for (Batch batch : new HashSet<>(course.getBatches())) {
+            batch.getCourses().remove(course);
+        }
         course.getBatches().clear();
+
         if (courseDTO.getBatchIds() != null && !courseDTO.getBatchIds().isEmpty()) {
-            Set<Batch> newBatches = new HashSet<>(
-                    batchRepository.findAllById(courseDTO.getBatchIds())
-            );
-            newBatches.forEach(course::addBatch);
+            Set<Batch> newBatches = new HashSet<>(batchRepository.findAllById(courseDTO.getBatchIds()));
+            course.setBatches(newBatches);
+            for (Batch batch : newBatches) {
+                batch.getCourses().add(course);
+            }
         }
 
         return courseRepository.save(course);
@@ -159,11 +160,14 @@ public class CourseServiceImplementation implements CourseService {
     public void deleteCourse(Long id) {
         Course course = getCourseById(id);
 
-        // Remove bidirectional links before deleting the course
-        new HashSet<>(course.getInstructors()).forEach(instructor -> instructor.removeCourse(course));
-        course.getInstructors().clear(); // Clear the collection on the course side
+        for (Instructor instructor : new HashSet<>(course.getInstructors())) {
+            instructor.getCourses().remove(course);
+        }
+        course.getInstructors().clear();
 
-        new HashSet<>(course.getBatches()).forEach(batch -> batch.removeCourse(course));
+        for (Batch batch : new HashSet<>(course.getBatches())) {
+            batch.getCourses().remove(course);
+        }
         course.getBatches().clear();
 
         courseRepository.delete(course);
@@ -174,26 +178,24 @@ public class CourseServiceImplementation implements CourseService {
         return courseRepository.existsByName(name);
     }
 
-    // NEW: Implementation for assigning instructors
     @Override
     @Transactional
     public void assignInstructorsToCourse(Long courseId, List<Long> instructorIds) {
-        Course course = getCourseById(courseId); // Throws RuntimeException if not found
+        Course course = getCourseById(courseId);
 
-        // Remove all current instructors from the course AND their bidirectional link
-        new HashSet<>(course.getInstructors()).forEach(instructor -> instructor.removeCourse(course));
+        for (Instructor instructor : new HashSet<>(course.getInstructors())) {
+            instructor.getCourses().remove(course);
+        }
         course.getInstructors().clear();
 
-        // Add new instructors if provided
         if (instructorIds != null && !instructorIds.isEmpty()) {
             List<Instructor> newInstructors = instructorRepository.findAllById(instructorIds);
-            // Add new instructors, maintaining bidirectional link
-            newInstructors.forEach(course::addInstructor);
+            course.setInstructors(newInstructors);
+            for (Instructor instructor : newInstructors) {
+                instructor.getCourses().add(course);
+            }
         }
 
-        // Save the updated course. Because the relationship is managed by the owning side (Course),
-        // saving the course will cascade changes to the join table.
         courseRepository.save(course);
     }
 }
-

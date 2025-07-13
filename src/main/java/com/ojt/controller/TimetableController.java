@@ -47,7 +47,7 @@ public String viewTimetable(Model model) {
             "12-1 PM", "1-2 PM", "2-3 PM", "3-4 PM", "4-5 PM"
     ));
     model.addAttribute("days", List.of(
-            "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"
+            "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY" , "SATURDAY"
     ));
 
     return "admin/timetable/timetable";

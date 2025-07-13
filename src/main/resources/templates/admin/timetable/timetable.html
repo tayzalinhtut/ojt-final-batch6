@@ -70,17 +70,19 @@
                         <table class="table table-hover table-bordered align-middle text-center">
                             <thead class="table-light">
                             <tr>
-                                <th>Time</th>
-                                <th th:each="day : ${days}" th:text="${day}">Day</th>
+                                <th>Day</th>
+                                <th th:each="time : ${timeSlots}" th:text="${time}">Time</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="time : ${timeSlots}">
-                                <td class="fw-semibold text-primary" th:text="${time}">Time</td>
-                                <td th:each="day : ${days}">
-                      <span th:each="t : ${timetables}" th:if="${t.time == time and t.dayOfWeek.name() == day}"
-                            th:text="${t.courses.name}"
-                            class="badge bg-info text-dark fw-normal px-3 py-2">Course</span>
+                            <tr th:each="day : ${days}">
+                                <td class="fw-semibold text-primary" th:text="${day}">Day</td>
+                                <td th:each="time : ${timeSlots}">
+                                <span th:each="t : ${timetables}"
+                                      th:if="${t.dayOfWeek.name() == day and t.time == time}"
+                                      th:text="${t.courses.name}"
+                                      th:text="${t.courses.instructors}"
+                                      class="badge bg-info text-dark fw-normal px-3 py-2">Course</span>
                                 </td>
                             </tr>
                             </tbody>
@@ -89,6 +91,7 @@
                 </div>
             </div>
         </main>
+
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
