@@ -78,15 +78,26 @@
                             <tr th:each="day : ${days}">
                                 <td class="fw-semibold text-primary" th:text="${day}">Day</td>
                                 <td th:each="time : ${timeSlots}">
-                                <span th:each="t : ${timetables}"
-                                      th:if="${t.dayOfWeek.name() == day and t.time == time}"
-                                      th:text="${t.courses.name}"
-                                      th:text="${t.courses.instructors}"
-                                      class="badge bg-info text-dark fw-normal px-3 py-2">Course</span>
+                                    <div th:each="t : ${timetables}"
+                                         th:if="${t.dayOfWeek.name() == day and t.time == time}">
+
+                                        <!-- Show Course Name -->
+                                        <div class="badge bg-info text-dark fw-normal px-3 py-2 mb-1"
+                                             th:text="${t.courses.name}">Course Name</div>
+
+                                        <!-- Show Instructors (if any) -->
+                                        <div th:if="${t.courses.instructors != null}">
+                                            <div th:each="ins : ${t.courses.instructors}"
+                                                 class="badge bg-secondary text-light fw-normal px-2 py-1 me-1"
+                                                 th:text="${ins.name}">Instructor Name</div>
+                                        </div>
+
+                                    </div>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
+
                     </div>
                 </div>
             </div>

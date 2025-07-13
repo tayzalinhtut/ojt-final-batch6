@@ -209,6 +209,16 @@ public class FinalProjectApplication {
 			instructor1.setEmail("nyomonnaingwin@gmail.com");
 			instructorRepo.save(instructor1);
 
+			Instructor instructor2 = new Instructor();
+			instructor2.setName("Sayar Zay Yar");
+			instructor2.setEmail("sayarzayyar@gmail.com");
+			instructorRepo.save(instructor2);
+
+			Course course = new Course();
+			course.setName("Java");
+			course.setInstructors(Arrays.asList(instructor1, instructor2));
+			courseRepo.save(course);
+
 			LocalTime currentTime = LocalTime.now();
 			Attendance attendance1 = new Attendance();
 			attendance1.setDate(LocalDate.of(2025, 7, 1));
