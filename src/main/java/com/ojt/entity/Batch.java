@@ -25,22 +25,4 @@ public class Batch {
     @OneToMany(mappedBy = "batch")
     private List<CV> cvs;
 
-    //I want to delete below helper methods
-
-    //Nyi Min Htet Lwin
-//    public void addCourse(Course course) {
-//        this.courses.add(course);
-//        if (!course.getBatches().contains(this)) {
-//            course.getBatches().add(this);
-//        }
-//    }
-//    //Nyi Min Htet Lwin
-//    public void removeCourse(Course course) {
-//        this.courses.remove(course);
-//        if (course.getBatches().contains(this)) {
-//            course.getBatches().remove(this);
-//        }
-//    }
-
-
 }
