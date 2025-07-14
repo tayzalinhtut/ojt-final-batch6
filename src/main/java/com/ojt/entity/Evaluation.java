@@ -37,4 +37,13 @@ public class Evaluation {
 	@JoinColumn(name = "ojt_id")
 	private OJT ojt;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "course_id")
+	private Course course;
+
+	public int getTotalScore() {
+		return teamwork + leadership + assignmentUnderstanding + technicalSkill +
+				logicalThinking + errorHandling + accuracy + standardOrFormatting +
+				assignmentCompetence;
+	}
 }

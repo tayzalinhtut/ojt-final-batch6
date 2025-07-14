@@ -44,9 +44,6 @@ public class OJTServiceImplementation implements OJTService {
         return ojtRepository.countByStatusTypeOrStatusType(StatusType.OJT_Active, StatusType.OJT_Pass);
     }
 
-
-
-
     @Override
     public long countOjtActiveStudent(Long batchId) {
         return ojtRepository.countByBatchIdAndStatusType(batchId, StatusType.OJT_Active);
@@ -75,7 +72,6 @@ public class OJTServiceImplementation implements OJTService {
     }
 
     //Mg Thant
-
 
     @Autowired
     private StatusRepository statusRepository;
@@ -170,6 +166,12 @@ public class OJTServiceImplementation implements OJTService {
     public List<OJT> getPassedOjtsByIds() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    // Htet Wai Yan Soe
+    @Override
+    public List<OJT> getOJTByStatus() {
+        return ojtRepository.findByStatus_StatusType(StatusType.OJT_Active);
     }
 
 }

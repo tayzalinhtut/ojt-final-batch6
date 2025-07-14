@@ -25,5 +25,7 @@ public class Course {
 	inverseJoinColumns = @JoinColumn(name = "batch_id"))
 	private Set<Batch> batches;
 
-
+	// Htet Wai Yan Soe
+	@OneToMany(mappedBy = "course")
+	private List<Evaluation> evaluations;
 }

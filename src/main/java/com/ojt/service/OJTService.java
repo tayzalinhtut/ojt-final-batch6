@@ -41,6 +41,9 @@ public interface OJTService {
     void deleteOJT(Long id) throws Exception;
 
     List<OJT> getPassedOjtsByIds();
+
+    // Htet Wai Yan Soe
+    List<OJT> getOJTByStatus();
 //    List<OJT> getOjtByBatchId(Long batchId);
 
 

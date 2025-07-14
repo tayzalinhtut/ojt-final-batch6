@@ -24,5 +24,4 @@ public class Batch {
 
     @OneToMany(mappedBy = "batch")
     private List<CV> cvs;
-
 }

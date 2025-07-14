@@ -7,16 +7,18 @@ import com.ojt.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @SpringBootApplication
+@EnableJpaRepositories("com.ojt.repository")  // Explicit repository package
+@EntityScan("com.ojt.entity")
 @EnableAsync
 public class FinalProjectApplication {
 
@@ -130,13 +132,11 @@ public class FinalProjectApplication {
 			CV cv9 = new CV(); cv9.setName("CV9"); cv9.setEmail("cv9@mail.com"); cv9.setPhone("119"); cv9.setStatus(offerAccepted);
 			CV cv10 = new CV(); cv10.setName("CV10"); cv10.setEmail("cv10@mail.com"); cv10.setPhone("120"); cv10.setStatus(offerAccepted);
 			CV cv11 = new CV(); cv11.setName("CV11"); cv11.setEmail("tayzalinhtut@gmail.com"); cv11.setPhone("121"); cv11.setStatus(interPass);
-
-
-			CV cv12 = new CV(); cv12.setName("CV12"); cv12.setEmail("abv@gmail.com"); cv12.setPhone("122"); cv12.setStatus(interFail);
-			CV cv13 = new CV(); cv13.setName("CV13"); cv13.setEmail("v@gmail.com"); cv13.setPhone("123"); cv13.setStatus(interFail);
-			CV cv14 = new CV(); cv14.setName("CV14"); cv14.setEmail("x@gmail.com"); cv14.setPhone("124"); cv14.setStatus(interFail);
-			CV cv15 = new CV(); cv15.setName("CV15"); cv15.setEmail("tayzalinhtut@gmail.com"); cv15.setPhone("125"); cv15.setStatus(interFail);
-			CV cv16 = new CV(); cv16.setName("CV16"); cv16.setEmail("tayzalinhtut11@gmail.com"); cv16.setPhone("126"); cv16.setStatus(interFail);
+			CV cv12 = new CV(); cv12.setName("CV12"); cv12.setEmail("cv12@mail.com"); cv12.setPhone("122"); cv12.setStatus(interFail);
+			CV cv13 = new CV(); cv13.setName("CV13"); cv13.setEmail("cv13@mail.com"); cv13.setPhone("123"); cv13.setStatus(interFail);
+			CV cv14 = new CV(); cv14.setName("CV14"); cv14.setEmail("cv14@mail.com"); cv14.setPhone("124"); cv14.setStatus(interFail);
+			CV cv15 = new CV(); cv15.setName("CV15"); cv15.setEmail("cv15@mail.com"); cv15.setPhone("125"); cv15.setStatus(interFail);
+			CV cv16 = new CV(); cv16.setName("CV16"); cv16.setEmail("cv16@mail.com"); cv16.setPhone("126"); cv16.setStatus(interFail);
 			CV cv17 = new CV(); cv17.setName("CV17"); cv17.setEmail("cv17@mail.com"); cv17.setPhone("127"); cv17.setStatus(interFail);
 			CV cv18 = new CV(); cv18.setName("CV18"); cv18.setEmail("cv18@mail.com"); cv18.setPhone("128"); cv18.setStatus(interFail);
 			CV cv19 = new CV(); cv19.setName("CV19"); cv19.setEmail("cv19@mail.com"); cv19.setPhone("129"); cv19.setStatus(interFail);
@@ -173,25 +173,22 @@ public class FinalProjectApplication {
 
 			Course course1 = new Course();
 			course1.setName("Java");
-			courseRepo.save(course1);
+
 
 			Course course2 = new Course();
 			course2.setName("Spring Boot");
 
 			Course course3 = new Course();
-			course3.setName("Excel");
+			course3.setName("ReactJS");
 
 			Course course4 = new Course();
-			course4.setName("Linux");
+			course4.setName("Python");
 
 			Course course5 = new Course();
-			course5.setName("Knowledge Sharing");
-
-			Course course6 = new Course();
-			course6.setName("Self Study");
-			courseRepo.save(course6);
-
-			courseRepo.saveAll(Arrays.asList( course2, course3, course4, course5));
+			course5.setName("Docker");
+//
+//
+			courseRepo.saveAll(Arrays.asList(course1, course2, course3, course4, course5));
 
 
 			OJT ojt1 = new OJT(); ojt1.setBankAccount("Acc1"); ojt1.setStatus(ojtActive); ojt1.setCv(cv1);
@@ -208,25 +205,9 @@ public class FinalProjectApplication {
 			ojtRepo.saveAll(Arrays.asList(ojt1, ojt2, ojt3, ojt4, ojt5, ojt6, ojt7, ojt8, ojt9, ojt10));
 
 			Instructor instructor1 = new Instructor();
-			instructor1.setName("Tr.NyoMon NaingWin");
+			instructor1.setName("Tr.Nyo Mon Naing Win");
 			instructor1.setEmail("nyomonnaingwin@gmail.com");
 			instructorRepo.save(instructor1);
-
-			Instructor instructor2 = new Instructor();
-			instructor2.setName("Sayar Zay Yar");
-			instructor2.setEmail("sayarzayyar@gmail.com");
-			instructorRepo.save(instructor2);
-
-			Instructor instructor3 = new Instructor();
-			instructor3.setName("Sayar Thant");
-			instructor3.setEmail("sayarthant@gmail.com");
-			instructorRepo.save(instructor3);
-
-			Instructor instructor4 = new Instructor();
-			instructor4.setName("Tr. Zin Mar Oo");
-			instructor4.setEmail("zinmarooo@gmail.com");
-			instructorRepo.save(instructor4);
-
 
 			LocalTime currentTime = LocalTime.now();
 			Attendance attendance1 = new Attendance();

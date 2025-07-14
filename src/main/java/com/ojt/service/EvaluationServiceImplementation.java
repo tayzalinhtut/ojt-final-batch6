@@ -7,11 +7,18 @@ import com.ojt.dto.EvaluationViewDTO.EvaluatorBreakdown;
 import com.ojt.dto.EvaluationViewDTO;
 import com.ojt.entity.Course;
 import com.ojt.entity.Instructor;
+import com.ojt.entity.OJT;
+import com.ojt.repository.CourseRepository;
+import com.ojt.repository.InstructorRepository;
+import com.ojt.repository.OJTRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ojt.entity.Evaluation;
 import com.ojt.repository.EvaluationRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class EvaluationServiceImplementation implements EvaluationService {
@@ -171,6 +178,98 @@ public class EvaluationServiceImplementation implements EvaluationService {
         if (score >= 200) return "A";
         if (score >= 150) return "B";
         return "C";
+    }
+
+    // Htet Wai Yan Soe
+    @Autowired
+    private OJTRepository ojtRepository;
+
+    @Autowired
+    private CourseRepository courseRepository;
+
+    @Autowired
+    private InstructorRepository instructorRepository;
+
+    @Override
+    public List<Evaluation> findALlEvaluation() {
+        // TODO Auto-generated method stub
+        return evaluationRepository.findAll();
+    }
+
+    @Override
+    public Optional<Evaluation> findEvaluationById(Long id) {
+        // TODO Auto-generated method stub
+        return evaluationRepository.findById(id);
+    }
+
+    @Override
+    public Evaluation saveEvaluation(Evaluation evaluation) {
+        // TODO Auto-generated method stub
+        return evaluationRepository.save(evaluation);
+    }
+
+    @Override
+    public void deleteEvaluationById(Long id) {
+        // TODO Auto-generated method stub
+        evaluationRepository.deleteById(id);
+    }
+
+    @Override
+    public Evaluation createUpdateEvaluation(Evaluation evaluationDetails, Long ojtId, Long courseId,
+                                             Long instructorId) {
+        OJT ojt = ojtRepository.findById(ojtId).orElseThrow(() -> new RuntimeException("OJT Student not found with id:" + ojtId));
+        Course courses = courseRepository.findById(courseId).orElseThrow(() -> new RuntimeException("OJT Student not found with id:" + courseId));
+        Instructor instructor = instructorRepository.findById(instructorId).orElseThrow(() -> new RuntimeException("OJT Student not found with id:" + instructorId));
+
+
+        // ✅ Prevent duplicate evaluation for same student and course
+        Optional<Evaluation> existingEval = evaluationRepository.findByOjtIdAndCourseId(ojtId, courseId);
+        if (existingEval.isPresent()) {
+            if (evaluationDetails.getId() == null || !existingEval.get().getId().equals(evaluationDetails.getId())) {
+                throw new IllegalArgumentException("This student has already been evaluated for the selected course.");
+            }
+        }
+        Evaluation evaluation;
+        if (evaluationDetails.getId() != null) {
+            // This is an update operation (used by edit form)
+            evaluation = evaluationRepository.findById(evaluationDetails.getId())
+                    .orElseThrow(() -> new RuntimeException("Evaluation not found with id: " + evaluationDetails.getId()));
+            // Update fields from evaluationDetails to the fetched evaluation
+            evaluation.setTeamwork(evaluationDetails.getTeamwork());
+            evaluation.setLeadership(evaluationDetails.getLeadership());
+            evaluation.setAssignmentUnderstanding(evaluationDetails.getAssignmentUnderstanding());
+            evaluation.setTechnicalSkill(evaluationDetails.getTechnicalSkill());
+            evaluation.setLogicalThinking(evaluationDetails.getLogicalThinking());
+            evaluation.setErrorHandling(evaluationDetails.getErrorHandling());
+            evaluation.setAccuracy(evaluationDetails.getAccuracy());
+            evaluation.setStandardOrFormatting(evaluationDetails.getStandardOrFormatting());
+            evaluation.setAssignmentCompetence(evaluationDetails.getAssignmentCompetence());
+            evaluation.setNote(evaluationDetails.getNote());
+        } else {
+            // This is a create operation (used by create form)
+            evaluation = evaluationDetails;
+        }
+
+        // Set relationships
+        evaluation.setOjt(ojt);
+        evaluation.setCourse(courses);
+        evaluation.setInstructor(instructor);
+
+        return evaluationRepository.save(evaluation);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Evaluation> findAllEvaluationPaginated(Pageable pageable) {
+        return evaluationRepository.findAllWithStudentAndCourse(pageable);
+    }//show Student Name and Course in instructor Dashboard
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Evaluation> searchEvalutionsByCvName(String studentName, Pageable pageable) {
+        // TODO Auto-generated method stub
+        return evaluationRepository.findByOjt_Cv_NameContainingIgnoreCase(studentName, pageable);
     }
 }
 

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Student Evaluation - OJT Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
+</head>
+<body class="bg-light">
+<div class="d-flex">
+
+    <!-- ✅ Sidebar -->
+    <div th:replace="fragment/instructor/sidebar :: sidebar"></div>
+
+    <div class="flex-grow-1" style="margin-left: 280px;">
+
+        <!-- Top Navigation -->
+        <header class="bg-white shadow-sm border-bottom sticky-top">
+            <div class="d-flex align-items-center justify-content-between p-4">
+                <div class="d-flex align-items-center">
+                    <h4 class="mb-0 fw-bold text-dark"><i class="bi bi-clipboard-check me-3 fs-5"></i>Student Evaluation</h4>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <a th:href="@{/instructor/evaluation/create}" class="btn btn-primary p-2">
+                        <i class="bi bi-plus-circle me-2 fs-5"> New Evaluation</i>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <main class="p-4">
+
+            <!-- ✅ Flash Messages
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+              <span th:text="${successMessage}"></span>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+              <span th:text="${errorMessage}"></span>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div> -->
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <h5 class="card-title mb-0">Student Evaluations</h5>
+
+                        <!-- ✅ Search Form -->
+                        <form class="d-flex" th:action="@{/instructor/evaluation}" method="get" style="width: 300px;">
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
+                                <input type="search" name="query" class="form-control border-start-0"
+                                       placeholder="Search students..." th:value="${query}" />
+                                <input type="hidden" name="page" th:value="${pageNumber}" />
+                                <input type="hidden" name="size" th:value="${size}" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="bg-light">
+                            <tr>
+                                <th>Student</th>
+                                <th>Subject</th>
+                                <th>Score</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+
+                            <tbody th:if="${not #lists.isEmpty(evaluationList)}">
+                            <tr th:each="evaluation : ${evaluationList}">
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3"
+                                             style="width: 40px; height: 40px;">
+                                            <i class="bi bi-person-circle text-muted fs-5"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-semibold" th:text="${evaluation.ojt.cv.name}">Student Name</div>
+                                            <small class="text-muted" th:text="${evaluation.ojt.cv.email}">student@email.com</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td th:text="${evaluation.course != null ? evaluation.course.name : 'N/A'}">Subject</td>
+                                <td>
+                                    <span class="fw-bold text-success" th:text="${evaluation.totalScore}">Score</span>
+                                </td>
+                                <td>
+                                    <a th:href="@{'/instructor/evaluation/view/' + ${evaluation.id}}" class="btn btn-sm btn-outline-primary me-2">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a th:href="@{'/instructor/evaluation/edit/' + ${evaluation.id}}" class="btn btn-sm btn-outline-success">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+
+                            <tbody th:if="${#lists.isEmpty(evaluationList)}">
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-4">No evaluations found.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ✅ Pagination -->
+                <div class="card-footer bg-white border-0">
+                    <nav>
+                        <ul class="pagination justify-content-center mb-0">
+                            <li class="page-item" th:classappend="${pageNumber == 1} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{/instructor/evaluation(page=${pageNumber - 1}, size=${size}, query=${query})}">Previous</a>
+                            </li>
+                            <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
+                                th:classappend="${pageNumber == i} ? 'active'">
+                                <a class="page-link"
+                                   th:href="@{/instructor/evaluation(page=${i}, size=${size}, query=${query})}"
+                                   th:text="${i}">1</a>
+                            </li>
+                            <li class="page-item" th:classappend="${pageNumber == totalPages} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{/instructor/evaluation(page=${pageNumber + 1}, size=${size}, query=${query})}">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
