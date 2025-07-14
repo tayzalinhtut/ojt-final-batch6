@@ -2,7 +2,7 @@ package com.ojt.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
@@ -10,8 +10,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Data
-@Table(name = "cv")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(exclude = {"batch"})
 public class CV {
 	
     @Id

@@ -3,6 +3,7 @@ package com.ojt;
 import com.ojt.entity.*;
 import com.ojt.enumeration.AttendType;
 import com.ojt.enumeration.StatusType;
+import com.ojt.enumeration.Week;
 import com.ojt.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -27,12 +28,16 @@ public class FinalProjectApplication {
 	}
 
 	@Bean
-	CommandLineRunner runner(RoleRepository roleRepository, UserRepository userRepository, CVRepository cvRepo, OJTRepository ojtRepo, CourseRepository courseRepo, StatusRepository statusRepo, BatchRepository batchRepo , InstructorRepository instructorRepo, AttendanceRepository attendanceRepo, EvaluationRepository evaluationRepository) {
+	CommandLineRunner runner(DetailRepository detailRepository,ScheduleRepository scheduleRepository,RoleRepository roleRepository, UserRepository userRepository, CVRepository cvRepo, OJTRepository ojtRepo, CourseRepository courseRepo, StatusRepository statusRepo, BatchRepository batchRepo , InstructorRepository instructorRepo, AttendanceRepository attendanceRepo, EvaluationRepository evaluationRepository) {
 		return args -> {
 
 			Role role = new Role();
 			role.setName("Admin");
 			roleRepository.save(role);
+
+			Role instructor = new Role();
+			instructor.setName("Instructor");
+			roleRepository.save(instructor);
 
 			User user = new User();
 			user.setStaffName("nik");
@@ -44,6 +49,16 @@ public class FinalProjectApplication {
 			user.setPosition("Manager");
 			user.setRole(role);
 			userRepository.save(user);
+
+			User instructor1 = new User();
+			instructor1.setStaffName("nik");
+			instructor1.setDepartment("Manager");
+			instructor1.setEmail("admin@gmail.com");
+			instructor1.setPassword("admin");
+			instructor1.setPhone("09862372");
+			instructor1.setPosition("Manager");
+			instructor1.setRole(instructor);
+			userRepository.save(instructor1);
 
 			Batch batch1 = new Batch();
 			batch1.setName("Batch1");
@@ -114,7 +129,6 @@ public class FinalProjectApplication {
 			Status emailCodetestFail = new Status();
 			emailCodetestFail.setStatusType(StatusType.Email_CodeTestFail);
 			emailCodetestFail = statusRepo.save(emailCodetestFail);
-
 
 			Status emailInterFail = new Status();
 			emailInterFail.setStatusType(StatusType.Email_InterviewFail);
@@ -204,10 +218,35 @@ public class FinalProjectApplication {
 
 			ojtRepo.saveAll(Arrays.asList(ojt1, ojt2, ojt3, ojt4, ojt5, ojt6, ojt7, ojt8, ojt9, ojt10));
 
-			Instructor instructor1 = new Instructor();
-			instructor1.setName("Tr.Nyo Mon Naing Win");
-			instructor1.setEmail("nyomonnaingwin@gmail.com");
-			instructorRepo.save(instructor1);
+			Instructor instructor12 = new Instructor();
+			instructor12.setName("Tr.Nyo Mon Naing Win");
+			instructor12.setEmail("nyomonnaingwin@gmail.com");
+			instructorRepo.save(instructor12);
+
+
+
+			Schedule schedule = new Schedule();
+			schedule.setWeek(Week.Week1); //enum
+			schedule.setTopic("HTML Basics & Structure");
+			schedule.setDuration(12L);
+			schedule.setStartDate(LocalDate.of(2024, 1, 8));
+			schedule.setEndDate(LocalDate.of(2024, 1, 12));
+			schedule.setInstructor(instructor12);
+//			schedule.setDetails(detail1);
+			schedule.setBatch(batch1);
+
+			scheduleRepository.save(schedule);
+
+
+			Detail detail1 = new Detail();
+			detail1.setDetails("This is a detail");
+			detail1.setSchedule(schedule);
+			detailRepository.save(detail1);
+
+			Detail detail2 = new Detail();
+			detail2.setDetails("This is a detail2");
+			detail2.setSchedule(schedule);
+			detailRepository.save(detail2);
 
 			LocalTime currentTime = LocalTime.now();
 			Attendance attendance1 = new Attendance();
@@ -245,7 +284,7 @@ public class FinalProjectApplication {
 			evaluation1.setErrorHandling(4);
 			evaluation1.setStandardOrFormatting(4);
 			evaluation1.setNote("All Fine");
-			evaluation1.setInstructor(instructor1);
+			evaluation1.setInstructor(instructor12);
 			evaluation1.setCreatedDate(LocalDate.now());
 			evaluationRepository.save(evaluation1);
 
@@ -261,10 +300,9 @@ public class FinalProjectApplication {
 			evaluation2.setErrorHandling(5);
 			evaluation2.setStandardOrFormatting(4);
 			evaluation2.setNote("All Fine");
-			evaluation2.setInstructor(instructor1);
+			evaluation2.setInstructor(instructor12);
 			evaluation2.setCreatedDate(LocalDate.now());
 			evaluationRepository.save(evaluation2);
-
 		};
 	}
 }

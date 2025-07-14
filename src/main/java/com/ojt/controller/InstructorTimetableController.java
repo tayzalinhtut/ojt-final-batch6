@@ -21,21 +21,6 @@ public class InstructorTimetableController {
     private final TimetableService timetableService;
     private final CourseService courseService;
 
-    @GetMapping("/available-times")
-    @ResponseBody
-    public List<String> getAvailableTimes(@RequestParam("day") String day) {
-        System.out.println("Fetching times for: " + day); // <-- Add this for debugging
-        DayOfWeek selectedDay = DayOfWeek.valueOf(day);
-        return timetableService.getAvailableTimeSlots(selectedDay);
-    }
-
-    @GetMapping("/list")
-    public String showAllTimetables(Model model) {
-        List<Timetable> timetables = timetableService.findAll();
-        model.addAttribute("timetables", timetables);
-        return "instructor/timetable/list";
-    }
-
     @GetMapping
     public String viewTimetable(Model model) {
         List<Timetable> timetables = timetableService.findAll();
@@ -46,16 +31,9 @@ public class InstructorTimetableController {
                 "12-1 PM", "1-2 PM", "2-3 PM", "3-4 PM", "4-5 PM"
         ));
         model.addAttribute("days", List.of(
-                "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"
+                "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"
         ));
 
         return "instructor/timetable";
     }
-
-    @PostMapping("/list")
-    public String createTimetable(@ModelAttribute TimetableDTO timetableDTO) {
-        timetableService.save(timetableDTO);
-        return "redirect:/instructor/timetable/list";
-    }
-
 }

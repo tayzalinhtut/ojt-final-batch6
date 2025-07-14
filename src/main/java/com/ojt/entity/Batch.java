@@ -4,10 +4,14 @@ import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(exclude = {"courses", "cvs", "schedule"})
 @Table(name = "batch")
 public class Batch {
 	
@@ -24,4 +28,8 @@ public class Batch {
 
     @OneToMany(mappedBy = "batch")
     private List<CV> cvs;
+
+    @OneToOne(mappedBy = "batch")
+    private Schedule schedule;
+
 }

@@ -58,28 +58,43 @@
 
     <main class="p-4">
       <div class="card shadow-sm border-0">
-        <div class="card-header bg-primary text-white">
+        <div class="card-header bg-white text-primary">
           <h5 class="mb-0">Weekly Timetable</h5>
         </div>
         <div class="card-body p-4">
           <div class="table-responsive">
-            <table class="table table-hover table-bordered align-middle text-center">
+            <table class="table table-bordered align-middle text-center">
               <thead class="table-light">
               <tr>
-                <th>Time</th>
-                <th th:each="day : ${days}" th:text="${day}">Day</th>
+                <th>Day</th>
+                <th th:each="time : ${timeSlots}" th:text="${time}">Time</th>
               </tr>
               </thead>
               <tbody>
-              <tr th:each="time : ${timeSlots}">
-                <td class="fw-semibold text-primary" th:text="${time}">Time</td>
-                <td th:each="day : ${days}">
-                      <span th:each="t : ${timetables}" th:if="${t.time == time and t.dayOfWeek.name() == day}"
-                            th:text="${t.courses.name}" class="badge bg-info text-dark fw-normal px-3 py-2">Course</span>
+              <tr th:each="day : ${days}">
+                <td class="fw-semibold text-primary" th:text="${day}">Day</td>
+                <td th:each="time : ${timeSlots}">
+                  <div th:each="t : ${timetables}"
+                       th:if="${t.dayOfWeek.name() == day and t.time == time}">
+
+                    <a th:href="@{/admin/timetable/edit/{id}(id=${t.id})}"
+                       class="badge bg-info text-dark fw-normal px-3 py-2 mb-1 text-decoration-none d-inline-block">
+                      <span th:text="${t.courses.name}">Course Name</span>
+                    </a>
+
+                    <div th:if="${t.courses.instructors != null}">
+                      <div th:each="ins : ${t.courses.instructors}"
+                           class="badge bg-success text-light fw-normal px-2 py-1 me-1"
+                           th:text="${ins.name}">Instructor Name</div>
+                    </div>
+
+                  </div>
                 </td>
+
               </tr>
               </tbody>
             </table>
+
           </div>
         </div>
       </div>
