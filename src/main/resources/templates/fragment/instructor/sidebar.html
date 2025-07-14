@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sidebar</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <style>
+    @media (min-width: 768px) {
+      #sidebar {
+        width: 280px;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+<!-- templates/fragments/sidebar.html -->
+<div th:fragment="sidebar">
+  <nav class="bg-white shadow-sm position-fixed h-100 d-flex flex-column" style="width: 280px; z-index: 1000;" id="sidebar">
+    <!-- Logo/Header -->
+    <div class="p-4 border-bottom">
+      <div class="d-flex align-items-center">
+        <div class="bg-primary text-white rounded-3 d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
+          <i class="bi bi-mortarboard-fill fs-5"></i>
+        </div>
+        <div>
+          <h5 class="mb-0 fw-bold text-dark">OJT Management</h5>
+          <small class="text-muted">Instructor Portal</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="flex-grow-1 p-3">
+      <ul class="nav flex-column gap-1">
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center py-3 px-3 rounded-3"
+             th:classappend="${currentUri == '/instructor/instructor-dashboard'} ? 'active bg-primary text-white' : 'text-dark'"
+             th:href="@{/instructor/instructor-dashboard}">
+            <i class="bi bi-speedometer2 me-3 fs-5"></i>
+            <span class="fw-semibold">Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center py-3 px-3 rounded-3"
+             th:classappend="${currentUri == '/instructor/timetable'} ? 'active bg-primary text-white' : 'text-dark'"
+             th:href="@{/instructor/timetable}">
+            <i class="bi bi-calendar-week me-3 fs-5"></i>
+            <span class="fw-semibold">Timetable</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center py-3 px-3 rounded-3"
+             th:classappend="${currentUri == '/instructor/evaluation'} ? 'active bg-primary text-white' : 'text-dark'"
+             th:href="@{/instructor/evaluation}">
+            <i class="bi bi-clipboard-check me-3 fs-5"></i>
+            <span class="fw-semibold">Evaluation</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- User dropdown -->
+    <div class="p-4 border-top">
+      <div class="d-flex align-items-center">
+        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3"
+             style="width: 45px; height: 45px;">
+          <i class="bi bi-person-circle fs-4 text-muted"></i>
+        </div>
+        <div class="flex-grow-1">
+          <!-- ✅ Dynamically show name and position -->
+          <div class="fw-semibold text-dark">Hla Hla</div>
+          <small class="text-muted">Senior Developer</small>
+          <!--<div class="fw-semibold text-dark" th:text="${loggedInUser.staffName}">Hla Hla</div>
+          <small class="text-muted" th:text="${loggedInUser.position}"">Senior Developer</small>-->
+        </div>
+        <div class="dropdown ms-2">
+          <button class="btn btn-link text-muted p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-three-dots-vertical"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>
+            <li><a class="dropdown-item" href="#">Settings</a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<!-- Bootstrap JS for Offcanvas toggle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

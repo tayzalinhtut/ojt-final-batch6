@@ -1,0 +1,143 @@
+<div th:fragment="notification-dropdown">
+    <!-- Notification Dropdown -->
+    <div class="dropdown">
+        <button id="notificationDropdownToggle" class="btn btn-link text-muted p-2 position-relative"
+                data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-bell fs-5"></i>
+            <!-- Dynamic badge count -->
+            <span th:id="notificationBadge"
+                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                  style="font-size: 0.6rem"
+                  th:text="${notifications != null ? #lists.size(notifications) : 0}">0</span>
+        </button>
+
+        <ul class="dropdown-menu dropdown-menu-end notification-dropdown p-0"
+            aria-labelledby="notificationDropdownToggle">
+            <!-- Notification content -->
+            <div id="notificationContent" class="notification-container">
+                <div class="p-3 border-bottom bg-light">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fw-bold fs-4">Notifications</h5>
+                    </div>
+                </div>
+                <div class="list-group list-group-flush notification-list" style="max-height: 500px; overflow-y: auto;">
+                    <div th:if="${notifications != null and !notifications.empty}">
+                        <a th:each="notification : ${notifications}"
+                           class="list-group-item list-group-item-action py-3 px-3 notification-item">
+                            <div class="d-flex w-100 justify-content-between align-items-start">
+                                <div class="me-3">
+                                    <div class="icon-circle bg-primary text-white">
+                                        <i class="fas fa-bell"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <p class="mb-0 text-muted small" th:if="${notification.message}"
+                                       th:text="${notification.message}"></p>
+                                </div>
+                                <small class="text-nowrap text-muted ms-2"
+                                       th:text="${#temporals.format(notification.createdAt, 'MMM dd, hh:mm a')}">Time</small>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty state -->
+            <div id="notificationEmpty" class="text-center p-4">
+                <p class="text-muted mb-0">No new notifications</p>
+            </div>
+        </ul>
+    </div>
+
+    <!-- Notyf cdn link -->
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+    <!-- SweetAlert2 cdn link -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+    <!-- SSE JavaScript -->
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            const notificationEmptyContainer = document.getElementById("notificationEmpty");
+            <!-- const currentUser = /*[[${currentUser}]]*/ 'admin'; -->
+            let notifications = /*[[${notifications}]]*/;
+            const currentUser = "admin";
+            const notificationBadge = document.getElementById('notificationBadge');
+            const notificationsArr = [];
+
+            const eventSource = new EventSource('/admin/api/notifications/' + currentUser);
+
+            fetchInitialNotifications();
+
+            eventSource.addEventListener('notification', function (event) {
+                const newNotification = JSON.parse(event.data);
+                const notyf = new Notyf();
+                notyf.success("Instructor make notification");
+                notificationsArr.unshift(newNotification);
+                updateNotificationUI(newNotification);
+            });
+
+            function fetchInitialNotifications() {
+                fetch('/admin/api/notifications/notifications/' + currentUser)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            notificationsArr.push(...data.reverse());
+                            renderAllNotifications();
+                            notificationEmptyContainer.classList.add("d-none");
+
+                            if (notificationBadge) {
+                                notificationBadge.textContent = notificationsArr.length;
+                            }
+                        }
+                    })
+                    .catch(error => console.error('Error fetching notification history:', error));
+            }
+
+            function renderAllNotifications() {
+                const notificationList = document.querySelector('.notification-dropdown .list-group');
+                if (!notificationList) return;
+
+                notificationList.innerHTML = '';
+
+                notificationsArr.forEach(notification => {
+                    const notificationElement = createNotificationElement(notification);
+                    notificationList.appendChild(notificationElement);
+                });
+            }
+
+            function updateNotificationUI(newNotification) {
+                // Update badge count
+                if (notificationBadge) {
+                    notificationBadge.textContent = notificationsArr.length;
+                }
+
+                // Add only the new notification to top of list
+                const notificationList = document.querySelector('.notification-dropdown .list-group');
+                if (notificationList) {
+                    const notificationElement = createNotificationElement(newNotification);
+                    notificationList.prepend(notificationElement);
+                }
+
+                notificationEmptyContainer.classList.add("d-none");
+            }
+
+            function createNotificationElement(notification) {
+                const newNotification = document.createElement('a');
+                newNotification.className = 'list-group-item list-group-item-action';
+                newNotification.href = notification.link || '#';
+                newNotification.innerHTML = `
+            <div class="d-flex w-100 justify-content-between">
+                <p class="mb-1">${notification.message}</p>
+                <small>${new Date(notification.createdAt).toLocaleString()}</small>
+            </div>
+        `;
+                return newNotification;
+            }
+
+            // Handle SSE errors
+            eventSource.onerror = function (error) {
+                console.error("EventSource failed:", error);
+            };
+        });
+    </script>
+</div>

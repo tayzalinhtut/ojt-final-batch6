@@ -30,4 +30,9 @@ public interface OJTRepository extends JpaRepository<OJT, Long> {
     @Query("SELECT new com.ojt.entity.OJT(o.id, o.bankAccount, o.status, o.cv, o.cv.batch) FROM OJT o")
     Page<OJT> findAllWithoutAttendance(Pageable pageable);
 
+    // Htet Wai Yan Soe
+    List<OJT> findByStatus_StatusType(StatusType status);
+
+    @Query("SELECT o From OJT o JOIN FETCH o.cv  ORDER BY o.cv.name ASC")
+    List<OJT>findAllWithCv();
 }

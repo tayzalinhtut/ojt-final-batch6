@@ -7,4 +7,9 @@ public interface InstructorService {
     List<Instructor> getAllInstructors();
     // You might also need getInstructorById if you plan to link to instructor details
     Instructor getInstructorById(Long id);
+
+    // Htet Wai Yan Soe
+    Instructor findByName(String name);
+
+    Instructor findByEmailOrStaffId(String input);
 }
