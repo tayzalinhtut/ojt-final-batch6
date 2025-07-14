@@ -28,30 +28,4 @@ public class Instructor {
 
     @OneToMany(mappedBy = "instructor")
     private List<Evaluation> evaluations;
-
-    //Nyi Min Htet Lwin
-    public void addCourse(Course course) {
-        this.courses.add(course);
-        if (!course.getInstructors().contains(this)) {
-            course.getInstructors().add(this);
-        }
-    }
-
-    public void removeCourse(Course course) {
-        this.courses.remove(course);
-        if (course.getInstructors().contains(this)) {
-            course.getInstructors().remove(this);
-        }
-    }
-
-    public void addEvaluation(Evaluation evaluation) {
-        this.evaluations.add(evaluation);
-        evaluation.setInstructor(this);
-    }
-
-    public void removeEvaluation(Evaluation evaluation) {
-        this.evaluations.remove(evaluation);
-        evaluation.setInstructor(null);
-    }
-
 }

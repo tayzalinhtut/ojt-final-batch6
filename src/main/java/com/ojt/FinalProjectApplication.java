@@ -10,16 +10,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @SpringBootApplication
 @EnableJpaRepositories("com.ojt.repository")  // Explicit repository package
 @EntityScan("com.ojt.entity")
+@EnableAsync
 public class FinalProjectApplication {
 
 	public static void main(String[] args) {

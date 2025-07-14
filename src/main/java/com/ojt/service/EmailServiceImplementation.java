@@ -6,12 +6,14 @@ import com.ojt.entity.EmailReply;
 import com.ojt.entity.Status;
 import com.ojt.entity.User;
 import com.ojt.enumeration.StatusType;
+import com.ojt.event.EmailEvent;
 import com.ojt.repository.CVRepository;
 import com.ojt.repository.EmailReplyRepository;
 import com.ojt.repository.StatusRepository;
 import com.ojt.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -37,6 +39,9 @@ public class  EmailServiceImplementation implements EmailService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     @Override
     public List<OJTDTO> getEligibleRecipients(StatusType cvStatusType, StatusType emailStatusType) {
@@ -107,7 +112,11 @@ public class  EmailServiceImplementation implements EmailService {
         emailReplyRepository.save(reply);
         cvRepository.saveAll(cvList);
     }
+    private void sendEmail(final String toEmail, final String subject, final String body) {
+        this.eventPublisher.publishEvent(new EmailEvent(this, toEmail, subject, body));
+    }
 
+    /*
     private void sendEmail(String toEmail, String subject, String body) {
         System.out.println(subject);
         System.out.println(body);
@@ -124,5 +133,8 @@ public class  EmailServiceImplementation implements EmailService {
             System.err.println("Failed to send email to " + toEmail + ": " + e.getMessage());
         }
     }
+    */
+
+
 
 }

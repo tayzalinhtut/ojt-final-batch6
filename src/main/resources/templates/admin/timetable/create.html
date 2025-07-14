@@ -7,141 +7,134 @@
 
 <body class="bg-light">
 
-    <div class="d-flex">
-        <!-- Sidebar -->
-        <div th:replace="~{fragment/side-bar :: side-bar}"></div>
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div th:replace="~{fragment/side-bar :: side-bar}"></div>
 
-        <!-- Main Content -->
-        <div class="flex-grow-1" style="margin-left: 280px">
-            <header class="bg-white shadow-sm border-bottom sticky-top">
-                <div class="d-flex align-items-center justify-content-between p-4">
-                    <div class="d-flex align-items-center">
-                        <a th:href="@{/admin/timetable}" class="btn btn-link text-muted p-0 me-3">
-                            <i class="bi bi-arrow-left fs-4"></i>
-                        </a>
-                        <h3 class="mb-0 fw-bold text-dark">Timetable Create</h3>
-                    </div>
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="dropdown">
-                            <button class="btn btn-link text-muted p-2 position-relative" data-bs-toggle="dropdown">
-                                <i class="bi bi-bell fs-5"></i>
-                                <span
+    <!-- Main Content -->
+    <div class="flex-grow-1" style="margin-left: 280px">
+        <header class="bg-white shadow-sm border-bottom sticky-top">
+            <div class="d-flex align-items-center justify-content-between p-4">
+                <div class="d-flex align-items-center">
+                    <a th:href="@{/admin/timetable}" class="btn btn-link text-muted p-0 me-3">
+                        <i class="bi bi-arrow-left fs-4"></i>
+                    </a>
+                    <h3 class="mb-0 fw-bold text-dark">Timetable Create</h3>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="dropdown">
+                        <button class="btn btn-link text-muted p-2 position-relative" data-bs-toggle="dropdown">
+                            <i class="bi bi-bell fs-5"></i>
+                            <span
                                     class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
                                     style="font-size: 0.6rem">3</span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li>
-                                    <a class="dropdown-item" href="#">New evaluation pending</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="#">Interview scheduled</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="#">Offer response due</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </header>
-
-            <div class="p-4">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <form th:action="@{/admin/timetable/list}" th:object="${timetableDTO}" method="post">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Day of Week</label>
-                                <select class="form-select" th:field="*{dayOfWeek}" id="daySelect" required>
-
-                                <option value="">Select Day</option>
-                                    <option th:each="day : ${T(com.ojt.enumeration.DayOfWeek).values()}"
-                                            th:value="${day}" th:text="${day}"></option>
-                                </select>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Course</label>
-                                <select class="form-select" th:field="*{courseId}" required>
-                                    <option value="">Select Course</option>
-                                    <option th:each="course : ${courses}" th:value="${course.id}"
-                                        th:text="${course.name}"></option>
-                                </select>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Time Slot</label>
-                                <select class="form-select" th:field="*{time}" id="timeSlotSelect" required>
-
-                                <option value="">Select Time</option>
-                                    <option value="8-9 AM">8-9 AM</option>
-                                    <option value="9-10 AM">9-10 AM</option>
-                                    <option value="10-11 AM">10-11 AM</option>
-                                    <option value="11-12 AM">11-12 AM</option>
-                                    <option value="12-1 PM">12-1 PM</option>
-                                    <option value="1-2 PM">1-2 PM</option>
-                                    <option value="2-3 PM">2-3 PM</option>
-                                    <option value="3-4 PM">3-4 PM</option>
-                                    <option value="4-5 PM">4-5 PM</option>
-                                </select>
-                            </div>
-
-                            <!-- Buttons -->
-                            <div class="d-flex justify-content-end gap-2">
-                                <a th:href="@{/admin/timetable}" class="btn btn-secondary">
-                                    <i class="bi bi-x-circle"></i> Cancel
-                                </a>
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="bi bi-check-circle"></i> Create Timetable
-                                </button>
-                            </div>
-                        </form>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item" href="#">New evaluation pending</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">Interview scheduled</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">Offer response due</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
+        </header>
 
+        <div class="p-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form th:action="@{/admin/timetable/new}" th:object="${timetableDTO}" method="post">
+
+                        <!-- Day of Week -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Day of Week</label>
+                            <select class="form-select" th:field="*{dayOfWeek}" id="daySelect">
+                                <option value="">Select Day</option>
+                                <option th:each="day : ${T(com.ojt.enumeration.DayOfWeek).values()}"
+                                        th:value="${day}" th:text="${day}"></option>
+                            </select>
+                            <div class="text-danger mt-1" th:if="${#fields.hasErrors('dayOfWeek')}" th:errors="*{dayOfWeek}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Course</label>
+                            <select class="form-select" th:field="*{courseId}">
+                                <option value="">Select Course</option>
+                                <option th:each="course : ${courses}" th:value="${course.id}"
+                                        th:text="${course.name}"></option>
+                            </select>
+                            <div class="text-danger mt-1" th:if="${#fields.hasErrors('courseId')}" th:errors="*{courseId}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Time Slot</label>
+                            <select class="form-select" th:field="*{time}" id="timeSlotSelect">
+                                <option value="">Select Time</option>
+                                <option value="8-9 AM">8-9 AM</option>
+                                <option value="9-10 AM">9-10 AM</option>
+                                <option value="10-11 AM">10-11 AM</option>
+                                <option value="11-12 AM">11-12 AM</option>
+                                <option value="12-1 PM">12-1 PM</option>
+                                <option value="1-2 PM">1-2 PM</option>
+                                <option value="2-3 PM">2-3 PM</option>
+                                <option value="3-4 PM">3-4 PM</option>
+                                <option value="4-5 PM">4-5 PM</option>
+                            </select>
+                            <div class="text-danger mt-1" th:if="${#fields.hasErrors('time')}" th:errors="*{time}"></div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <a th:href="@{/admin/timetable}" class="btn btn-outline-secondary btn-toggle">
+                                <i class="bi bi-x-circle"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-outline-primary btn-toggle">
+                                <i class="bi bi-check-circle"></i> Create Timetable
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
+
+
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const daySelect = document.getElementById("daySelect");
-            const timeSelect = document.getElementById("timeSlotSelect");
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:inline="javascript">
+    let timetableData = /*[[${timetables}]]*/ [];
 
-            daySelect.addEventListener("change", function () {
-                const selectedDay = this.value;
-                console.log("Selected day:", selectedDay); // Debug
+    document.addEventListener("DOMContentLoaded", function () {
+        let daySelect = document.getElementById("daySelect");
+        let timeSelect = document.getElementById("timeSlotSelect");
 
-                if (!selectedDay) {
-                    timeSelect.innerHTML = '<option value="">Select Time</option>';
-                    return;
-                }
+        let allSlots = [
+            "8-9 AM", "9-10 AM", "10-11 AM", "11-12 AM",
+            "12-1 PM", "1-2 PM", "2-3 PM", "3-4 PM", "4-5 PM"
+        ];
 
-                fetch(`/admin/timetable/available-times?day=${selectedDay}`)
-                    .then(res => {
-                        if (!res.ok) throw new Error("HTTP error " + res.status);
-                        return res.json();
-                    })
-                    .then(data => {
-                        console.log("Available times:", data); // Debug
-                        timeSelect.innerHTML = '<option value="">Select Time</option>';
-                        data.forEach(time => {
-                            const option = document.createElement("option");
-                            option.value = time;
-                            option.textContent = time;
-                            timeSelect.appendChild(option);
-                        });
-                    })
-                    .catch(err => {
-                        console.error("Error loading time slots:", err);
-                        timeSelect.innerHTML = '<option value="">Error loading</option>';
-                    });
+        daySelect.addEventListener("change", function () {
+            let selectedDay = daySelect.value;
+
+            let usedSlots = timetableData
+                .filter(t => t.dayOfWeek === selectedDay)
+                .map(t => t.time);
+
+            let availableSlots = allSlots.filter(slot => !usedSlots.includes(slot));
+
+            timeSelect.innerHTML = '<option value="">Select Time</option>';
+            availableSlots.forEach(slot => {
+                let option = document.createElement("option");
+                option.value = slot;
+                option.textContent = slot;
+                timeSelect.appendChild(option);
             });
         });
-    </script>
-
-
-
+    });
+</script>
 </body>
-
-</html>

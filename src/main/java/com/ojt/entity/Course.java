@@ -28,34 +28,4 @@ public class Course {
 	// Htet Wai Yan Soe
 	@OneToMany(mappedBy = "course")
 	private List<Evaluation> evaluations;
-
-	//Nyi Min Htet Lwin
-	public void addInstructor(Instructor instructor) {
-		this.instructors.add(instructor);
-		if (!instructor.getCourses().contains(this)) {
-			instructor.getCourses().add(this);
-		}
-	}
-
-	public void removeInstructor(Instructor instructor) {
-		this.instructors.remove(instructor);
-		if (instructor.getCourses().contains(this)) {
-			instructor.getCourses().remove(this);
-		}
-	}
-
-	public void addBatch(Batch batch) {
-		this.batches.add(batch);
-		if (!batch.getCourses().contains(this)) {
-			batch.getCourses().add(this);
-		}
-	}
-
-	public void removeBatch(Batch batch) {
-		this.batches.remove(batch);
-		if (batch.getCourses().contains(this)) {
-			batch.getCourses().remove(this);
-		}
-	}
-
 }
