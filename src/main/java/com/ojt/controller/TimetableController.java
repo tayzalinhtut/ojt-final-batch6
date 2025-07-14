@@ -22,15 +22,6 @@ public class TimetableController {
     private final TimetableService timetableService;
     private final CourseService courseService;
 
-    // Get available time slots for a selected day (AJAX call)
-    @GetMapping("/available-times")
-    @ResponseBody
-    public List<String> getAvailableTimes(@RequestParam("day") String day) {
-        DayOfWeek selectedDay = DayOfWeek.valueOf(day);
-        return timetableService.getAvailableTimeSlots(selectedDay);
-    }
-
-    // MAIN TIMETABLE PAGE: Grid of days and time slots
     @GetMapping
     public String viewTimetable(Model model) {
         List<Timetable> timetables = timetableService.findAll();
@@ -47,15 +38,16 @@ public class TimetableController {
         return "admin/timetable/timetable";
     }
 
-    // SHOW CREATE FORM
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("timetableDTO", new TimetableDTO());
         model.addAttribute("courses", courseService.findAll());
+        model.addAttribute("timetables", timetableService.findAll()); // ဒီလိုထည့်
         return "admin/timetable/create";
     }
 
-    // PROCESS CREATE FORM (validation)
+
+
     @PostMapping("/new")
     public String createTimetable(
             @Valid @ModelAttribute("timetableDTO") TimetableDTO timetableDTO,
@@ -71,7 +63,6 @@ public class TimetableController {
         return "redirect:/admin/timetable";
     }
 
-    // SHOW EDIT FORM
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
         Timetable timetable = timetableService.findById(id);
@@ -87,7 +78,6 @@ public class TimetableController {
         return "admin/timetable/edit";
     }
 
-    // PROCESS EDIT FORM (validation)
     @PostMapping("/update/{id}")
     public String updateTimetable(
             @PathVariable Long id,
@@ -104,7 +94,6 @@ public class TimetableController {
         return "redirect:/admin/timetable";
     }
 
-    // DELETE
     @GetMapping("/delete/{id}")
     public String deleteTimetable(@PathVariable Long id) {
         timetableService.delete(id);

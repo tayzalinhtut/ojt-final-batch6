@@ -37,22 +37,6 @@ public class BatchController {
     @Autowired
     private CVService cvService;
 
-
-
-//    @GetMapping("")
-//    public String viewAll(@RequestParam(name = "keyword", required = false) String keyword, Model model) {
-//        List<Batch> batches;
-//        if (keyword != null && !keyword.isEmpty()) {
-//            batches = batchService.searchBatchesByName(keyword);
-//        } else {
-//            batches = batchService.getAllBatches();
-//        }
-//        model.addAttribute("batches", batches);
-//        model.addAttribute("keyword", keyword);
-//
-//        return "admin/batch/batch-management";
-//    }
-
 @GetMapping
 public String viewAll(@RequestParam(name = "batchId", required = false) Long batchId, Model model, @ModelAttribute("message") String message) {
         List<Batch> allBatches = batchService.getAllBatches();
@@ -185,8 +169,6 @@ public String viewAll(@RequestParam(name = "batchId", required = false) Long bat
         return "redirect:/admin/batch";
     }
 
-
-    // View details
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable("id") Long id, Model model) {
 
@@ -207,8 +189,7 @@ public String viewAll(@RequestParam(name = "batchId", required = false) Long bat
         model.addAttribute("ojtFailed", ojtFailed);
         return "admin/batch/batch-details";
     }
-
-    // Handle delete
+ 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         batchService.deleteBatch(id);

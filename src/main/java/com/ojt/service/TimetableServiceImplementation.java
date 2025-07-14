@@ -38,8 +38,6 @@ class TimetableServiceImplementation implements TimetableService {
                 .toList();
     }
 
-
-
     @Override
     public Timetable save(TimetableDTO dto) {
         Timetable tt = new Timetable();

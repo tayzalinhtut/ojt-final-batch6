@@ -106,45 +106,37 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
+    <script th:inline="javascript">
+        let timetableData = /*[[${timetables}]]*/ [];
+
         document.addEventListener("DOMContentLoaded", function () {
-            const daySelect = document.getElementById("daySelect");
-            const timeSelect = document.getElementById("timeSlotSelect");
+            let daySelect = document.getElementById("daySelect");
+            let timeSelect = document.getElementById("timeSlotSelect");
+
+            let allSlots = [
+                "8-9 AM", "9-10 AM", "10-11 AM", "11-12 AM",
+                "12-1 PM", "1-2 PM", "2-3 PM", "3-4 PM", "4-5 PM"
+            ];
 
             daySelect.addEventListener("change", function () {
-                const selectedDay = this.value;
-                console.log("Selected day:", selectedDay);
+                let selectedDay = daySelect.value;
 
-                if (!selectedDay) {
-                    timeSelect.innerHTML = '<option value="">Select Time</option>';
-                    return;
-                }
+                let usedSlots = timetableData
+                    .filter(t => t.dayOfWeek === selectedDay)
+                    .map(t => t.time);
 
-                fetch(`/admin/timetable/available-times?day=${selectedDay}`)
-                    .then(res => {
-                        if (!res.ok) throw new Error("HTTP error " + res.status);
-                        return res.json();
-                    })
-                    .then(data => {
-                        console.log("Available times:", data); // Debug
-                        timeSelect.innerHTML = '<option value="">Select Time</option>';
-                        data.forEach(time => {
-                            const option = document.createElement("option");
-                            option.value = time;
-                            option.textContent = time;
-                            timeSelect.appendChild(option);
-                        });
-                    })
-                    .catch(err => {
-                        console.error("Error loading time slots:", err);
-                        timeSelect.innerHTML = '<option value="">Error loading</option>';
-                    });
+                let availableSlots = allSlots.filter(slot => !usedSlots.includes(slot));
+
+                timeSelect.innerHTML = '<option value="">Select Time</option>';
+                availableSlots.forEach(slot => {
+                    let option = document.createElement("option");
+                    option.value = slot;
+                    option.textContent = slot;
+                    timeSelect.appendChild(option);
+                });
             });
         });
     </script>
-
-
-
 </body>
 
 </html>

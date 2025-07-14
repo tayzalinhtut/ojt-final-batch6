@@ -5,7 +5,7 @@ import java.util.List;
 
 import jakarta.persistence.*;
 import lombok.Data;
-//Tay Za Lin Htut
+
 @Entity
 @Data
 @Table(name = "batch")
