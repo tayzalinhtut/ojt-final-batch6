@@ -47,13 +47,14 @@ public class FinalProjectApplication {
 			user.setPhone("09862372");
 			user.setPosition("Manager");
 			user.setRole(role);
+			user.setRole(instructor);
 			userRepository.save(user);
 
 			User instructor1 = new User();
-			instructor1.setStaffName("nik");
+			instructor1.setStaffName("admin instructor");
 			instructor1.setDepartment("Manager");
-			instructor1.setEmail("admin@gmail.com");
-			instructor1.setPassword("admin");
+			instructor1.setEmail("admin12@gmail.com");
+			instructor1.setPassword("admin1");
 			instructor1.setPhone("09862372");
 			instructor1.setPosition("Manager");
 			instructor1.setRole(instructor);
@@ -199,10 +200,7 @@ public class FinalProjectApplication {
 
 			Course course5 = new Course();
 			course5.setName("Docker");
-//
-//
 			courseRepo.saveAll(Arrays.asList(course1, course2, course3, course4, course5));
-
 
 			OJT ojt1 = new OJT(); ojt1.setBankAccount("Acc1"); ojt1.setStatus(ojtActive); ojt1.setCv(cv1);
 			OJT ojt2 = new OJT(); ojt2.setBankAccount("Acc2"); ojt2.setStatus(ojtActive); ojt2.setCv(cv2);
@@ -221,6 +219,11 @@ public class FinalProjectApplication {
 			instructor12.setName("Tr.Nyo Mon Naing Win");
 			instructor12.setEmail("nyomonnaingwin@gmail.com");
 			instructorRepo.save(instructor12);
+
+			Instructor instructor13 = new Instructor();
+			instructor13.setName("Sayar Thant");
+			instructor13.setEmail("sayarthant@gmail.com");
+			instructorRepo.save(instructor13);
 
 			LocalTime currentTime = LocalTime.now();
 			Attendance attendance1 = new Attendance();

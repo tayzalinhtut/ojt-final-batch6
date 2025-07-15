@@ -3,7 +3,7 @@ package com.ojt.service;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
-import com.ojt.dto.EvaluationViewDTO.EvaluatorBreakdown;
+import com.ojt.dto.EvaluatorBreakdownDTO;
 import com.ojt.dto.EvaluationViewDTO;
 import com.ojt.entity.Course;
 import com.ojt.entity.Instructor;
@@ -28,44 +28,7 @@ public class EvaluationServiceImplementation implements EvaluationService {
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    @Override
-    public Map<String, Integer> getSummedSkillsByOjt(Long ojtId) {
-        List<Evaluation> evaluations = evaluationRepository.findByOjt_Id(ojtId);
-        Map<String, Integer> skillTotals = new LinkedHashMap<>();
-
-        // Initialize all skills to 0
-        skillTotals.put("teamwork", 0);
-        skillTotals.put("leadership", 0);
-        skillTotals.put("assignmentUnderstanding", 0);
-        skillTotals.put("technicalSkill", 0);
-        skillTotals.put("logicalThinking", 0);
-        skillTotals.put("errorHandling", 0);
-        skillTotals.put("accuracy", 0);
-        skillTotals.put("standardOrFormatting", 0);
-        skillTotals.put("assignmentCompetence", 0);
-
-        // Sum all evaluations for each skill
-        for (Evaluation eval : evaluations) {
-            if (eval.getOjt().getId() == ojtId) {
-                skillTotals.put("teamwork", skillTotals.get("teamwork") + eval.getTeamwork());
-                skillTotals.put("leadership", skillTotals.get("leadership") + eval.getLeadership());
-                skillTotals.put("assignmentUnderstanding",
-                        skillTotals.get("assignmentUnderstanding") + eval.getAssignmentUnderstanding());
-                skillTotals.put("technicalSkill", skillTotals.get("technicalSkill") + eval.getTechnicalSkill());
-                skillTotals.put("logicalThinking", skillTotals.get("logicalThinking") + eval.getLogicalThinking());
-                skillTotals.put("errorHandling", skillTotals.get("errorHandling") + eval.getErrorHandling());
-                skillTotals.put("accuracy", skillTotals.get("accuracy") + eval.getAccuracy());
-                skillTotals.put("standardOrFormatting",
-                        skillTotals.get("standardOrFormatting") + eval.getStandardOrFormatting());
-                skillTotals.put("assignmentCompetence",
-                        skillTotals.get("assignmentCompetence") + eval.getAssignmentCompetence());
-            }
-        }
-
-        return skillTotals;
-    }
-
-
+    // Htet Linn Aung
     @Override
     public List<EvaluationViewDTO> getAllEvaluations() {
         Map<Long, List<Evaluation>> groupedByOjt = evaluationRepository.findAll().stream()
@@ -136,11 +99,11 @@ public class EvaluationServiceImplementation implements EvaluationService {
                 .collect(Collectors.toSet());
         dto.setEvaluators(String.join(", ", allEvaluators));
 
-        List<EvaluatorBreakdown> breakdowns = new ArrayList<>();
+        List<EvaluatorBreakdownDTO> breakdowns = new ArrayList<>();
         for (Evaluation e : evaluations) {
             Instructor instructor = e.getInstructor();
             if (instructor != null) {
-                EvaluatorBreakdown eb = new EvaluatorBreakdown();
+                EvaluatorBreakdownDTO eb = new EvaluatorBreakdownDTO();
                 eb.setInstructorName(instructor.getName());
 
                 String courseName = instructor.getCourses().isEmpty() ? "N/A"
@@ -178,6 +141,44 @@ public class EvaluationServiceImplementation implements EvaluationService {
         if (score >= 200) return "A";
         if (score >= 150) return "B";
         return "C";
+    }
+
+    // Thant Sin Win
+    @Override
+    public Map<String, Integer> getSummedSkillsByOjt(Long ojtId) {
+        List<Evaluation> evaluations = evaluationRepository.findByOjt_Id(ojtId);
+        Map<String, Integer> skillTotals = new LinkedHashMap<>();
+
+        // Initialize all skills to 0
+        skillTotals.put("teamwork", 0);
+        skillTotals.put("leadership", 0);
+        skillTotals.put("assignmentUnderstanding", 0);
+        skillTotals.put("technicalSkill", 0);
+        skillTotals.put("logicalThinking", 0);
+        skillTotals.put("errorHandling", 0);
+        skillTotals.put("accuracy", 0);
+        skillTotals.put("standardOrFormatting", 0);
+        skillTotals.put("assignmentCompetence", 0);
+
+        // Sum all evaluations for each skill
+        for (Evaluation eval : evaluations) {
+            if (eval.getOjt().getId() == ojtId) {
+                skillTotals.put("teamwork", skillTotals.get("teamwork") + eval.getTeamwork());
+                skillTotals.put("leadership", skillTotals.get("leadership") + eval.getLeadership());
+                skillTotals.put("assignmentUnderstanding",
+                        skillTotals.get("assignmentUnderstanding") + eval.getAssignmentUnderstanding());
+                skillTotals.put("technicalSkill", skillTotals.get("technicalSkill") + eval.getTechnicalSkill());
+                skillTotals.put("logicalThinking", skillTotals.get("logicalThinking") + eval.getLogicalThinking());
+                skillTotals.put("errorHandling", skillTotals.get("errorHandling") + eval.getErrorHandling());
+                skillTotals.put("accuracy", skillTotals.get("accuracy") + eval.getAccuracy());
+                skillTotals.put("standardOrFormatting",
+                        skillTotals.get("standardOrFormatting") + eval.getStandardOrFormatting());
+                skillTotals.put("assignmentCompetence",
+                        skillTotals.get("assignmentCompetence") + eval.getAssignmentCompetence());
+            }
+        }
+
+        return skillTotals;
     }
 
     // Htet Wai Yan Soe
