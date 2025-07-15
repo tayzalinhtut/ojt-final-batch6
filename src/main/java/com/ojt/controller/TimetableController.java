@@ -34,7 +34,7 @@ public class TimetableController {
         model.addAttribute("days", List.of(
                 "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"
         ));
-
+        model.addAttribute("activePage", "timetable");
         return "admin/timetable/timetable";
     }
 
@@ -42,7 +42,8 @@ public class TimetableController {
     public String showCreateForm(Model model) {
         model.addAttribute("timetableDTO", new TimetableDTO());
         model.addAttribute("courses", courseService.findAll());
-        model.addAttribute("timetables", timetableService.findAll()); // ဒီလိုထည့်
+        model.addAttribute("timetables", timetableService.findAll());
+        model.addAttribute("activePage", "timetable");
         return "admin/timetable/create";
     }
 
@@ -75,6 +76,7 @@ public class TimetableController {
 
         model.addAttribute("timetableDTO", dto);
         model.addAttribute("courses", courseService.findAll());
+        model.addAttribute("activePage", "timetable");
         return "admin/timetable/edit";
     }
 

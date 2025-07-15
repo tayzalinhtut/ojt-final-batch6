@@ -61,6 +61,7 @@ public class OJTController {
             ojtDto.setStatusId(ojt.getStatus().getId());
             ojtDto.setEmail(ojt.getCv().getEmail());
 
+
             int attendance = (int) atattendanceService.calculatedAttendancePercentage(ojtId, batchId);
             System.out.println("Attendance : " + attendance);
 
@@ -69,7 +70,7 @@ public class OJTController {
 
         model.addAttribute("ojts", data);
         model.addAttribute("message", message);
-
+        model.addAttribute("activePage", "ojt-members");
         return "admin/ojt/ojt-member-management";
     }
 
@@ -82,7 +83,7 @@ public class OJTController {
         long monthsBetween = ChronoUnit.MONTHS.between(ojtMember.getCv().getBatch().getStartDate(), ojtMember.getCv().getBatch().getEndDate());
         model.addAttribute("monthsBetween", monthsBetween);
 
-
+        model.addAttribute("activePage", "ojt-members");
         return "admin/ojt/ojt-member-profile-details";
     }
 
@@ -102,7 +103,7 @@ public class OJTController {
         ojtDto.setEmail(ojt.getCv().getEmail());
         ojtDto.setPhone(ojt.getCv().getPhone());
 
-
+        model.addAttribute("activePage", "ojt-members");
         model.addAttribute("ojtDto", ojtDto);
 
         return "admin/ojt/ojt-member-profile-edit";
@@ -128,7 +129,6 @@ public class OJTController {
         ojtService.deleteOJT(id);
 
         redirectAttributes.addFlashAttribute("message", "OJT successfuly deleted!");
-
         return "redirect:/admin/resources";
     }
 

@@ -20,7 +20,10 @@ public class EmailController {
     private EmailService emailService;
 
     @GetMapping
-    public String emailPage() {
+    public String emailPage(Model model) {
+
+        model.addAttribute("activePage", "email");
+
         return "admin/email/email";
     }
 

@@ -67,6 +67,7 @@ public String viewAll(@RequestParam(name = "batchId", required = false) Long bat
     model.addAttribute("studentCounts", studentCounts);
     model.addAttribute("courseCounts", courseCounts);
     model.addAttribute("selectedBatchId", batchId);
+    model.addAttribute("activePage", "batch");
 
     return "admin/batch/batch-management";
 }
@@ -76,7 +77,9 @@ public String viewAll(@RequestParam(name = "batchId", required = false) Long bat
     @GetMapping("/create")
     public String createForm(Model model) {
         model.addAttribute("batch", new BatchDTO());
+        model.addAttribute("activePage", "batch");
         return "admin/batch/batch-create";
+
     }
 
 
@@ -111,6 +114,7 @@ public String viewAll(@RequestParam(name = "batchId", required = false) Long bat
         model.addAttribute("batches", batch);
         model.addAttribute("batch", dto);
         model.addAttribute("enrolledOjts", enrolledOjts);
+        model.addAttribute("activePage", "batch");
         return "admin/batch/batch-edit";
     }
 
@@ -146,6 +150,8 @@ public String viewAll(@RequestParam(name = "batchId", required = false) Long bat
         model.addAttribute("assignedCourses", assignedCourses);
         model.addAttribute("availableCourses", availableCourses);
         model.addAttribute("studentCount", studentCount);
+        model.addAttribute("activePage", "batch");
+
         return "admin/batch/assign-course-batch";
     }
 
@@ -187,6 +193,7 @@ public String viewAll(@RequestParam(name = "batchId", required = false) Long bat
         model.addAttribute("withDrawCount", withDrawCount);
         model.addAttribute("ojtPass", ojtPass);
         model.addAttribute("ojtFailed", ojtFailed);
+        model.addAttribute("activePage", "batch");
         return "admin/batch/batch-details";
     }
  

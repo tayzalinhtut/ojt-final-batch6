@@ -41,6 +41,7 @@ public class DashboardController {
         model.addAttribute("batchTotal", batchTotal);
         model.addAttribute("notifications", notifications);
         model.addAttribute("currentUser", "admin@gmail.com");
+        model.addAttribute("activePage", "dashboard");
 
         return "admin/dashboard/dashboard";
     }

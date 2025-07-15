@@ -35,7 +35,7 @@ public class ResourceController {
         model.addAttribute("message", message);
 
         model.addAttribute("resources", resources);
-
+        model.addAttribute("activePage", "resources");
         System.out.println("Flash Message: " + message);
 
 
@@ -47,7 +47,7 @@ public class ResourceController {
         ResourceDTO resourceDTO = new ResourceDTO();
 
         model.addAttribute("resourceDTO", resourceDTO);
-
+        model.addAttribute("activePage", "resources");
         return "admin/resource/resource-create";
     }
 
@@ -71,7 +71,7 @@ public class ResourceController {
         resource = resourceService.getResourceById(id);
 
         resourceDTO.setName(resource.getName());
-
+        model.addAttribute("activePage", "resources");
         model.addAttribute("resourceDTO", resourceDTO);
 
         return "admin/resource/resource-edit";

@@ -30,13 +30,15 @@ public class CourseController {
     @GetMapping("")
     public String listCourses(Model model) {
         model.addAttribute("courses", courseService.getAllCourses());
+        model.addAttribute("activePage", "batch");
+        model.addAttribute("activePage", "course");
         return "admin/course/courses";
     }
 
     @GetMapping("/create")
     public String showCreateForm(Model model) {
         model.addAttribute("courseDTO", new CourseDTO());
-        // You might want to add all instructors/batches here for the create form
+        model.addAttribute("activePage", "course");        // You might want to add all instructors/batches here for the create form
         // model.addAttribute("allInstructors", instructorService.getAllInstructors());
         // model.addAttribute("allBatches", batchService.getAllBatches());
         return "admin/course/course-create";
@@ -84,6 +86,7 @@ public class CourseController {
                 .collect(Collectors.toList())); // Changed to List
 
         model.addAttribute("courseDTO", courseDTO);
+        model.addAttribute("activePage", "batch");
         // If your edit form also needs all instructors/batches for dropdowns/checkboxes, add them:
         // model.addAttribute("allInstructors", instructorService.getAllInstructors());
         // model.addAttribute("allBatches", batchService.getAllBatches());
@@ -130,7 +133,6 @@ public class CourseController {
         return "redirect:/admin/course";
     }
 
-    // Existing methods for assignInstructors
     @GetMapping("/assignInstructors")
     public String showAssignInstructorsPage(@RequestParam("courseId") Long courseId, Model model, RedirectAttributes redirectAttributes) {
         try {
@@ -144,7 +146,8 @@ public class CourseController {
             model.addAttribute("course", course);
             model.addAttribute("allInstructors", allInstructors);
             model.addAttribute("assignedInstructorIds", assignedInstructorIds);
-
+            model.addAttribute("activePage", "course");
+            model.addAttribute("activePage", "course");
             return "admin/course/assign-instructors";
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
@@ -158,7 +161,6 @@ public class CourseController {
                                           @RequestParam(value = "instructorIds", required = false) List<Long> instructorIds, // This expects a List<Long> from form
                                           RedirectAttributes redirectAttributes) {
         try {
-            // The service method also expects List<Long>, so this is consistent
             courseService.assignInstructorsToCourse(courseId, instructorIds);
             redirectAttributes.addFlashAttribute("message", "Instructors assigned successfully!");
             redirectAttributes.addFlashAttribute("alertClass", "alert-success");
@@ -169,7 +171,6 @@ public class CourseController {
         return "redirect:/admin/course";
     }
 
-    // View instructors already assigned to a course
     @GetMapping("/{courseId}/instructors")
     public String showAssignedInstructors(@PathVariable Long courseId, Model model, RedirectAttributes redirectAttributes) {
         try {
@@ -177,9 +178,11 @@ public class CourseController {
             List<Instructor> assignedInstructors = course.getInstructors();
 
             model.addAttribute("course", course);
-            model.addAttribute("assignInstructors", assignedInstructors); // or "assignedInstructors" for clarity
+            model.addAttribute("assignInstructors", assignedInstructors);
+            model.addAttribute("activePage", "course");
+            model.addAttribute("activePage", "course");
 
-            return "admin/course/view-assign-instructors"; // Match with templates/admin/course/view-assign-instructors.html
+            return "admin/course/view-assign-instructors";
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("message", "Course not found: " + e.getMessage());
             redirectAttributes.addFlashAttribute("alertClass", "alert-danger");

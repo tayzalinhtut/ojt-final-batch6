@@ -23,6 +23,7 @@ public class AttendanceController {
     public String attendance(Model model) {
         List<Attendance> attendanceList = attendanceService.getPendingAttendance();
         model.addAttribute("attendanceList", attendanceList);
+        model.addAttribute("activePage", "attendance");
         return "admin/attendance/submit-student-attendance";
     }
 

@@ -3,7 +3,6 @@ package com.ojt;
 import com.ojt.entity.*;
 import com.ojt.enumeration.AttendType;
 import com.ojt.enumeration.StatusType;
-import com.ojt.enumeration.Week;
 import com.ojt.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -28,7 +27,7 @@ public class FinalProjectApplication {
 	}
 
 	@Bean
-	CommandLineRunner runner(DetailRepository detailRepository,ScheduleRepository scheduleRepository,RoleRepository roleRepository, UserRepository userRepository, CVRepository cvRepo, OJTRepository ojtRepo, CourseRepository courseRepo, StatusRepository statusRepo, BatchRepository batchRepo , InstructorRepository instructorRepo, AttendanceRepository attendanceRepo, EvaluationRepository evaluationRepository) {
+	CommandLineRunner runner(RoleRepository roleRepository, UserRepository userRepository, CVRepository cvRepo, OJTRepository ojtRepo, CourseRepository courseRepo, StatusRepository statusRepo, BatchRepository batchRepo , InstructorRepository instructorRepo, AttendanceRepository attendanceRepo, EvaluationRepository evaluationRepository) {
 		return args -> {
 
 			Role role = new Role();
@@ -222,31 +221,6 @@ public class FinalProjectApplication {
 			instructor12.setName("Tr.Nyo Mon Naing Win");
 			instructor12.setEmail("nyomonnaingwin@gmail.com");
 			instructorRepo.save(instructor12);
-
-
-
-			Schedule schedule = new Schedule();
-			schedule.setWeek(Week.Week1); //enum
-			schedule.setTopic("HTML Basics & Structure");
-			schedule.setDuration(12L);
-			schedule.setStartDate(LocalDate.of(2024, 1, 8));
-			schedule.setEndDate(LocalDate.of(2024, 1, 12));
-			schedule.setInstructor(instructor12);
-//			schedule.setDetails(detail1);
-			schedule.setBatch(batch1);
-
-			scheduleRepository.save(schedule);
-
-
-			Detail detail1 = new Detail();
-			detail1.setDetails("This is a detail");
-			detail1.setSchedule(schedule);
-			detailRepository.save(detail1);
-
-			Detail detail2 = new Detail();
-			detail2.setDetails("This is a detail2");
-			detail2.setSchedule(schedule);
-			detailRepository.save(detail2);
 
 			LocalTime currentTime = LocalTime.now();
 			Attendance attendance1 = new Attendance();

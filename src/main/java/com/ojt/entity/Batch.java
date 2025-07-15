@@ -29,7 +29,4 @@ public class Batch {
     @OneToMany(mappedBy = "batch")
     private List<CV> cvs;
 
-    @OneToOne(mappedBy = "batch")
-    private Schedule schedule;
-
 }

@@ -30,7 +30,7 @@ public class EvaluationController {
         if (evaluation == null) {
             return "redirect:/admin/evaluation";
         }
-
+        model.addAttribute("activePage", "evaluation");
         model.addAttribute("evaluation", evaluation);
         return "admin/evaluation/evaluation-detail";
     }

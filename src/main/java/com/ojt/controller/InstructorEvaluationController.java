@@ -100,30 +100,33 @@ public class InstructorEvaluationController {
     public String saveEvaluation(@Valid @ModelAttribute("evaluation") Evaluation evaluation,
                                  BindingResult result,
                                  RedirectAttributes redirectAttributes,
-                                 Model model) {
-        if (result.hasErrors()) {
-            model.addAttribute("studentList", ojtService.getAllOJT());
-            model.addAttribute("courseList", courseService.getAllCourses());
-            return (evaluation.getId() != null) ? "instructor/evaluation-edit" : "instructor/evaluation-create";
-        }
+                                 Model model,
+                                 Principal principal) {
+        //String loginInput = principal.getName(); // can be email or staffId
+//        Instructor instructor = instructorService.findByEmailOrStaffId(principal.getName());
+        Instructor instructor = instructorService.findByEmailOrStaffId("nyomonnaingwin@gmail.com");
+        Long instructorId = instructor.getId();
 
-
-        Optional<Instructor> optionalInstructor = instructorService.getAllInstructors().stream().findFirst();
-        if (optionalInstructor.isEmpty()) {
-            model.addAttribute("errorMessage", "No instructor found. Please add one.");
-            model.addAttribute("studentList", ojtService.getAllOJT());
-            model.addAttribute("courseList", courseService.getAllCourses());
-            return (evaluation.getId() != null) ? "instructor/evaluation-edit" : "instructor/evaluation-create";
-        }
-
-        Long instructorId = optionalInstructor.get().getId();
         Long ojtId = Optional.ofNullable(evaluation.getOjt()).map(OJT::getId).orElse(null);
         Long courseId = Optional.ofNullable(evaluation.getCourse()).map(Course::getId).orElse(null);
 
+        boolean isEdit = evaluation.getId() != null;
+
+        if (result.hasErrors()) {
+            if (!isEdit) {
+                model.addAttribute("studentList", ojtService.getOJTByStatus());
+                model.addAttribute("courseList", instructor.getCourses());
+            }
+
+            return isEdit ? "instructor/evaluation-edit" : "instructor/evaluation-create";
+        }
+
         if (ojtId == null || courseId == null) {
             model.addAttribute("errorMessage", "Student and Course selection is required.");
-            model.addAttribute("studentList", ojtService.getAllOJT());
-            model.addAttribute("courseList", courseService.getAllCourses());
+            if (!isEdit) {
+                model.addAttribute("studentList", ojtService.getOJTByStatus());
+                model.addAttribute("courseList", instructor.getCourses());
+            }
             return (evaluation.getId() != null) ? "instructor/evaluation-edit" : "instructor/evaluation-create";
         }
 
@@ -131,14 +134,14 @@ public class InstructorEvaluationController {
             evaluationService.createUpdateEvaluation(evaluation, ojtId, courseId, instructorId);
 
             // for notification
-            Instructor instructor = instructorService.getInstructorById(instructorId);
+            Instructor inst = instructorService.getInstructorById(instructorId);
             Course course = courseService.getCourseById(courseId);
             OJT ojt = ojtService.getOJTById(ojtId);
 
             // sending notification to UI(Thant Sin Win)
             Notification notification = new Notification();
 
-            notification.setMessage(instructor.getName() + " has been evaluated mark set on course " + course.getName() + " student " + ojt.getCv().getName());
+            notification.setMessage(inst.getName() + " has been evaluated mark set on course " + course.getName() + " student " + ojt.getCv().getName());
             notification.setCreatedAt(LocalDateTime.now());
             notification.setRole("admin");
             notificationRepository.save(notification);
@@ -152,6 +155,8 @@ public class InstructorEvaluationController {
             return (evaluation.getId() != null) ? "redirect:/instructor/evaluation/edit/" + evaluation.getId() : "redirect:/instructor/evaluation/create";
         }
     }
+
+
 
     @GetMapping("/edit/{id}")
     public String showEditEvaluationForm(@PathVariable Long id,

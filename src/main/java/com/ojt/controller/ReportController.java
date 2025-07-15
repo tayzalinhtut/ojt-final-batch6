@@ -52,7 +52,7 @@ public class ReportController {
 
         model.addAttribute("cvYears", cvYears);
         model.addAttribute("batchLabels", batchLabels);
-
+        model.addAttribute("activePage", "report");
         return "admin/charts/report";
     }
 
