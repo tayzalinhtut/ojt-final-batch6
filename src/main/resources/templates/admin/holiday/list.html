@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>OJT Evaluations</title>
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/dataTables.bootstrap5.min.css}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css" />
+</head>
+
+<div th:replace="fragment/header :: header"></div>
+
+<body class="bg-light">
+<div class="d-flex">
+
+    <div th:replace="fragment/side-bar :: side-bar"></div>
+
+    <!-- Main Content -->
+    <div class="flex-grow-1" style="margin-left: 280px">
+        <!-- Header -->
+        <header class="bg-white shadow-sm border-bottom sticky-top">
+            <div class="d-flex align-items-center justify-content-between p-4">
+                <h3 class="mb-0 fw-bold text-dark">Holiday Management</h3>
+                <div th:replace="~{fragment/notification :: notification-dropdown}"></div>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <div class="container-fluid py-4 px-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0"><i class="bi bi-list-check me-2"></i>Holiday Management</h4>
+                        <div>
+                            <a class="btn btn-primary me-2" th:href="@{/admin/holiday/create}">
+                                <i class="bi bi-plus-circle me-1"></i> Add Holiday
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="alert alert-info mb-4">
+                        <i class="bi bi-info-circle-fill me-2"></i> You can upload multiple holidays via Excel file or add them individually.
+                    </div>
+
+                    <form method="post" th:action="@{/admin/holiday/upload}" enctype="multipart/form-data" class="mb-4">
+                        <div class="input-group">
+                            <input type="file" name="file" class="form-control" required accept=".xlsx,.xls">
+                            <button class="btn btn-success" type="submit">
+                                <i class="bi bi-upload me-1"></i> Upload Excel
+                            </button>
+                        </div>
+                        <small class="text-muted">Supported formats: .xlsx, .xls</small>
+                    </form>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered">
+                            <thead class="table table-bordered table-light ">
+                            <tr>
+                                <th class="text-center">Holiday Name</th>
+                                <th class="text-center">Date</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="holiday, iStat : ${holidays}">
+                                <td th:text="${holiday.name}" class="text-center">Holiday Name</td>
+                                <td th:text="${holiday.date}" class="fw-bold text-center">2025-01-01</td>
+                                <td class="text-center">
+                                    <a th:href="@{'/admin/holiday/edit/' + ${holiday.id}}"
+                                       class="btn btn-sm btn-outline-warning me-1">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <a th:href="@{'/admin/holiday/delete/' + ${holiday.id}}"
+                                       class="btn btn-sm btn-outline-danger"
+                                       onclick="return confirm('Are you sure you want to delete this holiday?');">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr th:if="${holidays.isEmpty()}">
+                                <td colspan="4" class="text-center text-muted py-4">
+                                    <i class="bi bi-calendar-x fs-1"></i>
+                                    <h5 class="mt-2">No holidays found</h5>
+                                    <p class="mb-0">Add your first holiday using the button above</p>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

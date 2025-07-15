@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Course Plans - Admin View</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar Placeholder -->
+    <div th:replace="~{fragment/side-bar :: side-bar}"></div>
+
+    <!-- Main Content -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">
+          <i class="fas fa-eye me-2"></i>
+          Instructor Course Plans
+        </h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <div class="btn-group me-2">
+            <button type="button" class="btn btn-outline-primary" onclick="exportToPDF()">
+              <i class="fas fa-file-pdf me-1"></i>
+              Export PDF
+            </button>
+            <button type="button" class="btn btn-outline-success" onclick="exportToExcel()">
+              <i class="fas fa-file-excel me-1"></i>
+              Export Excel
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Instructor Selection -->
+      <div class="row mb-4">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0">
+                <i class="fas fa-search me-2"></i>
+                Select Instructor
+              </h5>
+            </div>
+            <div class="card-body">
+              <form th:action="@{/admin/schedules/view}" method="get" class="row">
+                <div class="col-md-6">
+                  <label for="instructorId" class="form-label">Choose Instructor:</label>
+                  <select class="form-select" id="instructorId" name="instructorId" required>
+                    <option th:each="instructor : ${instructors}"
+                            th:value="${instructor.id}"
+                            th:text="${instructor.name}"
+                            th:selected="${instructor.id == selectedInstructorId}">
+                    </option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="batch" class="form-label">Batch:</label>
+                  <select class="form-select" id="batch" name="batch" required>
+                    <option value="">-- Select Batch --</option>
+                    <option th:each="b : ${batches}"
+                            th:value="${b.id}"
+                            th:text="${b.name}"
+                            th:selected="${b.id == selectedBatchId}">
+                    </option>
+                  </select>
+
+                </div>
+                <div class="mt-3 d-flex justify-content-end">
+                  <button type="submit" class="btn btn-primary">Load Plan</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div th:if="${schedulePlans != null}" id="coursePlanContainer">
+        <div class="alert alert-info mb-4">
+          <div class="row">
+            <div class="col-md-3"><strong>Instructor:</strong> <span th:text="${instructor.name}"></span></div>
+<!--            <div class="col-md-3"><strong>Course:</strong> <span th:text="${instructor.course}"></span></div>-->
+<!--            <div class="col-md-3"><strong>Batch:</strong> <span th:text="${selectedBatch}"></span></div>-->
+            <div class="col-md-3"><strong>Completion:</strong> <span class="badge bg-warning" th:text="${completionPercent}"></span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header bg-success text-white">
+            <h5 class="mb-0">
+              <i class="fas fa-calendar-alt me-2"></i>
+              12-Week Course Plan
+            </h5>
+          </div>
+          <div class="card-body p-0">
+            <div th:each="weekPlan : ${schedulePlans}" class="border-bottom">
+              <div class="p-3 bg-light">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h6 class="mb-0">
+                    <i class="fas fa-calendar-day text-primary me-2"></i>
+                    <strong th:text="'Week ' + ${weekPlan.weekNumber}"></strong>
+                    <small class="text-muted ms-2" th:text="${weekPlan.dateRange}"></small>
+                  </h6>
+                  <span class="badge bg-success" th:text="${#lists.size(weekPlan.topics)} + ' Topics Planned'"></span>
+                </div>
+              </div>
+              <div class="p-3">
+                <div class="row" th:if="${#lists.size(weekPlan.topics) > 0}">
+                  <div class="col-md-4" th:each="topic : ${weekPlan.topics}">
+                    <div class="card border-primary h-100">
+                      <div class="card-body">
+                        <h6 class="card-title text-primary" th:text="${topic.title}"></h6>
+                        <p class="card-text small" th:text="${topic.description}"></p>
+                        <div class="mt-auto">
+                          <small class="text-muted">
+                            <i class="fas fa-calendar me-1"></i><span th:text="${topic.date}"></span>
+                            <span class="ms-2">
+                                                                <i class="fas fa-clock me-1"></i><span th:text="${topic.duration}"></span>
+                                                            </span>
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-center text-muted" th:if="${#lists.isEmpty(weekPlan.topics)}">
+                  <i class="fas fa-exclamation-triangle fa-2x mb-2"></i>
+                  <p class="mb-0">No course plan submitted for this week</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mt-4">
+          <div class="card-header bg-info text-white">
+            <h5 class="mb-0">
+              <i class="fas fa-chart-bar me-2"></i>
+              Course Plan Summary
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="row text-center">
+              <div class="col-md-3">
+                <h3 class="text-success" th:text="${weeksPlanned}"></h3>
+                <p class="mb-0 text-muted">Weeks Planned</p>
+              </div>
+              <div class="col-md-3">
+                <h3 class="text-primary" th:text="${totalTopics}"></h3>
+                <p class="mb-0 text-muted">Total Topics</p>
+              </div>
+              <div class="col-md-3">
+                <h3 class="text-warning" th:text="${totalHours}"></h3>
+                <p class="mb-0 text-muted">Total Hours</p>
+              </div>
+              <div class="col-md-3">
+                <h3 class="text-info" th:text="${completionPercent}"></h3>
+                <p class="mb-0 text-muted">Completion</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div th:if="${schedulePlans == null}" id="noInstructorSelected" class="text-center text-muted py-5">
+        <i class="fas fa-user-graduate fa-4x mb-3"></i>
+        <h4>Select an Instructor</h4>
+        <p>Choose an instructor from the dropdown above to view their course plan.</p>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
