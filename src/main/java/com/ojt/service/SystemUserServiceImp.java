@@ -3,7 +3,7 @@ package com.ojt.service;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 import com.ojt.dto.OjtProfileDto;
 import com.ojt.dto.StaffProfileDto;
@@ -39,6 +39,8 @@ public class SystemUserServiceImp implements SystemUserService {
 
     @Autowired
     private ExcelHelper excelHelper;
+    @Autowired
+    private SystemUsersRepository systemUsersRepository;
 
     @Transactional
     public void createSystemUser(StaffProfileDto form) {
@@ -215,4 +217,25 @@ public class SystemUserServiceImp implements SystemUserService {
         }
 
     }
+
+    @Override
+    public void convertOjtIntoInactive(Long ojt_id) {
+
+//      List<OJT> ojtList =  ojtRepo.findByActiveOJtStatusType(StatusType.OJT_Active);
+       List<SystemUsers> users = userRepo.findByUserType("OJT");
+        Optional<OJT> ojt=ojtRepo.findById(ojt_id);
+
+           OJT ojtOptional=ojt.get();
+        SystemUsers systemUser = ojtOptional.getUser();
+           for (SystemUsers user : users) {
+               if (ojtOptional.getCv().getEmail().equals(user.getEmail())) {
+
+                   Status status = statusRepo.findByStatusType(StatusType.Inactive);
+                   user.setStatus(status);
+                   systemUsersRepository.save(user);
+               }
+           }
+
+    }
+
 }

@@ -34,9 +34,6 @@ import jakarta.validation.Valid;
 
 public class AddSystemUserController {
 
-
-
-
     private final SystemUserService systemUserService;
     private final RoleRepository roleRepository;
     private final SystemUsersRepository systemUserRepository;
@@ -58,6 +55,7 @@ public class AddSystemUserController {
 
         List<SystemUsers> userList=systemUserRepository.findAll();
         model.addAttribute("userList", userList);
+        model.addAttribute("activePage", "users");
 
         return "admin/users/user-management";
     }
@@ -68,6 +66,8 @@ public class AddSystemUserController {
     public String showStaffAddMember(Model model) {
         model.addAttribute("allRoles", roleRepository.findAll());
         model.addAttribute("userDto", new StaffProfileDto());
+        model.addAttribute("activePage", "users");
+
         return "admin/users/user-add";
     }
 
@@ -104,6 +104,8 @@ public class AddSystemUserController {
             // profileDto.setRole_name(profile.getRole().getName());
             // Set other fields as needed
             model.addAttribute("userProfile", profileDto);
+            model.addAttribute("activePage", "users");
+
             return "/admin/users/user-view";
         }
         else {
@@ -125,6 +127,8 @@ public class AddSystemUserController {
             profileDto.setEndDate(profile.getOjt().getCv().getBatch().getEndDate());
             profileDto.setBatchName(profile.getOjt().getCv().getBatch().getName());
             model.addAttribute("userProfile", profileDto);
+            model.addAttribute("activePage", "users");
+
             return "admin/member-profile-view";
 
         }
@@ -135,6 +139,7 @@ public class AddSystemUserController {
     @GetMapping("/view-member-profile")
     public String showOJTProfile()
     {
+
         return "admin/member-profile-view";
     }
 
@@ -184,6 +189,7 @@ public class AddSystemUserController {
             profileDto.setTeam(profile.getStaffInfo().getTeam());
             profileDto.setPosition(profile.getStaffInfo().getPosition());
             model.addAttribute("userProfile", profileDto);
+            model.addAttribute("activePage", "users");
 
             return "admin/users/user-edit";
         }
@@ -203,10 +209,10 @@ public class AddSystemUserController {
             profileDto.setEducation(profile.getOjt().getCv().getEducation());
             profileDto.setSkill(profile.getOjt().getCv().getSkill());
             model.addAttribute("userProfile", profileDto);
+            
             return "admin/member-profile-edit";
         }
     }
-
 
     @GetMapping("/staff-member-edit")
     public String showStaffMemberEditPage() {
@@ -321,14 +327,42 @@ public class AddSystemUserController {
     }
 
 
+
+
+
     @PostMapping("/upload")
+
     public String uploadExcelFile(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
 
-        systemUserService.saveStaffFromExcel(file);
 
-        // Add a success message
-        redirectAttributes.addFlashAttribute("message", "Successfully registration!");
-        return "redirect:/admin/user-management?success";
+        // Check if file is null or empty
+
+        if (file == null || file.isEmpty()) {
+
+            redirectAttributes.addFlashAttribute("error", "Please select a file to upload!");
+
+            return "redirect:/admin/user-management"; // Assuming this is your staff-member.html page
+
+        }
+
+
+        try {
+
+            systemUserService.saveStaffFromExcel(file);
+
+            // Add a success message
+
+            redirectAttributes.addFlashAttribute("message", "Successfully registration!");
+
+            return "redirect:/admin/user-management?success";
+
+        } catch (Exception e) {
+
+            redirectAttributes.addFlashAttribute("error", "Error processing file: " + e.getMessage());
+
+            return "redirect:/admin/staff-member";
+
+        }
     }
 
 }

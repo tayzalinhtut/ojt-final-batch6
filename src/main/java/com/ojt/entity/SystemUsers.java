@@ -3,6 +3,7 @@ package com.ojt.entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.ojt.enumeration.StatusType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -50,6 +51,6 @@ public class SystemUsers {
 
     @Override
     public String toString() {
-        return "SystemUsers{id=" + user_id + ", username=" + name + "}"; // Example
+        return "SystemUsers{id=" + user_id + ", username=" + name + "}";
     }
 }

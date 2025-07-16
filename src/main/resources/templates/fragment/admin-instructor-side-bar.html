@@ -38,7 +38,7 @@
             <!-- User Management -->
             <li class="nav-item">
                 <a class="nav-link text-dark d-flex align-items-center py-3 px-3 rounded-3"
-                   href="/admin/users"
+                   href="/admin/user-management"
                    th:classappend="${activePage == 'users'} ? ' active text-white bg-primary' : ''">
                     <i class="bi bi-people me-3 fs-5"></i>
                     <span class="fw-semibold">User Management</span>
@@ -128,12 +128,13 @@
             <!-- Instructor Evaluation -->
             <li class="nav-item">
                 <a class="nav-link d-flex align-items-center py-3 px-3 rounded-3"
-                   th:classappend="${currentUri == '/instructor/evaluation'} ? 'active bg-primary text-white' : 'text-dark'"
-                   th:href="@{/instructor/evaluation}">
+                   th:href="@{/instructor/evaluation}"
+                   th:classappend="${currentUri == '/instructor/evaluation' or activePage == 'evaluation-instructor-admin'} ? 'active bg-primary text-white' : 'text-dark'">
                     <i class="bi bi-clipboard-check me-3 fs-5"></i>
                     <span class="fw-semibold">Evaluation</span>
                 </a>
             </li>
+
 
             <!-- OJT Management -->
             <li class="nav-item">

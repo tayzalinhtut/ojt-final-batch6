@@ -27,5 +27,9 @@ public enum StatusType {
 
     //User Status
     Active,
-    Inactive
+    Inactive,
+
+    //For Batch
+    Batch_Active,
+    Batch_Completed
 }

@@ -63,8 +63,9 @@
 										<select class="form-select" id="status" th:field="*{statusName}">
 											<option value="" disabled selected>Select status</option>
 											<option value="OJT_Active">Active</option>
-											<option value="OJT_Pass">Completed</option>
+											<option value="OJT_Pass">Pass</option>
 											<option value="OJT_Withdraw">Withdrawl</option>
+											<option value="OJT_Fail">Fail</option>
 										</select>
 										<p th:if="${#fields.hasErrors('statusName')}" th:errorclass="text-danger"
 											th:errors="*{statusName}"></p>

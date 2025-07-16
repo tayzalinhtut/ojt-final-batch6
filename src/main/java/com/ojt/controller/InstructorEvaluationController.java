@@ -66,6 +66,8 @@ public class InstructorEvaluationController {
         model.addAttribute("totalPages", evaluationPage.getTotalPages());
         model.addAttribute("query", query);
         model.addAttribute("totalElements", evaluationPage.getTotalElements());
+        model.addAttribute("activePage", "evaluation");
+        model.addAttribute("activePage", "evaluation-instructor-admin");
         model.addAttribute("size", size);
 
         if (successMessage != null && !successMessage.isBlank()) {
@@ -92,6 +94,7 @@ public class InstructorEvaluationController {
         model.addAttribute("evaluation", new Evaluation());
         model.addAttribute("studentList", ojtService.getOJTByStatus());
         model.addAttribute("courseList", taughtCourses);
+        model.addAttribute("activePage", "evaluation-instructor-admin");
 
         return "instructor/evaluation-create";
     }

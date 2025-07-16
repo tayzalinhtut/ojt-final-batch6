@@ -12,7 +12,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface OJTRepository extends JpaRepository<OJT, Long> {
-
     //Tay Za Lin Htut
 
     @Query("SELECT COUNT(o) FROM OJT o WHERE o.cv.batch.id = :batchId AND o.status.statusType = :statusType")
@@ -28,6 +27,10 @@ public interface OJTRepository extends JpaRepository<OJT, Long> {
     List<OJT> findWithCvByBatchIdAndStatusTypeIn(@Param("batchId") Long batchId,
                                                  @Param("statusTypes") List<StatusType> statusTypes);
 
+    @Query("SELECT o.cv.batch.id, COUNT(o) FROM OJT o GROUP BY o.cv.batch.id")
+    List<Object[]> countOjtGroupedByBatch();
+
+
     //Mg Thant
     @Query("SELECT new com.ojt.entity.OJT(o.id, o.bankAccount, o.status, o.cv, o.cv.batch) FROM OJT o")
     Page<OJT> findAllWithoutAttendance(Pageable pageable);
@@ -39,6 +42,8 @@ public interface OJTRepository extends JpaRepository<OJT, Long> {
     List<OJT>findAllWithCv();
 
     //Aye Moh Moh Kyaw
-    SystemUsers save(SystemUsers newUser);
+    SystemUsers save(SystemUsers systemUsers);
 
+    @Query("Select o from OJT o WHERE o.status.statusType =: status")
+    List<OJT> findByActiveOJtStatusType(@Param("status") StatusType status);
 }

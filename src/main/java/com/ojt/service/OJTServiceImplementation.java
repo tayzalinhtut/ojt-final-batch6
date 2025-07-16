@@ -26,6 +26,9 @@ public class OJTServiceImplementation implements OJTService {
     private OJTRepository ojtRepository;
 
     @Autowired
+    private SystemUserService systemUserService;
+
+    @Autowired
     private CVRepository cvRepository;
 
     @Override
@@ -138,6 +141,7 @@ public class OJTServiceImplementation implements OJTService {
             cv.setName(ojtDto.getName());
             cv.setPhone(ojtDto.getPhone());
             cvRepository.save(cv);
+
         } else {
             throw new RuntimeException("CV not found for OJT ID: " + id);
         }
@@ -145,6 +149,9 @@ public class OJTServiceImplementation implements OJTService {
         StatusType status = ojtDto.getStatusName();
         if (status != null) {
             Status existStatus = statusRepository.findByStatusType(status);
+            if (existStatus.getStatusType().equals(StatusType.OJT_Pass) || existStatus.getStatusType().equals(StatusType.OJT_Fail) || existStatus.getStatusType().equals(StatusType.OJT_Withdraw)) {
+                systemUserService.convertOjtIntoInactive(id);
+            }
             ojt.setStatus(existStatus);
         } else {
             throw new RuntimeException("Status not found for OJT ID: " + id);

@@ -20,6 +20,8 @@ public class EvaluationController {
     public String showEvaluationPage(Model model) {
         List<EvaluationViewDTO> evaluations = evaluationService.getAllEvaluations();
         model.addAttribute("evaluations", evaluations);
+        model.addAttribute("activePage", "evaluation");
+
         return "admin/evaluation/evaluation";
     }
 

@@ -1,14 +1,8 @@
 package com.ojt.controller;
 
 import com.ojt.dto.BatchDTO;
-import com.ojt.entity.Batch;
-import com.ojt.entity.CV;
-import com.ojt.entity.Courses;
-import com.ojt.entity.OJT;
-import com.ojt.service.BatchService;
-import com.ojt.service.CVService;
-import com.ojt.service.CourseService;
-import com.ojt.service.OJTService;
+import com.ojt.entity.*;
+import com.ojt.service.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +18,9 @@ import java.util.Map;
 @Controller
 @RequestMapping("/admin/batch")
 public class BatchController {
+
+    @Autowired
+    private SystemUserService systemUserService;
 
     @Autowired
     private BatchService batchService;
@@ -90,8 +87,12 @@ public String viewAll(@RequestParam(name = "batchId", required = false) Long bat
         if (bindingResult.hasErrors()) {
             return "admin/batch/batch-create";
         }
+        try{
+            batchService.saveBatch(batchDto);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
-        batchService.saveBatch(batchDto);
         redirectAttributes.addFlashAttribute("message", "Batch successfully created!");
         return "redirect:/admin/batch";
     }

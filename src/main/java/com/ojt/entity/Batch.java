@@ -14,19 +14,18 @@ import lombok.*;
 @ToString(exclude = {"courses", "cvs", "schedule"})
 @Table(name = "batch")
 public class Batch {
-	
-	@Id
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-	
-	private String name;
+
+    private String name;
     private LocalDate startDate;
     private LocalDate endDate;
 
-    @ManyToMany(mappedBy = "batches")
+    @ManyToMany(mappedBy = "batches", fetch = FetchType.LAZY)
     private List<Courses> courses;
 
-    @OneToMany(mappedBy = "batch")
+    @OneToMany(mappedBy = "batch", fetch = FetchType.LAZY)
     private List<CV> cvs;
-
 }

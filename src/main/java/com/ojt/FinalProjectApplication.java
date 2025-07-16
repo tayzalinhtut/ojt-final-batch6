@@ -50,6 +50,10 @@ public class FinalProjectApplication {
             operator.setName("OPERATOR");
             roleRepository.save(operator);
 
+            Role ojtRole = new Role();
+            ojtRole.setName("STUDENT");
+            roleRepository.save(ojtRole);
+
             Batch batch1 = new Batch();
             batch1.setName("Batch1");
             batch1.setStartDate(LocalDate.of(2020, 1, 1));
@@ -284,40 +288,41 @@ public class FinalProjectApplication {
             ojt2.setBankAccount("Acc2");
             ojt2.setStatus(ojtActive);
             ojt2.setCv(cv2);
-            OJT ojt3 = new OJT();
-            ojt3.setBankAccount("Acc3");
-            ojt3.setStatus(ojtActive);
-            ojt3.setCv(cv3);
-            OJT ojt4 = new OJT();
-            ojt4.setBankAccount("Acc4");
-            ojt4.setStatus(ojtActive);
-            ojt4.setCv(cv4);
-            OJT ojt5 = new OJT();
-            ojt5.setBankAccount("Acc5");
-            ojt5.setStatus(ojtActive);
-            ojt5.setCv(cv5);
-            OJT ojt6 = new OJT();
-            ojt6.setBankAccount("Acc6");
-            ojt6.setStatus(ojtActive);
-            ojt6.setCv(cv6);
-            OJT ojt7 = new OJT();
-            ojt7.setBankAccount("Acc7");
-            ojt7.setStatus(ojtActive);
-            ojt7.setCv(cv7);
-            OJT ojt8 = new OJT();
-            ojt8.setBankAccount("Acc8");
-            ojt8.setStatus(ojtP);
-            ojt8.setCv(cv8);
-            OJT ojt9 = new OJT();
-            ojt9.setBankAccount("Acc9");
-            ojt9.setStatus(ojtW);
-            ojt9.setCv(cv9);
-            OJT ojt10 = new OJT();
-            ojt10.setBankAccount("Acc10");
-            ojt10.setStatus(ojtF);
-            ojt10.setCv(cv10);
+//            OJT ojt3 = new OJT();
+//            ojt3.setBankAccount("Acc3");
+//            ojt3.setStatus(ojtActive);
+//            ojt3.setCv(cv3);
+//            OJT ojt4 = new OJT();
+//            ojt4.setBankAccount("Acc4");
+//            ojt4.setStatus(ojtActive);
+//            ojt4.setCv(cv4);
+//            OJT ojt5 = new OJT();
+//            ojt5.setBankAccount("Acc5");
+//            ojt5.setStatus(ojtActive);
+//            ojt5.setCv(cv5);
+//            OJT ojt6 = new OJT();
+//            ojt6.setBankAccount("Acc6");
+//            ojt6.setStatus(ojtActive);
+//            ojt6.setCv(cv6);
+//            OJT ojt7 = new OJT();
+//            ojt7.setBankAccount("Acc7");
+//            ojt7.setStatus(ojtActive);
+//            ojt7.setCv(cv7);
+//            OJT ojt8 = new OJT();
+//            ojt8.setBankAccount("Acc8");
+//            ojt8.setStatus(ojtP);
+//            ojt8.setCv(cv8);
+//            OJT ojt9 = new OJT();
+//            ojt9.setBankAccount("Acc9");
+//            ojt9.setStatus(ojtW);
+//            ojt9.setCv(cv9);
+//            OJT ojt10 = new OJT();
+//            ojt10.setBankAccount("Acc10");
+//            ojt10.setStatus(ojtF);
+//            ojt10.setCv(cv10);
 
-            ojtRepo.saveAll(Arrays.asList(ojt1, ojt2, ojt3, ojt4, ojt5, ojt6, ojt7, ojt8, ojt9, ojt10));
+//            ojtRepo.saveAll(Arrays.asList(ojt1, ojt2, ojt3, ojt4, ojt5, ojt6, ojt7, ojt8, ojt9, ojt10));
+            ojtRepo.saveAll(Arrays.asList(ojt1, ojt2));
 
             LocalTime currentTime = LocalTime.now();
             Attendance attendance1 = new Attendance();
@@ -337,7 +342,7 @@ public class FinalProjectApplication {
             Attendance attendance3 = new Attendance();
             attendance3.setDate(LocalDate.of(2025, 7, 3));
             attendance3.setAttendType(AttendType.HalfLeave);
-            attendance3.setOjt(ojt3);
+            attendance3.setOjt(ojt1);
             attendance3.setAction(false);
             attendance3.setCreatedAt(currentTime);
 
@@ -392,9 +397,34 @@ public class FinalProjectApplication {
 
                 System.out.println("✅ Admin user created successfully.");
                 System.out.println("Role test: " + rolesArr);
+
+                SystemUsers ojt11= new SystemUsers();
+                ojt11.setEmail(ojt1.getCv().getEmail());
+                ojt11.setFirstTimeLogin(true);
+                ojt11.setCreatedAt(LocalDateTime.now());
+                ojt11.setUserType("OJT");
+                List<Role> rolesArr2=new ArrayList<>();
+                rolesArr2.add(ojtRole);
+                ojt11.setRole(rolesArr2);
+                ojt11.setName(ojt1.getCv().getName());
+                ojt11.setStatus(accActive);
+                userRepo.save(ojt11);
+
+                SystemUsers ojt12= new SystemUsers();
+                ojt12.setEmail(ojt2.getCv().getEmail());
+                ojt12.setFirstTimeLogin(true);
+                ojt12.setCreatedAt(LocalDateTime.now());
+                ojt12.setUserType("OJT");
+                List<Role> rolesArr3=new ArrayList<>();
+                rolesArr3.add(ojtRole);
+                ojt12.setRole(rolesArr3);
+                ojt12.setName(ojt2.getCv().getName());
+                ojt12.setStatus(accActive);
+                userRepo.save(ojt12);
             } else {
                 System.out.println("ℹ️ Admin user already exists.");
             }
         };
+
     }
 }
