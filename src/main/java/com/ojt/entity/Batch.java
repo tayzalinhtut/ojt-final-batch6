@@ -24,7 +24,7 @@ public class Batch {
     private LocalDate endDate;
 
     @ManyToMany(mappedBy = "batches")
-    private List<Course> courses;
+    private List<Courses> courses;
 
     @OneToMany(mappedBy = "batch")
     private List<CV> cvs;

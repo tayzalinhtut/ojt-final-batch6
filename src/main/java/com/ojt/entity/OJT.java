@@ -25,6 +25,10 @@ public class OJT {
 
 	private String bankAccount;
 
+	@OneToOne
+	@JoinColumn(name = "user_id")
+	private SystemUsers user;
+
 	@ManyToOne
 	@JoinColumn(name = "status_id")
 	private Status status;

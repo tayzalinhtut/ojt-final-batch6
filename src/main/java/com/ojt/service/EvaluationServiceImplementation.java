@@ -5,9 +5,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import com.ojt.dto.EvaluatorBreakdownDTO;
 import com.ojt.dto.EvaluationViewDTO;
-import com.ojt.entity.Course;
-import com.ojt.entity.Instructor;
-import com.ojt.entity.OJT;
+import com.ojt.entity.*;
 import com.ojt.repository.CourseRepository;
 import com.ojt.repository.InstructorRepository;
 import com.ojt.repository.OJTRepository;
@@ -16,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.ojt.entity.Evaluation;
 import com.ojt.repository.EvaluationRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,7 +51,11 @@ public class EvaluationServiceImplementation implements EvaluationService {
             Set<String> evaluatorNames = evaluations.stream()
                     .map(Evaluation::getInstructor)
                     .filter(Objects::nonNull)
-                    .map(Instructor::getName)
+                    .map(Instructor::getStaffInfo)
+                    .filter(Objects::nonNull)
+                    .map(StaffInfo::getUser)
+                    .filter(Objects::nonNull)
+                    .map(SystemUsers::getName)
                     .collect(Collectors.toSet());
             dto.setEvaluators(String.join(", ", evaluatorNames));
 
@@ -95,7 +96,11 @@ public class EvaluationServiceImplementation implements EvaluationService {
         Set<String> allEvaluators = evaluations.stream()
                 .map(Evaluation::getInstructor)
                 .filter(Objects::nonNull)
-                .map(Instructor::getName)
+                .map(Instructor::getStaffInfo)
+                .filter(Objects::nonNull)
+                .map(StaffInfo::getUser)
+                .filter(Objects::nonNull)
+                .map(SystemUsers::getName)
                 .collect(Collectors.toSet());
         dto.setEvaluators(String.join(", ", allEvaluators));
 
@@ -104,10 +109,10 @@ public class EvaluationServiceImplementation implements EvaluationService {
             Instructor instructor = e.getInstructor();
             if (instructor != null) {
                 EvaluatorBreakdownDTO eb = new EvaluatorBreakdownDTO();
-                eb.setInstructorName(instructor.getName());
+                eb.setInstructorName(instructor.getStaffInfo().getUser().getName());
 
                 String courseName = instructor.getCourses().isEmpty() ? "N/A"
-                        : instructor.getCourses().stream().map(Course::getName).collect(Collectors.joining(", "));
+                        : instructor.getCourses().stream().map(Courses::getName).collect(Collectors.joining(", "));
                 eb.setCourseName(courseName);
 
                 eb.setEvaluationDate(e.getCreatedDate() != null ? e.getCreatedDate().format(formatter) : "N/A");
@@ -219,7 +224,7 @@ public class EvaluationServiceImplementation implements EvaluationService {
     public Evaluation createUpdateEvaluation(Evaluation evaluationDetails, Long ojtId, Long courseId,
                                              Long instructorId) {
         OJT ojt = ojtRepository.findById(ojtId).orElseThrow(() -> new RuntimeException("OJT Student not found with id:" + ojtId));
-        Course courses = courseRepository.findById(courseId).orElseThrow(() -> new RuntimeException("OJT Student not found with id:" + courseId));
+        Courses courses = courseRepository.findById(courseId).orElseThrow(() -> new RuntimeException("OJT Student not found with id:" + courseId));
         Instructor instructor = instructorRepository.findById(instructorId).orElseThrow(() -> new RuntimeException("OJT Student not found with id:" + instructorId));
 
 

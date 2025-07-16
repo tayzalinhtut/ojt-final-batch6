@@ -8,25 +8,24 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "instructor")
 public class Instructor {
-
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int staffId;
-    private String name;
-    private String email;
-    private String position;
-    private String password;
+    @OneToOne
+    @JoinColumn(name = "staffInfo_id", referencedColumnName = "id")
+    private StaffInfo staffInfo;
 
     @ManyToMany
-    @JoinTable(name = "instructor_course", joinColumns = @JoinColumn(name = "instructor_id"),
-    inverseJoinColumns = @JoinColumn(name = "course_id"))
-    private List<Course> courses;
+    @JoinTable(
+            name = "instructor_course", // junction table
+            joinColumns = @JoinColumn(name = "instructor_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    private List<Courses> courses;
 
     @OneToMany(mappedBy = "instructor")
     private List<Evaluation> evaluations;
-
 }
+

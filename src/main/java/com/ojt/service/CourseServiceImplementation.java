@@ -2,7 +2,7 @@ package com.ojt.service;
 
 import com.ojt.dto.CourseDTO;
 import com.ojt.entity.Batch;
-import com.ojt.entity.Course;
+import com.ojt.entity.Courses;
 import com.ojt.entity.Instructor;
 import com.ojt.repository.BatchRepository;
 import com.ojt.repository.CourseRepository;
@@ -28,12 +28,12 @@ public class CourseServiceImplementation implements CourseService {
     private InstructorRepository instructorRepository;
 
     @Override
-    public List<Course> getCoursesByBatchId(Long batchId) {
+    public List<Courses> getCoursesByBatchId(Long batchId) {
         return courseRepository.findByBatches_Id(batchId);
     }
 
     @Override
-    public List<Course> getCoursesWithoutBatch(Long batchId) {
+    public List<Courses> getCoursesWithoutBatch(Long batchId) {
         return courseRepository.findCoursesNotInBatchOrUnassigned(batchId);
     }
 
@@ -42,8 +42,8 @@ public class CourseServiceImplementation implements CourseService {
         Batch batch = batchRepository.findById(batchId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid batch ID"));
 
-        List<Course> courses = courseRepository.findAllById(courseIds);
-        for (Course course : courses) {
+        List<Courses> courses = courseRepository.findAllById(courseIds);
+        for (Courses course : courses) {
             if (!course.getBatches().contains(batch)) {
                 course.getBatches().add(batch);
                 batch.getCourses().add(course);
@@ -57,8 +57,8 @@ public class CourseServiceImplementation implements CourseService {
         Batch batch = batchRepository.findById(batchId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid batch ID"));
 
-        List<Course> courses = courseRepository.findAllById(courseIds);
-        for (Course course : courses) {
+        List<Courses> courses = courseRepository.findAllById(courseIds);
+        for (Courses course : courses) {
             course.getBatches().remove(batch);
             batch.getCourses().remove(course);
         }
@@ -66,31 +66,31 @@ public class CourseServiceImplementation implements CourseService {
     }
 
     @Override
-    public List<Course> findAll() {
+    public List<Courses> findAll() {
         return courseRepository.findAll();
     }
 
     @Override
     @Transactional
-    public List<Course> getAllCourses() {
+    public List<Courses> getAllCourses() {
         return courseRepository.findAll();
     }
 
     @Override
     @Transactional
-    public Course getCourseById(Long id) {
+    public Courses getCourseById(Long id) {
         return courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course not found with ID: " + id));
     }
 
     @Override
     @Transactional
-    public Course createCourse(CourseDTO courseDTO) {
+    public Courses createCourse(CourseDTO courseDTO) {
         if (courseRepository.existsByName(courseDTO.getName())) {
             throw new RuntimeException("Course name '" + courseDTO.getName() + "' already exists.");
         }
 
-        Course course = new Course();
+        Courses course = new Courses();
         course.setName(courseDTO.getName());
 
         if (courseDTO.getInstructorIds() != null && !courseDTO.getInstructorIds().isEmpty()) {
@@ -114,8 +114,8 @@ public class CourseServiceImplementation implements CourseService {
 
     @Override
     @Transactional
-    public Course updateCourse(Long id, CourseDTO courseDTO) {
-        Course course = getCourseById(id);
+    public Courses updateCourse(Long id, CourseDTO courseDTO) {
+        Courses course = getCourseById(id);
 
         if (!course.getName().equalsIgnoreCase(courseDTO.getName()) &&
                 courseRepository.existsByName(courseDTO.getName())) {
@@ -158,7 +158,7 @@ public class CourseServiceImplementation implements CourseService {
     @Override
     @Transactional
     public void deleteCourse(Long id) {
-        Course course = getCourseById(id);
+        Courses course = getCourseById(id);
 
         for (Instructor instructor : new HashSet<>(course.getInstructors())) {
             instructor.getCourses().remove(course);
@@ -181,7 +181,7 @@ public class CourseServiceImplementation implements CourseService {
     @Override
     @Transactional
     public void assignInstructorsToCourse(Long courseId, List<Long> instructorIds) {
-        Course course = getCourseById(courseId);
+        Courses course = getCourseById(courseId);
 
         for (Instructor instructor : new HashSet<>(course.getInstructors())) {
             instructor.getCourses().remove(course);

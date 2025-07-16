@@ -1,6 +1,7 @@
 package com.ojt.repository;
 
 import com.ojt.entity.OJT;
+import com.ojt.entity.SystemUsers;
 import com.ojt.enumeration.StatusType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface OJTRepository extends JpaRepository<OJT, Long> {
+
     //Tay Za Lin Htut
 
     @Query("SELECT COUNT(o) FROM OJT o WHERE o.cv.batch.id = :batchId AND o.status.statusType = :statusType")
@@ -35,4 +37,8 @@ public interface OJTRepository extends JpaRepository<OJT, Long> {
 
     @Query("SELECT o From OJT o JOIN FETCH o.cv  ORDER BY o.cv.name ASC")
     List<OJT>findAllWithCv();
+
+    //Aye Moh Moh Kyaw
+    SystemUsers save(SystemUsers newUser);
+
 }

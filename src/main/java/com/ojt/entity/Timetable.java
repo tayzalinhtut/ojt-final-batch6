@@ -21,5 +21,5 @@ public class Timetable {
 	private DayOfWeek dayOfWeek;
 
 	@ManyToOne
-	private Course courses;
+	private Courses courses;
 }

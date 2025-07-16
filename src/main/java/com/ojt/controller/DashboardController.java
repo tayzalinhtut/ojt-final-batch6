@@ -36,6 +36,9 @@ public class DashboardController {
         long batchTotal = batchService.countTotalBatches();
         List<Notification> notifications = notificationService.getNotifications();
 
+        System.out.println("Model attributes: " + model.asMap().keySet());
+        System.out.println("Model attributes: " + model.asMap().values());
+
         model.addAttribute("activeStudentCount", activeStudentCount);
         model.addAttribute("attendancePending", attendancePending);
         model.addAttribute("batchTotal", batchTotal);

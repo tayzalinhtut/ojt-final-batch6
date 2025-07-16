@@ -3,7 +3,7 @@ package com.ojt.controller;
 import com.ojt.dto.BatchDTO;
 import com.ojt.entity.Batch;
 import com.ojt.entity.CV;
-import com.ojt.entity.Course;
+import com.ojt.entity.Courses;
 import com.ojt.entity.OJT;
 import com.ojt.service.BatchService;
 import com.ojt.service.CVService;
@@ -141,8 +141,8 @@ public String viewAll(@RequestParam(name = "batchId", required = false) Long bat
         Batch batch = batchService.getBatchById(batchId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid batch Id: " + batchId));
 
-        List<Course> assignedCourses = courseService.getCoursesByBatchId(batchId);
-        List<Course> availableCourses = courseService.getCoursesWithoutBatch(batchId);
+        List<Courses> assignedCourses = courseService.getCoursesByBatchId(batchId);
+        List<Courses> availableCourses = courseService.getCoursesWithoutBatch(batchId);
         long studentCount = ojtService.countOjtAllStudent(batchId);
 
         model.addAttribute("message", message);

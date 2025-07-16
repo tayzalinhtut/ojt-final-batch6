@@ -39,7 +39,7 @@ public class Evaluation {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "course_id")
-	private Course course;
+	private Courses course;
 
 	public int getTotalScore() {
 		return teamwork + leadership + assignmentUnderstanding + technicalSkill +

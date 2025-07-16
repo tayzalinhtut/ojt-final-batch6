@@ -15,7 +15,8 @@
 <body class="bg-light">
 	<div class="d-flex">
 
-		<div th:replace="fragment/side-bar :: side-bar"></div>
+		<div th:if="${!isAdminAndInstructor}" th:replace="fragment/side-bar :: side-bar"></div>
+		<div th:if="${isAdminAndInstructor}" th:replace="fragment/admin-instructor-side-bar :: admin-instructor-side-bar"></div>
 
 		<div class="flex-grow-1" style="margin-left: 280px">
 

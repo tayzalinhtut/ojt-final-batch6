@@ -1,16 +1,10 @@
 package com.ojt.service;
 
 import com.ojt.dto.OJTDTO;
-import com.ojt.entity.CV;
-import com.ojt.entity.EmailReply;
-import com.ojt.entity.Status;
-import com.ojt.entity.User;
+import com.ojt.entity.*;
 import com.ojt.enumeration.StatusType;
 import com.ojt.event.EmailEvent;
-import com.ojt.repository.CVRepository;
-import com.ojt.repository.EmailReplyRepository;
-import com.ojt.repository.StatusRepository;
-import com.ojt.repository.UserRepository;
+import com.ojt.repository.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -38,7 +32,8 @@ public class  EmailServiceImplementation implements EmailService {
     private EmailReplyRepository emailReplyRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    // private UserAccRepository userRepository; this repository change to StaffInfo entity
+    private StaffInfoRepository staffInfoRepository;
 
     @Autowired
     private ApplicationEventPublisher eventPublisher;
@@ -69,8 +64,8 @@ public class  EmailServiceImplementation implements EmailService {
     @Override
     public void sendEmailToSelectedRecipients(List<String> recipientEmails, String subject, String body,
                                               StatusType emailStatusType, String senderName) {
-        User sender = userRepository.findByStaffName(senderName);
-        System.out.println("Sender: " + sender.getStaffName());
+        StaffInfo sender = staffInfoRepository.findByStaffName(senderName);
+        System.out.println("Sender: " + sender.getUser().getName());
         if (sender == null) {
             throw new RuntimeException("Sender not found");
         }

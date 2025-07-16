@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,8 +37,8 @@ public class InstructorServiceImplementation implements InstructorService {
     @Override
     public Instructor findByEmailOrStaffId(String input) {
 
-        Instructor instructor = instructorRepository.findByEmail(input);
-        if (instructor == null) {
+        Instructor instructor = instructorRepository.findByEmail(input).orElseThrow(() -> new RuntimeException("Instructor not found with email: " + input));
+        if (instructor != null) {
             instructor = instructorRepository.findByStaffId(Long.parseLong(input));
         }
         return instructor;

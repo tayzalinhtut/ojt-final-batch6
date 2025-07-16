@@ -2,7 +2,7 @@ package com.ojt.service;
 
 import com.ojt.dto.BatchDTO;
 import com.ojt.entity.Batch;
-import com.ojt.entity.Course;
+import com.ojt.entity.Courses;
 import com.ojt.repository.BatchRepository;
 import com.ojt.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class BatchServiceImplementation implements BatchService {
         batch.setEndDate(dto.getEndDate());
 
         if (dto.getCourseIds() != null && !dto.getCourseIds().isEmpty()) {
-            List<Course> courses = courseRepository.findAllById(dto.getCourseIds());
+            List<Courses> courses = courseRepository.findAllById(dto.getCourseIds());
             batch.setCourses(courses);
         }
 

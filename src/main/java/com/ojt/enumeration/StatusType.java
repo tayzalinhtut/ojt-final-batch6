@@ -23,5 +23,9 @@ public enum StatusType {
     Email_InterviewInvite,
     Email_InterviewResult,
     Email_CodeTestFail,
-    Email_InterviewFail
+    Email_InterviewFail,
+
+    //User Status
+    Active,
+    Inactive
 }

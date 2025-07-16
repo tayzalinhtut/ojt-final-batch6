@@ -88,7 +88,7 @@ public class InstructorEvaluationController {
             throw new RuntimeException("Instructor not found");
         }
 
-        List<Course> taughtCourses = instructor.getCourses();
+        List<Courses> taughtCourses = instructor.getCourses();
         model.addAttribute("evaluation", new Evaluation());
         model.addAttribute("studentList", ojtService.getOJTByStatus());
         model.addAttribute("courseList", taughtCourses);
@@ -108,7 +108,7 @@ public class InstructorEvaluationController {
         Long instructorId = instructor.getId();
 
         Long ojtId = Optional.ofNullable(evaluation.getOjt()).map(OJT::getId).orElse(null);
-        Long courseId = Optional.ofNullable(evaluation.getCourse()).map(Course::getId).orElse(null);
+        Long courseId = Optional.ofNullable(evaluation.getCourse()).map(Courses::getId).orElse(null);
 
         boolean isEdit = evaluation.getId() != null;
 
@@ -135,13 +135,13 @@ public class InstructorEvaluationController {
 
             // for notification
             Instructor inst = instructorService.getInstructorById(instructorId);
-            Course course = courseService.getCourseById(courseId);
+            Courses course = courseService.getCourseById(courseId);
             OJT ojt = ojtService.getOJTById(ojtId);
 
             // sending notification to UI(Thant Sin Win)
             Notification notification = new Notification();
 
-            notification.setMessage(inst.getName() + " has been evaluated mark set on course " + course.getName() + " student " + ojt.getCv().getName());
+            notification.setMessage(inst.getStaffInfo().getUser().getName() + " has been evaluated mark set on course " + course.getName() + " student " + ojt.getCv().getName());
             notification.setCreatedAt(LocalDateTime.now());
             notification.setRole("admin");
             notificationRepository.save(notification);
@@ -170,7 +170,7 @@ public class InstructorEvaluationController {
 
         Evaluation evaluation = evaluationOptional.get();
         if (evaluation.getOjt() == null) evaluation.setOjt(new OJT());
-        if (evaluation.getCourse() == null) evaluation.setCourse(new Course());
+        if (evaluation.getCourse() == null) evaluation.setCourse(new Courses());
 
         model.addAttribute("evaluation", evaluation);
         model.addAttribute("studentList", ojtService.getAllOJT());

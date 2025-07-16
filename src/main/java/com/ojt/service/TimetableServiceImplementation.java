@@ -1,7 +1,6 @@
 package com.ojt.service;
 
 import com.ojt.dto.TimetableDTO;
-import com.ojt.entity.Course;
 import com.ojt.entity.Timetable;
 import com.ojt.enumeration.DayOfWeek;
 import com.ojt.repository.CourseRepository;

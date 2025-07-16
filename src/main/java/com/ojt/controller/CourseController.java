@@ -1,7 +1,7 @@
 package com.ojt.controller;
 
 import com.ojt.dto.CourseDTO;
-import com.ojt.entity.Course;
+import com.ojt.entity.Courses;
 import com.ojt.entity.Instructor; // Ensure this is imported if not already
 import com.ojt.entity.Batch;     // Ensure this is imported if not already
 import com.ojt.service.CourseService;
@@ -71,7 +71,7 @@ public class CourseController {
 
     @GetMapping("/edit")
     public String showEditForm(@RequestParam Long id, Model model) {
-        Course course = courseService.getCourseById(id);
+        Courses course = courseService.getCourseById(id);
         CourseDTO courseDTO = new CourseDTO();
         courseDTO.setId(course.getId());
         courseDTO.setName(course.getName());
@@ -136,7 +136,7 @@ public class CourseController {
     @GetMapping("/assignInstructors")
     public String showAssignInstructorsPage(@RequestParam("courseId") Long courseId, Model model, RedirectAttributes redirectAttributes) {
         try {
-            Course course = courseService.getCourseById(courseId);
+            Courses course = courseService.getCourseById(courseId);
             List<Instructor> allInstructors = instructorService.getAllInstructors();
 
             Set<Long> assignedInstructorIds = course.getInstructors().stream()
@@ -174,7 +174,7 @@ public class CourseController {
     @GetMapping("/{courseId}/instructors")
     public String showAssignedInstructors(@PathVariable Long courseId, Model model, RedirectAttributes redirectAttributes) {
         try {
-            Course course = courseService.getCourseById(courseId);
+            Courses course = courseService.getCourseById(courseId);
             List<Instructor> assignedInstructors = course.getInstructors();
 
             model.addAttribute("course", course);

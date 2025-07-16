@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Staff Member - OJT Management System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+  <style>
+    .sidebar-scroll {
+      height: calc(100vh - 120px);
+      overflow-y: auto;
+    }
+    .sidebar-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+    .sidebar-scroll::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    .sidebar-scroll::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 3px;
+    }
+    .sidebar-scroll::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+    .form-center {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body class="bg-light">
+<div class="d-flex">
+  <!-- Sidebar -->
+  <nav class="bg-white shadow-sm position-fixed h-100 d-flex flex-column" style="width: 280px; z-index: 1000">
+    <!-- Sidebar Header -->
+    <div class="p-4 border-bottom">
+      <div class="d-flex align-items-center">
+        <div class="bg-primary text-white rounded-3 d-flex align-items-center justify-content-center me-3"
+             style="width: 45px; height: 45px">
+          <i class="bi bi-mortarboard-fill fs-5"></i>
+        </div>
+        <div>
+          <h5 class="mb-0 fw-bold text-dark">OJT Management</h5>
+          <small class="text-muted">System</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar Menu -->
+    <div class="sidebar-scroll flex-grow-1 p-3">
+      <ul class="nav flex-column gap-1">
+        <li class="nav-item">
+          <a
+                  class="nav-link text-dark d-flex align-items-center py-3 px-3 rounded-3"
+                  th:href="@{/admin/dashboard}"
+          >
+            <i class="bi bi-speedometer2 me-3 fs-5"></i>
+            <span class="fw-semibold">Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+                  class="nav-link active bg-primary text-white d-flex align-items-center py-3 px-3 rounded-3"
+                  th:href="@{/admin/staff-members}"
+          >
+            <i class="bi bi-people me-3 fs-5"></i>
+            <span class="fw-semibold">User Management</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+                  class="nav-link text-dark d-flex align-items-center py-3 px-3 rounded-3"
+                  th:href="@{/admin/batch-management}"
+          >
+            <i class="bi bi-collection me-3 fs-5"></i>
+            <span class="fw-semibold">Batch Management</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+                  class="nav-link text-dark d-flex align-items-center py-3 px-3 rounded-3"
+                  th:href="@{/admin/courses}"
+          >
+            <i class="bi bi-box me-3 fs-5"></i>
+            <span class="fw-semibold">Course Management</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+                  class="nav-link text-dark d-flex align-items-center py-3 px-3 rounded-3"
+                  th:href="@{/admin/candidate-management}"
+          >
+            <i class="bi bi-file-earmark-person me-3 fs-5"></i>
+            <span class="fw-semibold">CV Management</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+                  class="nav-link text-dark d-flex align-items-center py-3 px-3 rounded-3"
+                  th:href="@{/admin/resources}"
+          >
+            <i class="bi bi-building me-3 fs-5"></i>
+            <span class="fw-semibold">Resources</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+                  class="nav-link text-dark rounded-3 d-flex align-items-center py-3 px-3"
+                  th:href="@{/admin/member-profiles}"
+          >
+            <i class="bi bi-people me-3 fs-5"></i>
+            <span class="fw-semibold">OJT Management</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+                  class="nav-link text-dark d-flex align-items-center py-3 px-3 rounded-3"
+                  th:href="@{/admin/submit-student-attendance}"
+          >
+            <i class="bi bi-calendar-check me-3 fs-5"></i>
+            <span class="fw-semibold">Attendance</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+                  class="nav-link text-dark d-flex align-items-center py-3 px-3 rounded-3"
+                  th:href="@{/admin/evaluations}"
+          >
+            <i class="bi bi-clipboard-check me-3 fs-5"></i>
+            <span class="fw-semibold">Evaluations</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+                  class="nav-link text-dark d-flex align-items-center py-3 px-3 rounded-3"
+                  th:href="@{/admin/completion-report}"
+          >
+            <i class="bi bi-award me-3 fs-5"></i>
+            <span class="fw-semibold">Completion Report</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+                  class="nav-link text-dark d-flex align-items-center py-3 px-3 rounded-3"
+                  th:href="@{/admin/reports}"
+          >
+            <i class="bi bi-clipboard-data me-3 fs-5"></i>
+            <span class="fw-semibold">Reports & Analytics</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+                  class="nav-link text-dark d-flex align-items-center py-3 px-3 rounded-3"
+                  th:href="@{/admin/email-notification}"
+          >
+            <i class="bi bi-envelope me-3 fs-5"></i>
+            <span class="fw-semibold">Emails</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Sidebar Footer -->
+    <div class="p-4 border-top">
+      <div class="d-flex align-items-center">
+        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3"
+             style="width: 45px; height: 45px">
+          <i class="bi bi-person-circle fs-4 text-muted"></i>
+        </div>
+        <div class="flex-grow-1">
+          <div class="fw-semibold text-dark">Admin User</div>
+          <small class="text-muted">System Administrator</small>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="flex-grow-1" style="margin-left: 280px">
+    <!-- Top Navigation -->
+    <header class="bg-white shadow-sm border-bottom sticky-top">
+      <div class="d-flex align-items-center justify-content-between p-4">
+        <div class="d-flex align-items-center">
+          <a href="/admin/staff-members" class="btn btn-link text-muted p-0 me-3">
+            <i class="bi bi-arrow-left fs-4"></i>
+          </a>
+          <h3 class="mb-0 fw-bold text-dark">Edit User Details</h3>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <!-- Notification dropdown remains the same -->
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Form Content -->
+    <div class="container-fluid py-4 px-4">
+      <div class="row justify-content-center">
+        <div class="col-lg-12">
+          <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-gradient bg-primary text-white py-4">
+              <div class="d-flex align-items-center">
+                <div class="bg-white bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center me-3"
+                     style="width: 50px; height: 50px">
+                  <i class="bi bi-person-lines-fill fs-4 text-white"></i>
+                </div>
+                <div class="text-center w-100">
+                  <h5 class="mb-1 fw-bold">Staff Information</h5>
+                  <small class="opacity-75">Update staff member details and permissions</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-body form-center">
+              <form th:action="@{/admin/update_staff/{user_id}(user_id=${user_id})}" th:object="${userProfile}" method="post">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold">Name</label>
+                    <input type="text" class="form-control" th:field="*{userName}" required />
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold">Staff ID</label>
+                    <input type="text" class="form-control" th:field="*{userIdStaff}"  required />
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold">Email Address</label>
+                    <input type="email" class="form-control" th:field="*{email}"  required />
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold">Division</label>
+                    <input type="text" class="form-control" th:field="*{division}" />
+                  </div>
+                  <div class="col-md-6">
+
+
+
+                    <label class="form-label fw-semibold">Role</label>
+                    <div th:each="role : ${allRoles}">
+                      <div class="form-check">
+                        <input type="radio"
+                               class="form-check-input"
+                               th:value="${role.id}"
+                               th:field="*{roleList}"
+                               th:id="${'role_' + role.id}">
+                        <label class="form-check-label"
+                               th:for="${'role_' + role.id}"
+                               th:text="${role.name}">Role Name</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold">Department</label>
+                    <input type="text" class="form-control" th:field="*{department}"  required />
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold">Team</label>
+                    <input type="text" class="form-control" th:field="*{team}"  required />
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold">Status</label>
+                    <select class="form-select" th:field="*{status_id}"  required>
+
+                      <option th:each="status : ${statusList}"
+                              th:value="${status.id}"
+                              th:text="${status.statusType}"
+                      >
+                        Role Name
+                      </option>
+
+                    </select>
+
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label fw-semibold">Position</label>
+                    <input type="text" class="form-control" th:field="*{position}"  required />
+                  </div>
+                </div>
+                <div class="mt-4 border-top pt-3 text-center">
+                  <a href="/admin/user-management" class="btn btn-secondary me-2">
+                    Cancel
+                  </a>
+
+                  <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check-lg me-2"></i>Update Staff Member
+                  </button>
+
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

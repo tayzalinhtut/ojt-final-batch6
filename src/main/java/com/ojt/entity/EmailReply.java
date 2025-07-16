@@ -20,7 +20,7 @@ public class EmailReply {
 
 	@ManyToOne
 	@JoinColumn(name = "sent_by", referencedColumnName = "id")
-	private User sentBy;
+	private StaffInfo sentBy;
 
 	@ManyToMany(mappedBy = "emailReplies")
 	private List<CV> cvList;
