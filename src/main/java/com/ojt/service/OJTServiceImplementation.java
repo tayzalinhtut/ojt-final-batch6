@@ -71,7 +71,7 @@ public class OJTServiceImplementation implements OJTService {
 
     @Override
     public long countOjtAllStudent(Long batchId) {
-        return cvRepository.countByBatchIdAndStatus_StatusType(batchId, StatusType.Offer_Accept);
+        return cvRepository.countByBatchIdAndStatus_StatusType(batchId, StatusType.OJT_Active);
     }
 
     //Mg Thant

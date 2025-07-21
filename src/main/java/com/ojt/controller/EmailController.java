@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -20,10 +21,10 @@ public class EmailController {
     private EmailService emailService;
 
     @GetMapping
-    public String emailPage(Model model) {
+    public String emailPage(Model model, @ModelAttribute("message") String message) {
 
         model.addAttribute("activePage", "email");
-
+        model.addAttribute("message", message);
         return "admin/email/email";
     }
 
@@ -39,14 +40,16 @@ public class EmailController {
     public String sendEmail(@RequestParam("recipients") List<String> recipientEmails,
                             @RequestParam("subject") String subject, @RequestParam("emailBody") String body,
                             @RequestParam("emailStatusType") StatusType emailStatus, @RequestParam("senderName") String senderName,
-                            Model model) {
+                            Model model, RedirectAttributes redirectAttributes) {
         try {
             System.out.println("Sending email");
             System.out.println("Sender name: " + senderName);
             System.out.println("Recipient emails: " + recipientEmails);
             emailService.sendEmailToSelectedRecipients(recipientEmails, subject, body, emailStatus, senderName);
             model.addAttribute("successMessage", "Emails sent successfully!");
+            redirectAttributes.addFlashAttribute("message", "Email Sent successfully!");
         } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Email failed!");
             model.addAttribute("errorMessage", "Error sending emails: " + e.getMessage());
         }
 

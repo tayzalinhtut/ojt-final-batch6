@@ -1,7 +1,6 @@
 package com.ojt.service;
 
 import com.ojt.dto.BatchDTO;
-import com.ojt.dto.BatchSummaryDTO;
 import com.ojt.entity.Batch;
 import com.ojt.entity.Courses;
 import com.ojt.repository.BatchRepository;
@@ -45,31 +44,6 @@ public class BatchServiceImplementation implements BatchService {
     @Override
     public List<Batch> getAllBatches() {
         return batchRepository.findAllWithCourses(); // updated
-    }
-
-    public List<BatchSummaryDTO> getBatchSummaries() {
-        List<Batch> batches = batchRepository.findAllWithCourses();
-        Map<Long, Long> studentCountMap = new HashMap<>();
-
-        // Example bulk count query
-        List<Object[]> results = ojtRepository.countOjtGroupedByBatch();
-        for (Object[] row : results) {
-            Long batchId = (Long) row[0];
-            Long count = (Long) row[1];
-            studentCountMap.put(batchId, count);
-        }
-
-        List<BatchSummaryDTO> summaries = new ArrayList<>();
-        for (Batch batch : batches) {
-            BatchSummaryDTO dto = new BatchSummaryDTO();
-            dto.setId(batch.getId());
-            dto.setName(batch.getName());
-            dto.setCourseCount(batch.getCourses() != null ? batch.getCourses().size() : 0);
-            dto.setStudentCount(studentCountMap.getOrDefault(batch.getId(), 0L));
-            summaries.add(dto);
-        }
-
-        return summaries;
     }
 
     @Override

@@ -103,7 +103,7 @@
 
                   <!-- ✅ Hidden email status type (updated via JS) -->
                   <input type="hidden" name="emailStatusType" id="emailStatusType" />
-                  <input type="hidden" name="senderName" value="nik" />
+                  <input type="hidden" name="senderName" value="Aye Moh Moh Kyaw" />
 
                 </div>
 
@@ -247,6 +247,36 @@
     });
   });
 </script>
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  let message = /*[[${message != null ? "" + message + "" : ""}]]*/ '';
+  const notyf = new Notyf();
+  console.log("Flash message: " + message);
 
+  if (message.trim().length > 0) {
+    notyf.success({
+      message: message,
+      duration: 5000,
+      position: {
+        x: 'right',
+        y: 'top'
+      }
+    })
+  }
+
+  let errorMessage = /*[[${errorMessage != null ? "" + errorMessage + "" : ""}]]*/ '';
+
+  if (errorMessage.trim().length > 0) {
+    notyf.error({
+      message: errorMessage,
+      duration: 5000,
+      position: {
+        x: 'right',
+        y: 'top'
+      }
+    });
+  }
+  /*]]>*/
+</script>
 </body>
 </html>

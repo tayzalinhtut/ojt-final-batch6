@@ -34,41 +34,41 @@ public class BatchController {
     @Autowired
     private CVService cvService;
 
-@GetMapping
-public String viewAll(@RequestParam(name = "batchId", required = false) Long batchId, Model model, @ModelAttribute("message") String message) {
+    @GetMapping
+    public String viewAll(@RequestParam(name = "batchId", required = false) Long batchId, Model model) {
         List<Batch> allBatches = batchService.getAllBatches();
-    List<Batch> batches;
+        List<Batch> batches;
 
-    if (batchId != null) {
-        batches = allBatches.stream()
-                .filter(b -> b.getId().equals(batchId))
-                .toList();
-    } else {
-        batches = allBatches;
+        if (batchId != null) {
+            batches = allBatches.stream()
+                    .filter(b -> b.getId().equals(batchId))
+                    .toList();
+        } else {
+            batches = allBatches;
+        }
+
+
+        Map<Long, Long> studentCounts = new HashMap<>();
+        for (Batch batch : batches) {
+            long studentCount = ojtService.countOjtActiveStudent(batch.getId());
+            studentCounts.put(batch.getId(), studentCount);
+        }
+
+        Map<Long, Long> courseCounts = new HashMap<>();
+        for (Batch batch : batches) {
+            long courseCount = courseService.getCoursesByBatchId(batch.getId()).size();
+            courseCounts.put(batch.getId(), courseCount);
+        }
+
+        model.addAttribute("allBatches", allBatches);
+        model.addAttribute("batches", batches);
+        model.addAttribute("studentCounts", studentCounts);
+        model.addAttribute("courseCounts", courseCounts);
+        model.addAttribute("selectedBatchId", batchId);
+        model.addAttribute("activePage", "batch");
+
+        return "admin/batch/batch-management";
     }
-
-
-    Map<Long, Long> studentCounts = new HashMap<>();
-    for (Batch batch : batches) {
-        studentCounts.put(batch.getId(), ojtService.countOjtAllStudent(batch.getId()));
-    }
-    Map<Long, Long> courseCounts = new HashMap<>();
-    for (Batch batch : batches) {
-        long courseCount = courseService.getCoursesByBatchId(batch.getId()).size();
-        courseCounts.put(batch.getId(), courseCount);
-    }
-
-    model.addAttribute("message", message);
-    model.addAttribute("allBatches", allBatches);
-    model.addAttribute("batches", batches);
-    model.addAttribute("studentCounts", studentCounts);
-    model.addAttribute("courseCounts", courseCounts);
-    model.addAttribute("selectedBatchId", batchId);
-    model.addAttribute("activePage", "batch");
-
-    return "admin/batch/batch-management";
-}
-
 
 
     @GetMapping("/create")
@@ -85,11 +85,12 @@ public String viewAll(@RequestParam(name = "batchId", required = false) Long bat
                          BindingResult bindingResult,
                          Model model, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Batch could not be created");
             return "admin/batch/batch-create";
         }
-        try{
+        try {
             batchService.saveBatch(batchDto);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -98,9 +99,8 @@ public String viewAll(@RequestParam(name = "batchId", required = false) Long bat
     }
 
 
-
     @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable("id") Long id, Model model,@ModelAttribute("message") String message) {
+    public String editForm(@PathVariable("id") Long id, Model model, @ModelAttribute("message") String message) {
         Batch batch = batchService.getBatchById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid batch Id: " + id));
 
@@ -137,8 +137,9 @@ public String viewAll(@RequestParam(name = "batchId", required = false) Long bat
         redirectAttributes.addFlashAttribute("message", "Batch Edit successfully!");
         return "redirect:/admin/batch";
     }
+
     @GetMapping("/assign-course/{batchId}")
-    public String assignCourseForm(@PathVariable("batchId") Long batchId, Model model,@ModelAttribute("message") String message) {
+    public String assignCourseForm(@PathVariable("batchId") Long batchId, Model model, @ModelAttribute("message") String message) {
         Batch batch = batchService.getBatchById(batchId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid batch Id: " + batchId));
 
@@ -197,7 +198,7 @@ public String viewAll(@RequestParam(name = "batchId", required = false) Long bat
         model.addAttribute("activePage", "batch");
         return "admin/batch/batch-details";
     }
- 
+
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         batchService.deleteBatch(id);

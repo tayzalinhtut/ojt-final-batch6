@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragment/header :: header"></head>
 <body class="bg-light">
 	<div class="d-flex">
@@ -12,7 +12,7 @@
 			<header class="bg-white shadow-sm border-bottom sticky-top">
 				<div class="d-flex align-items-center justify-content-between p-4">
 					<div class="d-flex align-items-center">
-						<a href="member-profiles.html" class="btn btn-link text-muted p-0 me-3">
+						<a href="/admin/ojt-members" class="btn btn-link text-muted p-0 me-3">
 							<i class="bi bi-arrow-left fs-4"></i>
 						</a>
 						<h3 class="mb-0 fw-bold text-dark">OJT Member Profile</h3>
@@ -71,9 +71,9 @@
 							<div class="card-body p-4">
 								<div class="row g-3">
 									<div class="col-md-4 fw-semibold">Start Date:</div>
-									<div class="col-md-8" th:text="${ojt.batch.startDate}">Jan 15, 2025</div>
+									<div class="col-md-8" th:text="${ojt.cv.batch.startDate}">Jan 15, 2025</div>
 									<div class="col-md-4 fw-semibold">End Date:</div>
-									<div class="col-md-8" th:text="${ojt.batch.endDate}">Jul 15, 2025</div>
+									<div class="col-md-8" th:text="${ojt.cv.batch.endDate}">Jul 15, 2025</div>
 									<div class="col-md-4 fw-semibold">Duration:</div>
 									<div class="col-md-8" th:text="${monthsBetween} + ' months'">6 months</div>
 								</div>
